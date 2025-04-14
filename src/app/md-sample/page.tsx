@@ -3,10 +3,11 @@
 import styles from "./styles.module.scss";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import SampleMd from "@/md/sample.md";
 import rehypeRaw from "rehype-raw";
+import SampleMd from "@md/sample.md";
+import { Article } from "@api/article";
 
-export const Home = () => {
+const MdSample = () => {
   return (
     <div className={styles.home}>
       <h1>react-markdown</h1>
@@ -16,3 +17,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default MdSample;

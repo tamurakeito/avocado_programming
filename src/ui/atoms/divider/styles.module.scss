@@ -1,0 +1,7 @@
+@use "@assets/styles/variables" as var;
+
+.divider {
+  width: 1440px;
+  height: 6px;
+  background: var.$AVOCADO_DARK;
+}
