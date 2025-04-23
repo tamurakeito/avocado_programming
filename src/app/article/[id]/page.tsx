@@ -44,8 +44,9 @@ const Article = async ({ params }: PageProps) => {
       <Header />
       <div className={styles.content_area}>
         <Paginations
-          previousChapter={data.previousChapter}
-          nextChapter={data.nextChapter}
+          chapter={data.chapter}
+          previous={data.previous}
+          next={data.next}
         />
         <div className={styles.course_chapter_heading_goal}>
           <div className={styles.course_chapter}>
@@ -68,8 +69,9 @@ const Article = async ({ params }: PageProps) => {
           </ReactMarkdown>
         </div>
         <Paginations
-          previousChapter={data.previousChapter}
-          nextChapter={data.nextChapter}
+          chapter={data.chapter}
+          previous={data.previous}
+          next={data.next}
         />
       </div>
       <Footer />

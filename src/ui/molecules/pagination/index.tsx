@@ -34,19 +34,18 @@ export const PaginationNext = ({ index, heading }: PaginationProps) => {
 };
 
 export const Paginations = ({
-  previousChapter,
-  nextChapter,
+  chapter,
+  previous,
+  next,
 }: {
-  previousChapter: PaginationProps;
-  nextChapter: PaginationProps;
+  chapter: number;
+  previous: string;
+  next: string;
 }) => {
   return (
     <div className={styles.paginations}>
-      <PaginationPrevious
-        index={previousChapter.index}
-        heading={previousChapter.heading}
-      />
-      <PaginationNext index={nextChapter.index} heading={nextChapter.heading} />
+      <PaginationPrevious index={chapter - 1} heading={previous} />
+      <PaginationNext index={chapter + 1} heading={next} />
     </div>
   );
 };
