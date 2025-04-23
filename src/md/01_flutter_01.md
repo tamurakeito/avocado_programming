@@ -32,40 +32,6 @@
       color: #757575;
     }
   }
-  <style>
-  .yellow {
-    color: #DCDCAA;
-  }
-  .yellowgreen {
-    color: #B5CEA8;
-  }
-  .green {
-    color: #4EC9B0;
-  }
-  .blue {
-    color: #569CD6; 
-  }
-  .skyblue {
-    color: #9CDCFE;
-  }
-  .purple {
-    color: #C586C0;
-  }
-  .pink {
-    color: pink;
-  }
-  .orange {
-    color: #CE9178;
-    * {
-      color: #CE9178;
-    }
-  }
-  .gray {
-    color: #757575;
-    * {
-      color: #757575;
-    }
-  }
 </style>
 
 さて、Dart 言語の基本を少し学んだところで、いよいよ Flutter の中心的な概念である **Widget（ウィジェット）** について学んでいきましょう！ Flutter アプリ開発では、この Widget を理解することが非常に重要です。

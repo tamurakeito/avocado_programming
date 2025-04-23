@@ -1,0 +1,29 @@
+@use "@assets/styles/variables" as var;
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px;
+
+  background: var.$PRIMARY200;
+
+  align-self: stretch;
+
+  .header_content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 24px;
+    gap: 60px;
+
+    .navigation {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 60px;
+    }
+  }
+}

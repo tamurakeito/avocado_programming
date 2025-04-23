@@ -1,12 +1,10 @@
-"use client";
-
 import styles from "./styles.module.scss";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import MdFile from "@md/01_flutter_01.md";
 import { ArticleType } from "@api/article";
-import { Divider } from "@ui/atoms/divider";
+import { Header } from "@ui/organisms/header";
 import { PaginationNext, PaginationPrevious } from "@ui/molecules/pagination";
 import { Footer } from "@ui/organisms/footer";
 
@@ -20,7 +18,7 @@ const Article = () => {
   };
   return (
     <div className={styles.article}>
-      <Divider />
+      <Header />
       <div className={styles.content_area}>
         <Pagenations />
         <div className={styles.course_chapter_heading_goal}>
@@ -44,8 +42,8 @@ const Article = () => {
           </ReactMarkdown>
         </div>
         <Pagenations />
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 };

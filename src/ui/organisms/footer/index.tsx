@@ -8,8 +8,8 @@ export const Footer = () => {
     <div className={styles.footer}>
       <div className={styles.logo_navigation}>
         <div className={styles.logo}>
-          <img src={AvocadoLogo.src} width={336} height={33} />
-          <img src={PoweredBy.src} width={225} height={39} />
+          <img src={AvocadoLogo.src} width={240} />
+          <img src={PoweredBy.src} width={180} />
         </div>
         <div className={styles.navigation}>
           <Tab label="ホーム" />
