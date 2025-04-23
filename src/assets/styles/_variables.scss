@@ -1,3 +1,6 @@
+// @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap");
+
 /* Size */
 $BREAKPOINT_SM: 767px;
 $BREAKPOINT_MD: 1023px;
@@ -31,9 +34,6 @@ $PRIMARY200: #eaf3cd;
 $PRIMARY900: #a0cb1c;
 
 /* Font */
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap");
-
 $NOTO_SANS_JP: "Noto Sans JP", sans-serif;
 $SOURCE_CODE_PRO: "Source Code Pro", sans-serif;
 
@@ -43,3 +43,5 @@ $FONT_H3: normal 600 16px/19px $NOTO_SANS_JP;
 // $FONT_LG:
 $FONT_MD: normal 400 16px/24px $NOTO_SANS_JP;
 $FONT_SM: normal 400 14px/17px $NOTO_SANS_JP;
+
+$FONT_CODE: normal 400 14px/21px $SOURCE_CODE_PRO;

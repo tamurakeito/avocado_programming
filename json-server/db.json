@@ -1,0 +1,20 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "course": "Flutter入門",
+      "chapter": 5,
+      "heading": "Flutterの基本「Widget」を理解しよう",
+      "goal": "FlutterのUI構築の核となるWidgetの概念を理解する",
+      "content": "01_flutter_01.md",
+      "previousChapter": {
+        "index": 4,
+        "heading": "Dart言語の基本（Flutterで使う部分だけ！）"
+      },
+      "nextChapter": {
+        "index": 6,
+        "heading": "レイアウトを組んでみよう"
+      }
+    }
+  ]
+}

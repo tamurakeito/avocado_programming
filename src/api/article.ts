@@ -5,17 +5,25 @@ export type ArticleType = {
   chapter: number;
   heading: string;
   goal: string;
-  content: URL;
+  content: string;
+  previousChapter: {
+    index: number;
+    heading: string;
+  };
+  nextChapter: {
+    index: number;
+    heading: string;
+  };
 };
 
-export async function apiArticle(id: number): Promise<ArticleType | undefined> {
+export async function getArticle(id: number): Promise<ArticleType | Error> {
   try {
-    const url = `/article/${id}`;
+    const url = `/articles/${id}`;
     const response = await client.get<ArticleType>(url);
 
     return response.data;
   } catch (error) {
     console.error(error);
-    return undefined;
+    return error as Error;
   }
 }
