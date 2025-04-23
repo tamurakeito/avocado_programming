@@ -1,0 +1,45 @@
+@use "@assets/styles/variables" as var;
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  gap: 84px;
+
+  background: var.$WHITE025;
+  align-self: stretch;
+
+  .logo_navigation {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 60px;
+    align-self: stretch;
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding: 0px;
+      gap: 24px;
+    }
+    .navigation {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 24px;
+    }
+  }
+  .copyright {
+    font-family: var.$NOTO_SANS_JP;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: var.$BLACK1000;
+  }
+}

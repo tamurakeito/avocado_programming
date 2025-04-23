@@ -5,7 +5,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import SampleMd from "@md/sample.md";
-import { Article } from "@api/article";
 
 const MdSample = () => {
   return (

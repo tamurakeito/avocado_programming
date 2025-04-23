@@ -1,9 +1,3 @@
-export const Chapter = ({
-  className,
-  index,
-}: {
-  className: string;
-  index: number;
-}) => {
-  return <div className={className}>第 {index} 章</div>;
+export const Chapter = ({ index }: { index: number }) => {
+  return "第 " + index.toString() + " 章";
 };

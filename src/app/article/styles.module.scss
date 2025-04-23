@@ -1,2 +1,247 @@
+@use "@assets/styles/variables" as var;
+
 .article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+
+  background: var.$WHITE025;
+
+  .content_area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+    gap: 24px;
+
+    width: auto;
+    max-width: 1024px;
+
+    .course_chapter_heading_goal {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 12px;
+
+      align-self: stretch;
+
+      .course_chapter {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 24px;
+
+        .course {
+          box-sizing: border-box;
+
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 6px 12px;
+          gap: 10px;
+
+          height: 31px;
+
+          background: var.$PRIMARY;
+          flex: none;
+          order: 0;
+          flex-grow: 0;
+
+          font: var.$FONT_H3;
+
+          color: var.$GRAY900;
+        }
+
+        .chapter {
+          box-sizing: border-box;
+
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 6px 12px;
+          gap: 10px;
+
+          height: 31px;
+
+          background: var.$PRIMARY100;
+          border: 3px solid var.$PRIMARY;
+
+          font: var.$FONT_H3;
+
+          color: var.$GRAY900;
+        }
+      }
+
+      .heading {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 6px 12px;
+
+        font: var.$FONT_H1;
+
+        color: var.$GRAY900;
+      }
+
+      .goal {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 6px 12px;
+        gap: 10px;
+
+        background: var.$PRIMARY100;
+
+        align-self: stretch;
+
+        .mokuhyou {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 4px 6px;
+          gap: 10px;
+
+          background: var.$AVOCADO_DARK;
+          border-radius: 4px;
+
+          font: var.$FONT_MD;
+
+          color: var.$WHITE000;
+
+          flex: none;
+          order: 0;
+          flex-grow: 0;
+        }
+
+        .goal_content {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          padding: 4px 6px;
+          gap: 10px;
+
+          font: var.$FONT_MD;
+
+          flex: none;
+          order: 1;
+          flex-grow: 0;
+        }
+      }
+    }
+
+    .divider {
+      height: 1px;
+      background: var.$PRIMARY;
+      align-self: stretch;
+    }
+
+    .content {
+      h2 {
+        padding: {
+          top: 24px;
+          bottom: 32px;
+        }
+        font: var.$FONT_H2;
+        color: var.$AVOCADO_DARK;
+      }
+
+      h3 {
+        padding: {
+          top: 8px;
+          bottom: 32px;
+        }
+        font: var.$FONT_H3;
+        color: var.$GRAY900;
+      }
+
+      p {
+        padding: 0px 0px 24px;
+        font: var.$FONT_MD;
+        color: var.$GRAY900;
+      }
+
+      strong {
+        font-weight: 500;
+      }
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px 24px 24px;
+        gap: 6px;
+        align-self: stretch;
+        list-style-type: square;
+
+        li {
+          font: var.$FONT_MD;
+          color: var.$GRAY900;
+        }
+      }
+
+      ol {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px 20px 24px;
+        gap: 6px;
+        align-self: stretch;
+        list-style-type: decimal;
+
+        li {
+          font: var.$FONT_MD;
+          color: var.$GRAY900;
+        }
+      }
+
+      code {
+        // display: inline-block;
+        font: normal 400 12px/19px var.$SOURCE_CODE_PRO;
+        letter-spacing: 0.02em;
+        color: var.$GRAY900;
+        background: var.$GRAY200;
+        padding: 1px 4px;
+        border-radius: 5px;
+      }
+
+      pre {
+        padding: 24px;
+        margin: {
+          bottom: 32px;
+        }
+        gap: 10px;
+
+        // width: 600px;
+        background: #1f1f1f;
+        white-space: pre-wrap;
+        border-radius: 8px;
+
+        code {
+          font: normal 400 12px/19px var.$SOURCE_CODE_PRO;
+          letter-spacing: 0.02em;
+          color: var.$GRAY100;
+          background: none;
+        }
+      }
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 36px;
+
+  align-self: stretch;
 }
