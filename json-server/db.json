@@ -11,6 +11,16 @@
       "next": "開発環境を整えよう"
     },
     {
+      "id": 2,
+      "course": "Flutter入門",
+      "chapter": 2,
+      "heading": "開発環境を整えよう",
+      "goal": "Flutter",
+      "content": "01_flutter_02.md",
+      "previous": "Flutterの世界へようこそ！",
+      "next": "最初のFlutterアプリとご対面！"
+    },
+    {
       "id": 5,
       "course": "Flutter入門",
       "chapter": 5,

@@ -178,6 +178,11 @@
         font-weight: 500;
       }
 
+      a {
+        color: var.$AVOCADO_DARK;
+        text-decoration: underline;
+      }
+
       ul {
         display: flex;
         flex-direction: column;
