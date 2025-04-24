@@ -3,10 +3,20 @@
     {
       "id": 1,
       "course": "Flutter入門",
+      "chapter": 1,
+      "heading": "Flutterの世界へようこそ！",
+      "goal": "Flutter",
+      "content": "01_flutter_01.md",
+      "previous": "",
+      "next": "開発環境を整えよう"
+    },
+    {
+      "id": 5,
+      "course": "Flutter入門",
       "chapter": 5,
       "heading": "Flutterの基本「Widget」を理解しよう",
       "goal": "FlutterのUI構築の核となるWidgetの概念を理解する",
-      "content": "01_flutter_01.md",
+      "content": "01_flutter_05.md",
       "previous": "Dart言語の基本（Flutterで使う部分だけ！）",
       "next": "レイアウトを組んでみよう"
     }

@@ -44,8 +44,16 @@ export const Paginations = ({
 }) => {
   return (
     <div className={styles.paginations}>
-      <PaginationPrevious index={chapter - 1} heading={previous} />
-      <PaginationNext index={chapter + 1} heading={next} />
+      {previous != "" ? (
+        <PaginationPrevious index={chapter - 1} heading={previous} />
+      ) : (
+        <div className={styles.pagination}></div>
+      )}
+      {next != "" ? (
+        <PaginationNext index={chapter + 1} heading={next} />
+      ) : (
+        <div className={styles.pagination}></div>
+      )}
     </div>
   );
 };
