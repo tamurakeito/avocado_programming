@@ -1,23 +1,60 @@
 import styles from "./styles.module.scss";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
+import { MDXRemote } from "next-mdx-remote/rsc";
 import { ArticleType, getArticle } from "@api/article";
 import { Header } from "@ui/organisms/header";
 import { Paginations } from "@ui/molecules/pagination";
 import { Footer } from "@ui/organisms/footer";
 import fs from "fs/promises";
 import path from "path";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+const components = {
+  pre: ({ children }: { children: any }) => {
+    const child = children as React.ReactElement;
+    const code = child.props.children;
+    const language = child.props.className?.replace("language-", "");
+
+    return (
+      <SyntaxHighlighter
+        language={language || "text"}
+        style={vscDarkPlus}
+        PreTag="div"
+        className={styles.codeBlock}
+      >
+        {code}
+      </SyntaxHighlighter>
+    );
+  },
+  SyntaxHighlighter: ({
+    children,
+    language,
+    className,
+  }: {
+    children: string;
+    language?: string;
+    className?: string;
+  }) => (
+    <SyntaxHighlighter
+      language={language || "text"}
+      style={vscDarkPlus}
+      PreTag="div"
+      className={`${styles.codeBlock} ${className || ""}`}
+    >
+      {children}
+    </SyntaxHighlighter>
+  ),
+};
+
 const Article = async ({ params }: PageProps) => {
   const { id } = await params;
   const articleId = parseInt(id);
   let data: ArticleType | Error;
-  let markdownContent: string;
+  let mdxContent: string;
 
   try {
     data = await getArticle(articleId);
@@ -32,10 +69,10 @@ const Article = async ({ params }: PageProps) => {
   }
 
   try {
-    const filePath = path.join(process.cwd(), "public", "md", data.content);
-    markdownContent = await fs.readFile(filePath, "utf-8");
+    const filePath = path.join(process.cwd(), "public", "mdx", data.content);
+    mdxContent = await fs.readFile(filePath, "utf-8");
   } catch (error) {
-    console.error("マークダウンファイルの読み込みに失敗しました:", error);
+    console.error("MDXファイルの読み込みに失敗しました:", error);
     return <div>コンテンツの読み込みに失敗しました</div>;
   }
 
@@ -61,12 +98,7 @@ const Article = async ({ params }: PageProps) => {
         </div>
         <div className={styles.divider}></div>
         <div className={styles.content}>
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-          >
-            {markdownContent}
-          </ReactMarkdown>
+          <MDXRemote source={mdxContent} components={components} />
         </div>
         <Paginations
           chapter={data.chapter}

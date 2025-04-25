@@ -1,10 +1,22 @@
 // next.config.ts
-import type { NextConfig } from "next";
+import { NextConfig } from "next";
 import type { Configuration } from "webpack"; // Webpack の型定義をインポート (オプションですが推奨)
+import withMDX from "@next/mdx";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+
+const mdxConfig = withMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeRaw],
+  },
+});
 
 const nextConfig: NextConfig = {
   // 他の Next.js 設定があればここに記述します
   reactStrictMode: true, // 例
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 
   // Webpack の設定をカスタマイズ
   webpack: (
@@ -19,9 +31,22 @@ const nextConfig: NextConfig = {
       use: "raw-loader", // raw-loader を使用
     });
 
+    config.module?.rules?.push({
+      test: /\.mdx?$/,
+      use: [
+        {
+          loader: "@mdx-js/loader",
+          options: {
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [rehypeRaw],
+          },
+        },
+      ],
+    });
+
     // 変更した config オブジェクトを返すことが重要です
     return config;
   },
 };
 
-export default nextConfig;
+export default mdxConfig(nextConfig);
