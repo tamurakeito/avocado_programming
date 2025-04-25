@@ -5,7 +5,7 @@
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 0,
       "heading": "はじめに - プログラミングの世界へようこそ！",
-      "goal": "Flutter",
+      "goal": "講座の全体像とFlutterでアプリを作る魅力を知る",
       "content": "01_flutter_00.mdx",
       "previous": "",
       "next": "Flutterって何だろう？ - アプリの見た目に触れてみる"
@@ -15,7 +15,7 @@
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 1,
       "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
-      "goal": "Flutter",
+      "goal": "Flutterのコードが画面の見た目になる雰囲気を掴む",
       "content": "01_flutter_01.mdx",
       "previous": "はじめに - プログラミングの世界へようこそ！",
       "next": "開発環境を整えよう"
