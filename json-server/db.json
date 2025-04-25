@@ -1,18 +1,28 @@
 {
   "articles": [
     {
+      "id": 0,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 0,
+      "heading": "はじめに - プログラミングの世界へようこそ！",
+      "goal": "Flutter",
+      "content": "01_flutter_00.mdx",
+      "previous": "",
+      "next": "Flutterって何だろう？ - アプリの見た目に触れてみる"
+    },
+    {
       "id": 1,
-      "course": "Flutter入門",
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 1,
-      "heading": "Flutterの世界へようこそ！",
+      "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
       "goal": "Flutter",
       "content": "01_flutter_01.mdx",
-      "previous": "",
+      "previous": "はじめに - プログラミングの世界へようこそ！",
       "next": "開発環境を整えよう"
     },
     {
       "id": 2,
-      "course": "Flutter入門",
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 2,
       "heading": "開発環境を整えよう",
       "goal": "Flutter",
@@ -22,7 +32,7 @@
     },
     {
       "id": 5,
-      "course": "Flutter入門",
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 5,
       "heading": "Flutterの基本「Widget」を理解しよう",
       "goal": "FlutterのUI構築の核となるWidgetの概念を理解する",
