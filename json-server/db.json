@@ -18,16 +18,26 @@
       "goal": "Flutterのコードが画面の見た目になる雰囲気を掴む",
       "content": "01_flutter_01.mdx",
       "previous": "はじめに - プログラミングの世界へようこそ！",
-      "next": "開発環境を整えよう"
+      "next": "Dart言語の基本"
     },
     {
       "id": 2,
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 2,
-      "heading": "Flutterと話すための言葉 - Dart言語の基本",
+      "heading": "Dart言語の基本",
       "goal": "アプリ作成に必要なDart言語の基本文法を理解する",
       "content": "01_flutter_02.mdx",
       "previous": "Flutterって何だろう？ - アプリの見た目に触れてみる",
+      "next": "アプリの部品 - Widgetを知ろう"
+    },
+    {
+      "id": 3,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 3,
+      "heading": "アプリの部品 - Widgetを知ろう",
+      "goal": "Flutterアプリの画面を構成する基本Widgetを知る",
+      "content": "01_flutter_03.mdx",
+      "previous": "Dart言語の基本",
       "next": ""
     },
     {

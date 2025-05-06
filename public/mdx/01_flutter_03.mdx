@@ -1,35 +1,203 @@
-<style>
-  .yellow {
-    color: #DCDCAA;
-  }
-  .yellowgreen {
-    color: #B5CEA8;
-  }
-  .green {
-    color: #4EC9B0;
-  }
-  .blue {
-    color: #569CD6; 
-  }
-  .skyblue {
-    color: #9CDCFE;
-  }
-  .purple {
-    color: #C586C0;
-  }
-  .pink {
-    color: pink;
-  }
-  .orange {
-    color: #CE9178;
-    * {
-      color: #CE9178;
+第2章では、Flutterアプリの設計図を書くための言語、Dartの基本的な文法を学びましたね。
+変数、型、リスト、関数など、アプリを作るための道具の基礎を固めました。
+
+さて、いよいよFlutterの核心に迫っていきましょう。
+Flutterでアプリの見た目（UI）を作る上で、最も重要なコンセプトが **Widget（ウィジェット）** です。
+
+イメージしてみてください。レゴブロックで何かを作るとき、様々な形や色のブロックを組み合わせていきますよね？
+FlutterにおけるWidgetは、まさにその**レゴブロック**のようなものです。
+一つ一つのWidgetが画面の一部となり、それらを組み合わせることで、アプリ全体の画面が構築されます。
+
+驚くかもしれませんが、Flutterでは**画面に表示されるほぼ全てのもの**がWidgetです。
+
+- 文字を表示する ⇒ `Text` Widget
+- 画像を表示する ⇒ `Image` Widget
+- アイコンを表示する ⇒ `Icon` Widget
+- ボタン ⇒ `ElevatedButton` や `TextButton` などのWidget
+- 要素を中央に配置する ⇒ `Center` Widget
+- 要素を縦や横に並べる ⇒ `Column` や `Row` Widget
+- 要素の周りに余白を作る ⇒ `Padding` Widget
+- 画面全体の骨組み ⇒ `Scaffold` Widget
+
+これらはほんの一例です。Flutterには、あらかじめ用意されたたくさんのWidgetがあり、これらを組み合わせることで、多種多様な画面を作り出すことができます。
+
+## Widgetって何？
+
+もう少し詳しく見てみましょう。Widgetとは、Flutterアプリの**画面の一部を構成する部品**であり、その部品が **「どのように見えるべきか」の設計図** です。
+
+第1章で触れた「宣言的UI」を思い出してください。
+Widgetは、「このテキストはこんな内容で、こんな色で、こんな大きさで表示してね」とか、「このアイコンとテキストを横に並べてね」といった **宣言（指示）** をコードで記述したものです。
+Flutterフレームワークがその宣言を読み取り、実際に画面に描画する処理を行ってくれます。
+
+## 基本的なWidgetを見てみよう
+
+まずは、よく使う基本的なWidgetをいくつか紹介します。
+今はコードを完璧に理解する必要はありません。「へぇ、こんなWidgetがあるんだ」という感じで眺めてみてください。
+
+- `Text`: 文字列を表示します。一番シンプルでよく使うWidgetの一つです。
+
+<SyntaxHighlighter language="dart">
+{`Text('こんにちは、Flutter！')`}
+</SyntaxHighlighter>
+
+- `Icon`: アイコンを表示します。Flutterにはたくさんのアイコンが事前に用意されています（Material Icons）。
+
+<SyntaxHighlighter language="dart">
+{`Icon(Icons.favorite, color: Colors.red) // 赤いハートのアイコン`}
+</SyntaxHighlighter>
+
+（ `Icons.favorite` でアイコンの種類を指定し、 `Colors.red` で色を指定しています。 `Icons` や `Colors` もFlutterが用意してくれている便利な道具です）
+
+- `Image`: 画像を表示します。インターネット上の画像をURLで指定したり、アプリ内に含めた画像ファイルを表示したりできます。
+
+<SyntaxHighlighter language="dart">
+{`// 例：ネットワーク上の画像を表示する場合
+Image.network('https://example.com/image.png')
+
+// 例：アプリ内の画像を表示する場合 (設定が別途必要)
+Image.asset('assets/images/my_image.jpg')`}
+</SyntaxHighlighter>
+
+- `Container`: 多目的な「箱」のようなWidgetです。
+色をつけたり、サイズを指定したり、枠線をつけたり、内側や外側に余白（`padding` や `margin`）を設定したりできます。
+レイアウトの調整に非常に便利です。
+
+<SyntaxHighlighter language="dart">
+{`Container(
+    width: 100.0, // 幅を100に指定
+    height: 50.0, // 高さを50に指定
+    color: Colors.blue, // 背景色を青に指定
+    child: Center(child: Text('箱')), // 中にさらにWidgetを入れることも可能
+)`}
+</SyntaxHighlighter>
+
+- `Center`: 中に入れた子Widget（child）を、自身の領域の中央に配置します。
+
+<SyntaxHighlighter language="dart">
+{`Center(
+    child: Text('中央寄せ'),
+)`}
+</SyntaxHighlighter>
+
+## Widgetを組み合わせる：レイアウトWidget
+
+個々のWidgetも重要ですが、アプリの画面を作るには、これらのWidgetを**どのように配置するか**を決める必要があります。
+その役割を担うのが**レイアウトWidget**です。
+
+レイアウトWidgetは、自身の子Widget（`child` または `children`）を受け取り、それらを特定のルールに従って配置します。
+
+- `Row`: 子Widgetたちを **水平方向（横）** に並べます。
+
+<SyntaxHighlighter language="dart">
+{`Row(
+    mainAxisAlignment: MainAxisAlignment.center, // 横方向の中央揃え (オプション)
+    children: <Widget>[ // 横に並べたいWidgetをリストで指定
+      Icon(Icons.star),
+      SizedBox(width: 8.0), // Widget間に少し隙間を開けるWidget
+      Text('お気に入り'),
+    ],
+)`}
+</SyntaxHighlighter>
+（`children` には `List<Widget>`、つまりWidgetのリストを渡します）
+
+- `Column`: 子Widgetたちを **垂直方向（縦）** に並べます。
+
+<SyntaxHighlighter language="dart">
+{`Column(
+    crossAxisAlignment: CrossAxisAlignment.start, // 縦方向の左揃え (オプション)
+    children: <Widget>[ // 縦に並べたいWidgetをリストで指定
+      Text('タイトル', style: TextStyle(fontSize: 20.0)), // 文字サイズを指定する例
+      Text('サブタイトル'),
+      Container(height: 10.0), // Widget間に少し隙間を開ける例
+      Row( /* RowをColumnの中に入れることも可能 */ ),
+    ],
+)`}
+</SyntaxHighlighter>
+
+- `Padding`: 子Widgetの周囲に **余白（パディング）** を追加します。
+
+<SyntaxHighlighter language="dart">
+{`Padding(
+    padding: EdgeInsets.all(16.0), // 全方向に16.0の余白を追加
+    // padding: EdgeInsets.symmetric(horizontal: 20.0), // 水平方向に20.0の余白
+    // padding: EdgeInsets.only(left: 10.0, top: 5.0), // 左に10.0, 上に5.0の余白
+    child: Text('この文字の周りに余白があります'),
+)`}
+</SyntaxHighlighter>
+（`EdgeInsets` を使って余白のサイズや方向を指定します）
+
+- `Scaffold`: アプリの基本的なページの骨組みを提供します。
+画面上部のバー(`AppBar`)、画面本体(`body`)、右下のフローティングボタン(`FloatingActionButton`)などを配置するための枠組みです。
+第1章のコード例でも使われていましたね。多くのページの最も外側のWidgetとして使われます。
+
+- `AppBar`: `Scaffold` と組み合わせて使う、画面上部のバーです。
+通常、アプリのタイトルや戻るボタンなどが表示されます。
+
+これらを組み合わせることで、「タイトルを一番上に表示し、その下に画像を配置し、さらにその下に横並びのボタンを配置する」といったレイアウトが実現できます。
+
+## 見た目だけじゃない？ StatelessWidget
+
+Widgetには、その性質によっていくつかの種類があります。まず最初に理解しておきたいのが `StatelessWidget` **(ステートレスウィジェット)** です。
+
+StatelessWidgetは、その名の通り「状態（State）を持たない」Widgetです。
+これはどういうことかというと、**一度作られたら、その見た目が内部的な要因で変化することはない**、ということです。
+
+StatelessWidgetの見た目は、それが作られるときに外部から与えられた情報（設定値）と、それが配置される状況（`BuildContext`）によってのみ決まります。
+ユーザーがボタンをタップしたり、時間が経過したりしても、StatelessWidget自体が勝手に見た目を変えることはありません。
+
+例えるなら、**一度描かれた絵画**のようなものです。絵の具が乾けば、その絵の内容は変わりませんよね。
+
+第1章で見たコード例も、実は `StatelessWidget` を使って作られていました。
+
+
+<SyntaxHighlighter language="dart">
+{`// 'name' という文字列を受け取って挨拶を表示するStatelessWidgetの例
+  class GreetingWidget extends StatelessWidget {
+    // このWidgetの設定値（外部から受け取る情報）
+    final String name;
+
+    // Widgetが作られるときに呼ばれるコンストラクタ
+    // required this.name で、必ずnameを受け取るように指定
+    const GreetingWidget({Key? key, required this.name}) : super(key: key);
+
+    // このWidgetが画面にどう表示されるかを定義するメソッド
+    @override
+    Widget build(BuildContext context) {
+      // Text Widgetを返すことで、画面に文字を表示する
+      return Text('こんにちは、$name さん！');
     }
   }
-  .gray {
-    color: #757575;
-    * {
-      color: #757575;
-    }
-  }
-</style>
+
+  // 使う側：
+  GreetingWidget(name: 'アボカド') // これで「こんにちは、アボカド さん！」と表示される`}
+</SyntaxHighlighter>
+
+- `class GreetingWidget extends StatelessWidget` で、StatelessWidgetを継承（性質を受け継ぐ）して新しいWidgetを定義します。
+- `final String name;` で、このWidgetが持つ設定値（変更されない値）を宣言します。
+- `const GreetingWidget(...)` はコンストラクタと呼ばれ、Widgetが作られるときに初期設定を行います。
+- `build` メソッドが最も重要で、 **このWidgetが実際に画面に表示する内容（他のWidgetの組み合わせ）** を返します。
+`Text` や `Icon`、`Row`、`Column` など、これまで紹介した基本的なWidgetの多くは、StatelessWidgetの考え方に基づいています。
+
+### （補足）状態を持つWidgetについて
+
+「じゃあ、ボタンを押したら表示が変わるカウンターとか、チェックボックスはどうするの？」と思ったかもしれません。
+そのような、**内部的に状態を持ち、その状態に応じて見た目が変化するWidget**も存在します。
+それが `StatefulWidget` **(ステートフルウィジェット)** です。<br/>
+これについては、第5章でカウンターアプリの例で少し触れることになります。
+ただし、この講座ではより現代的で強力な状態管理の方法（RiverpodとHooks）を学ぶため、StatefulWidget を使った詳細な状態管理については扱いません。
+今は「見た目が変わらないWidget (`StatelessWidget`) と、状況に応じて見た目が変わることもあるWidget (`StatefulWidget`) があるんだな」くらいに覚えておけばOKです。
+
+---
+
+今回は、FlutterのUIを構成する基本単位である「Widget」について学びました。
+
+- Flutterでは画面のほぼ全てがWidgetであること。
+- 基本的な表示Widget (`Text`, `Icon`, `Image`, `Container`)。
+- Widgetを配置するためのレイアウトWidget (`Row`, `Column`, `Padding`, `Scaffold`, `AppBar`)。
+- 見た目が内部的に変化しない `StatelessWidget` の概念。
+
+たくさんのWidgetが出てきましたが、一度に全てを覚える必要はありません。
+これから実際にアプリを作りながら、繰り返し使っていくうちに自然と身についていきます。
+
+さて、Dart言語の基本とWidgetの概念が分かったところで、いよいよ次は、皆さんのパソコンでFlutterアプリを開発し、動かすための準備をしましょう！
+次の章では **開発環境の構築** を行います。
