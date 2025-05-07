@@ -38,6 +38,16 @@
       "goal": "Flutterアプリの画面を構成する基本Widgetを知る",
       "content": "01_flutter_03.mdx",
       "previous": "Dart言語の基本",
+      "next": "開発環境を整えよう - Flutterを動かす準備"
+    },
+    {
+      "id": 4,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 4,
+      "heading": "開発環境を整えよう - Flutterを動かす準備",
+      "goal": "自分のPCでFlutterアプリ開発の準備ができるようになる",
+      "content": "01_flutter_04.mdx",
+      "previous": "アプリの部品 - Widgetを知ろう",
       "next": ""
     },
     {
