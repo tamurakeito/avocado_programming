@@ -1,35 +1,373 @@
-<style>
-  .yellow {
-    color: #DCDCAA;
+第6章では、TODOアプリの画面レイアウト（見た目の骨組み）を作成しましたね。
+`TextField` で入力欄を作り、`ListView` でリスト表示エリアを設け、`FloatingActionButton` を配置しました。
+しかしまだ、入力した内容がリストに表示されたり、ボタンが実際に機能したりはしていませんでした。
+
+この章では、いよいよその静的な画面に命を吹き込みます！ Riverpodとflutter_hooksを使って、ユーザーが入力したTODOアイテムをリストに追加し、それを画面にリアルタイムで表示する機能を実装していきましょう。
+
+具体的には、以下のステップで進めます。
+
+1. 個々のTODOアイテムが持つべき情報（データの形）を定義します。
+2. TODOアイテムのリスト全体を管理するためのRiverpodの仕組み（Provider）を作ります。
+3. 入力欄や追加ボタンから、新しいTODOをそのProviderに追加できるようにします。
+4. Providerが管理しているTODOリストを画面の `ListView` に表示します。
+
+## TODOデータの形を決めよう
+
+まず、一つ一つの「TODOアイテム」がどんな情報を持つべきかを考えましょう。最低限、以下の情報が必要になりそうです。
+
+- **内容 (description)** : そのTODOが何をするものかを示す文字列（例：「牛乳を買う」）。
+- **完了状態 (isCompleted)** : そのTODOが完了したかどうかを示す真偽値 (`true` または `false`)。
+- **ID (id)** : 各TODOアイテムを区別するための一意の識別子。後で特定のTODOを更新したり削除したりする際に必要になります。
+これらの情報をまとめて扱うために、Dartの `class` を使って `Todo` という独自のデータ型を定義します。
+`lib` フォルダ内に新しく `todo_model.dart` というファイルを作成し、以下のように記述しましょう。
+
+Dart (lib/todo_model.dart)
+
+<SyntaxHighlighter language="dart">
+{`class Todo {
+    final String id;          // 各TODOを一位に識別するためのID
+    final String description; // TODOの内容
+    final bool isCompleted;   // 完了したかどうか (true / false)
+
+    // Todoオブジェクトを作るときに呼ばれるコンストラクタ
+    Todo({
+      required this.id,
+      required this.description,
+      this.isCompleted = false, // デフォルトでは未完了として作成
+    });
+  }`}
+</SyntaxHighlighter>
+
+- `final` キーワードは、一度値が設定されたら変更されないことを意味します。
+    これにより、`Todo` オブジェクト自体は不変（イミュータブル）となり、状態管理がしやすくなります。
+- `id` は、各TODOアイテムをユニークにするためのものです。
+- `isCompleted` は、デフォルト値として `false`（未完了）を設定しています。
+
+## TODOリストの状態をRiverpodで管理する (`StateNotifierProvider` と `StateNotifier`)
+
+次に、この `Todo` オブジェクトのリスト (`List<Todo>`) をアプリ全体で管理するための仕組みをRiverpodで作ります。
+
+第5章でカウンターアプリのシンプルな数値の状態管理に `StateProvider` を使いましたが、TODOリストのように複数のアイテムを持ち、追加・削除・更新といった操作メソッドも一緒に管理したい場合には、`StateNotifier` **(ステートノーティファイア)** と `StateNotifierProvider` **(ステートノーティファイアプロバイダー)** の組み合わせがより適しています。
+
+- `StateNotifier<T>`: `T` という型の状態を保持し、その状態を変更するためのメソッドを持つことができるクラスです。状態を変更する際は、必ず新しい状態オブジェクトを作成して置き換える（イミュータブルな更新）というルールがあります。
+
+- `StateNotifierProvider<Notifier, StateType>`: `StateNotifier` のインスタンスとその状態 (`StateType`) をUIに提供するためのProviderです。
+
+`lib` フォルダ内に `todo_provider.dart` という新しいファイルを作成し、以下のように記述しましょう。
+
+Dart (lib/todo_provider.dart)
+
+<SyntaxHighlighter language="dart">
+{`import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'todo_model.dart'; // 作成したTodoモデルをインポート
+
+  // 1. TodoListNotifier クラスの定義
+  // StateNotifierを継承し、管理する状態の型として List<Todo> を指定
+  class TodoListNotifier extends StateNotifier<List<Todo>> {
+    // コンストラクタ：初期状態として空のリストを渡す
+    TodoListNotifier() : super([]);
+
+    // 新しいTODOを追加するメソッド
+    void addTodo(String description) {
+      final newTodo = Todo(
+        // 簡単なユニークIDとして現在時刻のミリ秒を使用
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        description: description,
+        // isCompleted は Todo クラスのデフォルトで false になる
+      );
+      // 現在の状態（state）に新しいTODOを追加した「新しいリスト」で状態を更新
+      // '...state' はスプレッド演算子といい、既存のリストの全要素を展開する
+      state = [...state, newTodo];
+    }
+
+    // TODOの完了状態を切り替えるメソッド (第8章で実装)
+    // void toggle(String todoId) { ... }
+
+    // TODOを削除するメソッド (第8章で実装)
+    // void removeTodo(String todoId) { ... }
   }
-  .yellowgreen {
-    color: #B5CEA8;
-  }
-  .green {
-    color: #4EC9B0;
-  }
-  .blue {
-    color: #569CD6; 
-  }
-  .skyblue {
-    color: #9CDCFE;
-  }
-  .purple {
-    color: #C586C0;
-  }
-  .pink {
-    color: pink;
-  }
-  .orange {
-    color: #CE9178;
-    * {
-      color: #CE9178;
+
+  // 2. StateNotifierProvider の定義
+  // TodoListNotifier とその状態 List<Todo> を提供する
+  final todoListProvider =
+      StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
+    return TodoListNotifier();
+});`}
+</SyntaxHighlighter>
+
+- `TodoListNotifier` クラスが `StateNotifier<List<Todo>>` を継承しています。これにより、このクラスは `List<Todo>` 型の状態を管理できます。
+
+- コンストラクタ `TodoListNotifier() : super([]);` で、初期状態として空のリスト (`[]`) を設定しています。`StateNotifier` 内では、管理している状態は `state` という名前のプロパティでアクセスできます。
+- `addTodo` メソッドでは、新しい `Todo` オブジェクトを作成し、現在の `state` (TODOリスト) の末尾に新しい `Todo` を追加した **新しいリスト** を作成して、`state` を更新しています。
+  状態を直接変更するのではなく、新しい状態オブジェクトで置き換えるのがポイントです（イミュータビリティ）。
+- `todoListProvider` は、この `TodoListNotifier` のインスタンスをアプリの他の部分に提供する役割を持ちます。
+  UI側のWidgetは、このProviderを通じて `TodoListNotifier` のメソッドを呼び出したり、状態（TODOリスト）を監視したりします。
+
+## 入力値を使ってTODOリスト（Provider）を更新する
+
+`TodoListNotifier` と `todoListProvider` が準備できたので、いよいよUI側（`todo_screen.dart`）からこれらを使ってTODOを追加できるようにします。
+
+`lib/todo_screen.dart` を開き、`FloatingActionButton` の `onPressed` コールバックと、`TextField` の `onSubmitted` コールバックを修正します。
+
+Dart (lib/todo_screen.dart の TodoScreen Widget内)
+
+<SyntaxHighlighter language="dart">
+{`// ... (既存のimport文)
+  import 'todo_provider.dart'; // 作成した todo_provider.dart をインポート
+
+  class TodoScreen extends HookConsumerWidget {
+    const TodoScreen({super.key});
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+      final newTodoController = useTextEditingController();
+      // final List<Todo> todos = ref.watch(todoListProvider); // ←これは次のセクションで使う
+
+      // ( ... appBar, body の Column の始まりなど ... )
+
+              // TextField の onSubmitted を修正
+              TextField(
+                controller: newTodoController,
+                decoration: const InputDecoration(
+                  labelText: '新しいTODOを入力',
+                  hintText: '例：牛乳を買う',
+                ),
+                onSubmitted: (String value) { // エンターキーなどで入力が確定されたとき
+                  final String description = value.trim(); // 前後の空白を削除
+                  if (description.isNotEmpty) {
+                    // todoListProvider の notifier を通じて addTodo メソッドを呼び出す
+                    ref.read(todoListProvider.notifier).addTodo(description);
+                    newTodoController.clear(); // 入力欄をクリア
+                  }
+                },
+              ),
+              
+      // ( ... ListView など ... )
+
+        floatingActionButton: FloatingActionButton(
+          onPressed: () { // ボタンが押されたとき
+            final String description = newTodoController.text.trim(); // 前後の空白を削除
+            if (description.isNotEmpty) {
+              // 同様に addTodo メソッドを呼び出す
+              ref.read(todoListProvider.notifier).addTodo(description);
+              newTodoController.clear(); // 入力欄をクリア
+            }
+          },
+          tooltip: 'TODOを追加',
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.green,
+        ),
+      // ...
+    }
+  }`}
+</SyntaxHighlighter>
+
+- `import 'todo_provider.dart';` を追加して、先ほど作成した `todoListProvider` を使えるようにします。
+- `onPressed` (FAB) および `onSubmitted` (`TextField`) の中で、
+    - `newTodoController.text.trim()` で入力されたテキストを取得し、`trim()` で前後の余計な空白を削除しています。
+    - テキストが空でなければ (`description.isNotEmpty`)、`ref.read(todoListProvider.notifier).addTodo(description);` を呼び出しています。
+        - `ref.read(provider.notifier)` は、Providerが管理している `StateNotifier` のインスタンス（この場合は `TodoListNotifier`）を取得する方法です。
+        - そして、そのインスタンスの `addTodo` メソッドを呼び出して、新しいTODOをリストに追加しています。
+    - TODO追加後、`newTodoController.clear();` で入力欄を空にしています。
+
+## Providerの状態を読み取って `ListView` に表示する
+
+TODOをリストに追加できるようになったので、次はそれを画面の `ListView` に表示しましょう。
+`TodoScreen` Widgetの `build` メソッド内で、`todoListProvider` を `ref.watch()` で監視し、取得したTODOリストのデータを使って `ListView.builder` を更新します。
+
+Dart (lib/todo_screen.dart の TodoScreen Widget内)
+
+<SyntaxHighlighter language="dart">
+{`// ... (既存のimport文)
+  import 'todo_model.dart';    // Todoモデルをインポート
+  import 'todo_provider.dart'; // todo_provider.dart をインポート
+
+  class TodoScreen extends HookConsumerWidget {
+    const TodoScreen({super.key});
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+      final newTodoController = useTextEditingController();
+      // todoListProvider から現在のTODOリストの状態を監視（watch）する
+      final List<Todo> todos = ref.watch(todoListProvider);
+
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('アボカドTODO'),
+          backgroundColor: Colors.green,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              TextField( /* ... (変更なし) ... */ ),
+              const SizedBox(height: 20.0),
+              Expanded(
+                child: ListView.builder(
+                  // itemCount を実際のTODOリストの長さに変更
+                  itemCount: todos.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    // 現在のインデックスに対応するTodoオブジェクトを取得
+                    final Todo todo = todos[index];
+                    return ListTile(
+                      leading: const Icon(Icons.check_box_outline_blank), // 仮のチェックボックス
+                      // Todoオブジェクトの description を表示
+                      title: Text(todo.description),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          // TODO: 削除処理 (第8章)
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton( /* ... (変更なし) ... */ ),
+      );
+    }
+  }`}
+</SyntaxHighlighter>
+
+- `import 'todo_model.dart';` を追加します。
+- `final List<Todo> todos = ref.watch(todoListProvider); `: `ref.watch()` を使って `todoListProvider` の状態（つまり `List<Todo>`）を監視します。
+  `todos` 変数には常に最新のTODOリストが格納され、このリストが変更されると `TodoScreen` Widgetが再描画されます。
+- `ListView.builder` の `itemCount` を `todos.length` に変更し、リストの実際の長さに合わせます。
+- `itemBuilder` の中で `final Todo todo = todos[index];` として、現在のインデックスに対応する `Todo` オブジェクトを取得します。
+- `ListTile` の `title` に `Text(todo.description)` を設定し、TODOの内容を表示するようにしました。
+
+これで、`TextField` にTODOを入力してエンターキーを押すか、`FloatingActionButton` を押すと、リストに新しいTODOアイテムが追加され、画面に表示されるはずです！
+
+## ここまでの全コード
+
+参考までに、この章で作成・修正したファイルの全コードを載せておきます。
+
+lib/todo_model.dart
+Dart
+
+<SyntaxHighlighter language="dart">
+{`class Todo {
+    final String id;
+    final String description;
+    final bool isCompleted;
+
+    Todo({
+      required this.id,
+      required this.description,
+      this.isCompleted = false,
+    });
+  }`}
+</SyntaxHighlighter>
+
+lib/todo_provider.dart
+<SyntaxHighlighter language="dart">
+{`import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'todo_model.dart';
+
+  class TodoListNotifier extends StateNotifier<List<Todo>> {
+    TodoListNotifier() : super([]);
+
+    void addTodo(String description) {
+      final newTodo = Todo(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        description: description,
+      );
+      state = [...state, newTodo];
     }
   }
-  .gray {
-    color: #757575;
-    * {
-      color: #757575;
+
+  final todoListProvider =
+      StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
+    return TodoListNotifier();
+  });`}
+</SyntaxHighlighter>
+
+lib/todo_screen.dart (主な変更箇所のみ。main.dart は第6章から変更なし)
+
+<SyntaxHighlighter language="dart">
+{`import 'package:flutter/material.dart';
+  import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'package:flutter_hooks/flutter_hooks.dart';
+  import 'todo_model.dart';    // 追加
+  import 'todo_provider.dart'; // 追加
+
+  class TodoScreen extends HookConsumerWidget {
+    const TodoScreen({super.key});
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+      final newTodoController = useTextEditingController();
+      final List<Todo> todos = ref.watch(todoListProvider); // 追加
+
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('アボカドTODO'),
+          backgroundColor: Colors.green,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: newTodoController,
+                decoration: const InputDecoration(
+                  labelText: '新しいTODOを入力',
+                  hintText: '例：牛乳を買う',
+                ),
+                onSubmitted: (String value) {
+                  final String description = value.trim();
+                  if (description.isNotEmpty) {
+                    ref.read(todoListProvider.notifier).addTodo(description); // 修正
+                    newTodoController.clear();
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: todos.length, // 修正
+                  itemBuilder: (BuildContext context, int index) {
+                    final Todo todo = todos[index]; // 修正
+                    return ListTile(
+                      leading: const Icon(Icons.check_box_outline_blank),
+                      title: Text(todo.description), // 修正
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          // TODO: 削除処理
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final String description = newTodoController.text.trim();
+            if (description.isNotEmpty) {
+              ref.read(todoListProvider.notifier).addTodo(description); // 修正
+              newTodoController.clear();
+            }
+          },
+          tooltip: 'TODOを追加',
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.green,
+        ),
+      );
     }
-  }
-</style>
+  }`}
+</SyntaxHighlighter>
+
+---
+
+素晴らしい！ これでTODOアプリの基本的な「追加」と「表示」の機能が実装できました。
+
+`StateNotifier` と `StateNotifierProvider` を使ってリストの状態を管理し、`ref.read().notifier.method()` で状態を更新、`ref.watch()` で状態を監視してUIに反映させる、というRiverpodの基本的な使い方の流れを体験できたかと思います。
+
+次の章では、このTODOリストに対して、アイテムの完了状態を切り替える（チェックを入れる/外す）機能と、アイテムを削除する機能を実装していきます！

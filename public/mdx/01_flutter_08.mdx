@@ -1,35 +1,362 @@
-<style>
-  .yellow {
-    color: #DCDCAA;
-  }
-  .yellowgreen {
-    color: #B5CEA8;
-  }
-  .green {
-    color: #4EC9B0;
-  }
-  .blue {
-    color: #569CD6; 
-  }
-  .skyblue {
-    color: #9CDCFE;
-  }
-  .purple {
-    color: #C586C0;
-  }
-  .pink {
-    color: pink;
-  }
-  .orange {
-    color: #CE9178;
-    * {
-      color: #CE9178;
+第7章では、RiverpodとHooksを使ってTODOアイテムをリストに追加し、それを画面に表示することに成功しましたね！ 入力した「やること」がリストに並んでいくのを見ると、アプリが実際に動いている実感が湧いてきたのではないでしょうか。
+
+今回は、そのTODOリストをさらに使いやすくするために、個々のTODOアイテムに対する操作機能を追加していきます。具体的には、
+
+1. TODOアイテムの完了／未完了状態を切り替える（チェックボックスをタップする）機能
+2. 不要になったTODOアイテムをリストから削除する機能
+
+を実装します。これらも、Riverpodの `TodoListNotifier` に新しいメソッドを追加し、UI側（`TodoScreen`）からそれらを呼び出す形で実現します。
+
+## TODOアイテムの完了状態（じょうたい）を切り替える
+
+まずは、TODOアイテムを「完了した」または「まだ終わっていない」という状態に切り替えられるようにしましょう。
+
+### `Todo` モデルに `copyWith` メソッドを追加（任意ですが推奨）
+
+特定のTODOアイテムの状態（例えば `isCompleted` プロパティ）だけを変更し、他のプロパティはそのままに新しい `Todo` オブジェクトを作成したい場合、`copyWith` というヘルパーメソッドを `Todo` クラスに用意しておくと非常に便利です。
+これはイミュータビリティ（不変性）を保ちながらオブジェクトを更新する際の定石（じょうせき）パターンです。
+
+`lib/todo_model.dart` を開き、`Todo` クラスに以下のように `copyWith` メソッドを追加します。
+
+Dart (lib/todo_model.dart)
+
+<SyntaxHighlighter language="dart">
+{`class Todo {
+    final String id;
+    final String description;
+    final bool isCompleted;
+
+    Todo({
+      required this.id,
+      required this.description,
+      this.isCompleted = false,
+    });
+
+    // copyWith メソッドを追加
+    Todo copyWith({
+      String? id, // ? は null許容型を意味し、引数が省略可能であることを示す
+      String? description,
+      bool? isCompleted,
+    }) {
+      return Todo(
+        id: id ?? this.id, // 引数 id が指定されればそれ、なければ元の id を使う
+        description: description ?? this.description,
+        isCompleted: isCompleted ?? this.isCompleted,
+      );
+    }
+  }`}
+</SyntaxHighlighter>
+
+`copyWith` メソッドは、引数で指定されたプロパティだけを新しい値で更新し、指定されなかったプロパティは元のオブジェクトの値を引き継いだ、新しい `Todo` インスタンスを返します。
+`??` は「Null合体演算子」といい、左辺が `null` なら右辺の値を採用します。
+
+### `TodoListNotifier` に `toggle` メソッドを追加
+
+次に、`lib/todo_provider.dart` の `TodoListNotifier` クラスに、指定されたIDのTODOアイテムの `isCompleted` プロパティを反転させる `toggle` メソッドを追加します。
+
+Dart (lib/todo_provider.dart の TodoListNotifier クラス内)
+
+<SyntaxHighlighter language="dart">
+{`// class TodoListNotifier extends StateNotifier<List<Todo>> {
+  //   TodoListNotifier() : super([]);
+  //   void addTodo(String description) { ... } // 既存のメソッド
+
+    // 指定されたIDのTODOの完了状態をトグル（反転）するメソッド
+    void toggle(String todoId) {
+      state = [
+        for (final todo in state) // 現在のstate（TODOリスト）をループ処理
+          if (todo.id == todoId) // IDが一致するTODOアイテムなら
+            // isCompletedプロパティを反転させた新しいTodoオブジェクトを生成
+            todo.copyWith(isCompleted: !todo.isCompleted)
+          else // IDが一致しない場合は
+            todo, // そのままのTodoオブジェクトを使用
+      ];
+      // 上記の処理で新しいリストが生成され、stateが更新される
+    }
+
+    // void removeTodo(String todoId) { ... } // これは後で追加
+  // }`}
+</SyntaxHighlighter>
+
+この `toggle` メソッドでは、現在の `state`（TODOリスト）の各アイテムをチェックし、IDが一致するアイテムが見つかれば、そのアイテムの `isCompleted` の値を `!todo.isCompleted`（現在の値の反対）にして `copyWith` で新しい `Todo` オブジェクトを作成します。
+IDが一致しないアイテムはそのままです。これにより、変更対象のアイテムだけが更新された新しいリストが生成され、`state` が置き換えられます。
+
+### UIの更新 (`TodoScreen`)
+
+`lib/todo_screen.dart` の `ListView.builder` 内で `ListTile` の表示を修正し、チェックボックスを配置して `toggle` メソッドを呼び出せるようにします。
+また、完了したタスクの見た目が変わるように少しスタイルも調整しましょう。
+
+Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内)
+
+<SyntaxHighlighter language="dart">
+{`              itemBuilder: (BuildContext context, int index) {
+                  final Todo todo = todos[index];
+                  return ListTile(
+                    // leading を Icon から Checkbox に変更
+                    leading: Checkbox(
+                      value: todo.isCompleted, // チェックボックスの状態をTodoのisCompletedに合わせる
+                      onChanged: (bool? newValue) { // チェック状態が変更されたら
+                        // todoListProviderのtoggleメソッドを呼び出し、IDを渡す
+                        ref.read(todoListProvider.notifier).toggle(todo.id);
+                      },
+                    ),
+                    title: Text(
+                      todo.description,
+                      style: TextStyle(
+                        // 完了状態なら取り消し線、そうでなければ通常表示
+                        decoration: todo.isCompleted
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        // 完了状態なら文字色を少し薄くする（お好みで）
+                        color: todo.isCompleted ? Colors.grey : null,
+                      ),
+                    ),
+                    trailing: IconButton( /* ... (削除ボタンは後ほど) ... */ ),
+                  );
+                },`}
+</SyntaxHighlighter>
+
+- `ListTile` の `leading` プロパティを、以前の `Icon` から `Checkbox` Widgetに変更しました。
+- `Checkbox` の `value` プロパティに `todo.isCompleted` を設定し、現在のTODOアイテムの完了状態を反映させます。
+- `onChanged` コールバックで、チェック状態が変更されたときに `ref.read(todoListProvider.notifier).toggle(todo.id)` を呼び出し、対応するTODOの完了状態を切り替えます。
+- `title` の `Text` Widgetの `style` プロパティを調整し、`todo.isCompleted` が `true` なら取り消し線 (`TextDecoration.lineThrough`) を表示し、文字色を少し薄くするようにしました。
+
+これでアプリを実行し、TODOアイテムの左側にあるチェックボックスをタップすると、チェック状態が切り替わり、文字に取り消し線が付いたり消えたりするはずです！
+
+## TODOアイテムを削除する
+
+次に、不要になったTODOアイテムをリストから削除する機能を実装しましょう。
+
+### `TodoListNotifier` に `removeTodo` メソッドを追加
+
+`lib/todo_provider.dart` の `TodoListNotifier` クラスに、指定されたIDのTODOアイテムをリストから取り除く `removeTodo` メソッドを追加します。
+
+Dart (lib/todo_provider.dart の TodoListNotifier クラス内)
+
+<SyntaxHighlighter language="dart">
+{`// class TodoListNotifier extends StateNotifier<List<Todo>> {
+  //   // ... (既存のコンストラクタ, addTodo, toggle メソッド) ...
+
+    // 指定されたIDのTODOをリストから削除するメソッド
+    void removeTodo(String todoId) {
+      // 現在のstate（TODOリスト）から、指定されたID以外の要素「だけ」を
+      // 集めて新しいリストを作成し、stateを更新する
+      state = state.where((todo) => todo.id != todoId).toList();
+    }
+  // }`}
+</SyntaxHighlighter>
+
+`state.where((todo) => todo.id != todoId)` は、リストの各要素 (`todo`) について、`todo.id != todoId` という条件（IDが削除対象のIDと一致しない）を満たすものだけを抽出します。
+その結果に `.toList()` を付けることで、新しいリストが生成され、`state` が更新されます。
+
+### UIの更新 (`TodoScreen`)
+
+`lib/todo_screen.dart` の `ListTile` の右側にある削除アイコンボタン (`trailing` プロパティの `IconButton`) が押されたときに、`removeTodo` メソッドを呼び出すようにします。
+
+Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile の trailing)
+
+<SyntaxHighlighter language="dart">
+{`                  trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        // todoListProviderのremoveTodoメソッドを呼び出し、IDを渡す
+                        ref.read(todoListProvider.notifier).removeTodo(todo.id);
+                      },
+                    ),`}
+</SyntaxHighlighter>
+
+`IconButton` の `onPressed` コールバックで、`ref.read(todoListProvider.notifier).removeTodo(todo.id)` を呼び出し、対応するTODOアイテムを削除します。
+
+これで、各TODOアイテムの右側にあるゴミ箱アイコンをタップすると、そのアイテムがリストから削除されるようになりました！
+
+## Provider内のロジックの整理（再確認）
+
+今回 `TodoListNotifier` に追加した `toggle` や `removeTodo` メソッドを見てみると、どちらも元の `state` リストを直接変更するのではなく、条件に基づいて新しいリストを作成し、それで `state` を置き換えていることがわかります。
+
+<SyntaxHighlighter language="dart">
+{`// toggleメソッド内
+  state = [ /* 新しいリストをここで構築 */ ];
+
+  // removeTodoメソッド内
+  state = state.where(/* 条件 */).toList(); // where().toList() は新しいリストを返す`}
+</SyntaxHighlighter>
+
+このように状態を **不変（イミュータブル）** なものとして扱い、更新時には常に新しい状態オブジェクトを生成する、というやり方は、Riverpodをはじめとする多くの現代的な状態管理ライブラリで推奨されるパターンです。
+
+なぜなら、
+
+- **変更の検知が容易になる** : Flutter（やRiverpod）は、状態オブジェクトの参照が変わったかどうかで変更を検知しやすいため、UIの再描画などを効率的に行えます。
+- **副作用を減らせる** : 元の状態を直接変更しないため、予期せぬ副作用が起こりにくくなります。
+- **デバッグがしやすくなる** : 状態の変更履歴を追いやすくなるなどのメリットがあります。
+
+最初は少し回りくどく感じるかもしれませんが、この「イミュータブルな状態更新」の考え方に慣れていくと、より堅牢（けんろう）で予測可能なアプリケーションを構築できるようになります。
+
+## ここまでの全コード（主なファイル）
+
+`lib/todo_model.dart`（変更点: `copyWith` メソッドの追加）
+
+<SyntaxHighlighter language="dart">
+{`class Todo {
+    final String id;
+    final String description;
+    final bool isCompleted;
+
+    Todo({
+      required this.id,
+      required this.description,
+      this.isCompleted = false,
+    });
+
+    Todo copyWith({
+      String? id,
+      String? description,
+      bool? isCompleted,
+    }) {
+      return Todo(
+        id: id ?? this.id,
+        description: description ?? this.description,
+        isCompleted: isCompleted ?? this.isCompleted,
+      );
+    }
+  }`}
+</SyntaxHighlighter>
+
+`lib/todo_provider.dart`（変更点: `toggle`, `removeTodo` メソッドの追加）
+
+<SyntaxHighlighter language="dart">
+{`import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'todo_model.dart';
+
+  class TodoListNotifier extends StateNotifier<List<Todo>> {
+    TodoListNotifier() : super([]);
+
+    void addTodo(String description) {
+      final newTodo = Todo(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        description: description,
+      );
+      state = [...state, newTodo];
+    }
+
+    void toggle(String todoId) {
+      state = [
+        for (final todo in state)
+          if (todo.id == todoId)
+            todo.copyWith(isCompleted: !todo.isCompleted)
+          else
+            todo,
+      ];
+    }
+
+    void removeTodo(String todoId) {
+      state = state.where((todo) => todo.id != todoId).toList();
     }
   }
-  .gray {
-    color: #757575;
-    * {
-      color: #757575;
+
+  final todoListProvider =
+      StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
+    return TodoListNotifier();
+  });`}
+</SyntaxHighlighter>
+
+`lib/todo_screen.dart`（変更点: `ListTile` 内の `Checkbox` と `IconButton` の `onPressed`、`Text` の `style`）
+
+<SyntaxHighlighter language="dart">
+{`import 'package:flutter/material.dart';
+  import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'package:flutter_hooks/flutter_hooks.dart';
+  import 'todo_model.dart';
+  import 'todo_provider.dart';
+
+  class TodoScreen extends HookConsumerWidget {
+    const TodoScreen({super.key});
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+      final newTodoController = useTextEditingController();
+      final List<Todo> todos = ref.watch(todoListProvider);
+
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('アボカドTODO'),
+          backgroundColor: Colors.green,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: newTodoController,
+                decoration: const InputDecoration(
+                  labelText: '新しいTODOを入力',
+                  hintText: '例：牛乳を買う',
+                ),
+                onSubmitted: (String value) {
+                  final String description = value.trim();
+                  if (description.isNotEmpty) {
+                    ref.read(todoListProvider.notifier).addTodo(description);
+                    newTodoController.clear();
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: todos.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Todo todo = todos[index];
+                    return ListTile(
+                      leading: Checkbox(
+                        value: todo.isCompleted,
+                        onChanged: (bool? newValue) {
+                          ref.read(todoListProvider.notifier).toggle(todo.id);
+                        },
+                      ),
+                      title: Text(
+                        todo.description,
+                        style: TextStyle(
+                          decoration: todo.isCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                          color: todo.isCompleted ? Colors.grey : null,
+                        ),
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          ref.read(todoListProvider.notifier).removeTodo(todo.id);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final String description = newTodoController.text.trim();
+            if (description.isNotEmpty) {
+              ref.read(todoListProvider.notifier).addTodo(description);
+              newTodoController.clear();
+            }
+          },
+          tooltip: 'TODOを追加',
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.green,
+        ),
+      );
     }
-  }
-</style>
+  }`}
+</SyntaxHighlighter>
+
+---
+
+やりましたね！ 
+これで、TODOアイテムの追加、表示、完了状態の切り替え、そして削除という、TODOアプリとしての一通りの基本機能が実装できました。
+
+Riverpodの `StateNotifier` にビジネスロジック（状態を変更するメソッド）をまとめ、UI側のWidgetからは `ref.read().notifier.method()` でそれを呼び出し、`ref.watch()` で最新の状態を監視して画面に反映させる、という流れがより具体的になったかと思います。
+
+しかし、今のままではアプリを一度閉じてしまうと、登録したTODOリストは全て消えてしまいます。これでは実用的なアプリとは言えませんね。
+次の章では、このTODOリストのデータを永続化（えいぞくか）し、アプリを再起動してもデータが残るようにする方法を学びます！

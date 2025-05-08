@@ -1,35 +1,304 @@
-<style>
-  .yellow {
-    color: #DCDCAA;
-  }
-  .yellowgreen {
-    color: #B5CEA8;
-  }
-  .green {
-    color: #4EC9B0;
-  }
-  .blue {
-    color: #569CD6; 
-  }
-  .skyblue {
-    color: #9CDCFE;
-  }
-  .purple {
-    color: #C586C0;
-  }
-  .pink {
-    color: pink;
-  }
-  .orange {
-    color: #CE9178;
-    * {
-      color: #CE9178;
+第5章では、Riverpodとflutter_hooksを使ってカウンターアプリの状態管理をモダン化しましたね。
+`ProviderScope`, `StateProvider`, `HookConsumerWidget`, そして `ref.watch` や `ref.read` といった新しい概念に触れ、状態管理の強力な土台を築きました。
+
+さて、いよいよ私たちの最終目標であるTODOアプリの開発に取り掛かります！
+アプリの機能（TODOの追加や削除など）を実装する前に、まずはユーザーが実際に目にする **画面の見た目（UI：ユーザーインターフェース）** を組み立てていくことから始めましょう。
+料理で言えば、盛り付けるお皿やカトラリーを用意するような段階です。
+
+この章では、主に第3章で学んだ様々なWidgetを使い、TODOアプリの主要な画面のレイアウトを静的に（つまり、まだ実際のデータは動かずに、見た目だけ）作成していきます。
+Widgetは `HookConsumerWidget` を基本として使っていきますが、この章ではまだRiverpodの `ref` を積極的に使った状態の読み書きは行わず、主にレイアウト構築に集中します。
+
+## TODOアプリの画面構成（こうせい）を考える
+
+まず、どんな画面を作るかイメージを固めましょう。私たちが作るTODOアプリの主な画面には、以下のような要素が必要になりそうです。
+
+1. **アプリのタイトルバー (AppBar)** : アプリの名前が表示される部分。
+2. **新しいTODOの入力欄 (TextField)** : ユーザーが新しい「やること」を入力するテキストフィールド。
+3. **TODOリストの表示エリア (ListView)** : 入力されたTODOが一覧で表示される部分。各TODOには、完了したかどうかのチェックボックスや、削除ボタンも欲しいですね。
+4. **TODO追加ボタン (FloatingActionButton)** : 新しいTODOをリストに追加するためのボタン。画面右下によくある丸いボタンです。
+
+これらの要素を配置するために、Flutterの基本的な構造Widgetである `Scaffold` を土台とし、その中に `Column` や `Row` などを使って部品を配置していくことになります。
+
+## メイン画面の骨組み（ほねぐみ）を作る (`Scaffold`と`AppBar`)
+
+では、まずTODOアプリのメイン画面となる新しいWidgetを作成しましょう。
+`lib` フォルダ内に新しいファイル `todo_screen.dart` を作成し、以下のように記述します。
+
+<SyntaxHighlighter language="dart">
+{`import 'package:flutter/material.dart';
+  import 'package:hooks_riverpod/hooks_riverpod.dart'; // HookConsumerWidget を使うため
+
+  class TodoScreen extends HookConsumerWidget {
+    const TodoScreen({super.key}); // コンストラクタ
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+      return Scaffold( // 画面の基本的な骨組みを提供するWidget
+        appBar: AppBar( // 画面上部のバー
+          title: const Text('アボカドTODO'), // アプリのタイトル
+          backgroundColor: Colors.green,    // AppBarの背景色（お好みで）
+        ),
+        body: const Center( // 画面中央に仮のテキストを配置
+          child: Text('TODOリストはここに表示されます'),
+        ),
+      );
     }
-  }
-  .gray {
-    color: #757575;
-    * {
-      color: #757575;
+  }`}
+</SyntaxHighlighter>
+
+- `TodoScreen` という名前の `HookConsumerWidget` を作成しました。
+- `Scaffold` Widgetを返し、その `appBar` プロパティに `AppBar` を設定しています。
+- `body` には、今のところ仮のテキストを中央に表示するようにしています。
+
+次に、この `TodoScreen` がアプリ起動時に表示されるように、`lib/main.dart` ファイルを修正します。
+`MyApp` Widget内の `home` プロパティを、新しく作った `TodoScreen` に変更しましょう。
+
+<SyntaxHighlighter language="dart">
+{`// lib/main.dart の中の MyApp クラス
+  // ... (省略) ...
+  import 'todo_screen.dart'; // 作成した todo_screen.dart をインポート
+
+  class MyApp extends StatelessWidget {
+    const MyApp({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        title: 'アボカドTODO', // アプリ全体のタイトル
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green), // アプリのテーマカラー
+          useMaterial3: true,
+        ),
+        home: const TodoScreen(), // ここを TodoScreen() に変更！
+      );
     }
-  }
-</style>
+  }`}
+</SyntaxHighlighter>
+
+`main.dart` に `import 'todo_screen.dart';` を追加するのを忘れないでください。
+これでアプリを実行すると、緑色のタイトルバーに「アボカドTODO」と表示され、画面中央に仮のテキストが表示されるはずです。
+
+## TODO入力欄の作成 (`TextField`)
+
+次に、ユーザーが新しいTODOを入力するための `TextField` を配置します。
+`TodoScreen` の `Scaffold` の `body` 部分を修正していきましょう。
+入力欄とその下のリスト表示エリアを縦に並べたいので、`Column` Widgetを使います。
+また、画面の端に余白を持たせるために `Padding` Widgetで全体を囲みます。
+
+`flutter_hooks` パッケージの `useTextEditingController` フックを使うと、`TextField` の入力を簡単に管理できます。
+
+<SyntaxHighlighter language="dart">
+{`// lib/todo_screen.dart の TodoScreen クラス内
+  import 'package:flutter/material.dart';
+  import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'package:flutter_hooks/flutter_hooks.dart'; // flutter_hooks をインポート
+
+  class TodoScreen extends HookConsumerWidget {
+    const TodoScreen({super.key});
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+      // TextFieldの入力を管理するためのコントローラーをフックで作成
+      final newTodoController = useTextEditingController();
+
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('アボカドTODO'),
+          backgroundColor: Colors.green,
+        ),
+        body: Padding( // 全体に余白を追加
+          padding: const EdgeInsets.all(16.0),
+          child: Column( // Widgetを縦に並べる
+            children: <Widget>[
+              TextField(
+                controller: newTodoController, // 作成したコントローラーを割り当てる
+                decoration: const InputDecoration(
+                  labelText: '新しいTODOを入力', // 入力欄の上に表示されるラベル
+                  hintText: '例：牛乳を買う',   // 入力欄に薄く表示されるヒント
+                ),
+                // エンターキーが押されたときの処理（今は何もしない）
+                onSubmitted: (String value) {
+                  // ここで入力された値を使ってTODOを追加する処理を後で書きます
+                  // print('入力されたTODO: $value');
+                  // newTodoController.clear(); // 入力後クリアする場合
+                },
+              ),
+              // TODOリスト表示エリアは後でここに追加
+            ],
+          ),
+        ),
+        // FloatingActionButtonは後でここに追加
+      );
+    }
+  }`}
+</SyntaxHighlighter>
+
+- `flutter_hooks.dart` をインポートします。
+- `useTextEditingController()` で `TextEditingController` のインスタンス（`newTodoController`）を作成し、これを `TextField` の `controller` プロパティに設定します。
+  これで、`newTodoController.text` で入力されたテキストを取得できるようになります。
+- `decoration` プロパティで、入力欄の見た目を少し整えています。
+
+## TODOリスト表示エリアの作成 (`ListView`)
+
+`TextField` の下に、TODOアイテムのリストを表示するエリアを作ります。
+たくさんのTODOアイテムが表示される可能性があるので、スクロール可能なリストを作るために `ListView.builder` を使います。
+また、`ListView` が `Column` の中で適切に高さを確保できるように、`Expanded` Widgetで囲みます。
+
+<SyntaxHighlighter language="dart">
+{`          // lib/todo_screen.dart の TodoScreen クラスの build メソッド内
+            // Column の children の TextField の下に追加
+
+            // TextFieldとリストの間に少しスペースを空ける
+            const SizedBox(height: 20.0),
+
+            Expanded( // 残りの利用可能なスペース全てをListViewが使うようにする
+              child: ListView.builder(
+                itemCount: 3, // とりあえず仮のアイテム数として3を設定
+                itemBuilder: (BuildContext context, int index) {
+                  // 各リストアイテムの見た目を作る
+                  return ListTile(
+                    leading: const Icon(Icons.check_box_outline_blank), // 左側のチェックボックスアイコン（仮）
+                    title: Text('TODOアイテム \${index + 1}'), // TODOの内容（仮）
+                    trailing: IconButton( // 右側の削除ボタンアイコン（仮）
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        // TODOアイテムを削除する処理を後で書きます
+                        // print('アイテム \${index + 1} を削除');
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),`}
+</SyntaxHighlighter>
+
+- `SizedBox(height: 20.0)` で、入力欄とリストの間に少し縦の空白を入れています。
+- `Expanded` Widgetを使うことで、`ListView` は `Column` の中で `TextField` が使っている以外の残りの垂直方向のスペースを全て使うようになります。
+  これにより、リストが長くなっても画面からはみ出さずにスクロールできるようになります。
+- `ListView.builder` は、リストのアイテム数 (`itemCount`) と、各アイテムをどのように描画するか (`itemBuilder`) を指定してリストを効率的に構築します。
+    - `itemCount: 3` は、今は仮に3つのアイテムを表示するという意味です。後で実際のTODOリストの数に置き換えます。
+    - `itemBuilder` は関数で、各アイテムが画面に表示されるときに呼び出されます。`index` には何番目のアイテムか（0から始まる）が入ってきます。
+    - `ListTile` は、テキストやアイコンを綺麗に一行に配置するのに便利なWidgetです。`leading`（先頭）、`title`（主要なテキスト）、`trailing`（末尾）などのプロパティがあります。
+
+## 追加ボタンの配置 (`FloatingActionButton`)
+
+最後に、新しいTODOを追加するためのボタンを画面右下に配置しましょう。`Scaffold` の `floatingActionButton` プロパティを使います。
+
+<SyntaxHighlighter language="dart">
+{`    // lib/todo_screen.dart の TodoScreen クラスの Scaffold 内
+      // body: Padding(...), の後に追加
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // 新しいTODOを追加する処理を後で書きます
+          // final String todoText = newTodoController.text;
+          // if (todoText.isNotEmpty) {
+          //   print('追加するTODO: $todoText');
+          //   newTodoController.clear();
+          // }
+        },
+        tooltip: 'TODOを追加', // ボタンを長押ししたときに表示されるヒント
+        child: const Icon(Icons.add), // ボタンに表示されるアイコン
+        backgroundColor: Colors.green, // ボタンの色（お好みで）
+      ),`}
+</SyntaxHighlighter>
+
+- `FloatingActionButton` の `onPressed` には、ボタンが押されたときの処理を書きますが、実際の追加ロジックは次の章で実装します。
+- `tooltip` や `child`（アイコン）も設定しています。
+
+## ここまでの全コード (`todo_screen.dart`)
+
+ここまでの変更を反映した `lib/todo_screen.dart` の全コードは以下のようになります。
+
+<SyntaxHighlighter language="dart">
+{`import 'package:flutter/material.dart';
+  import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'package:flutter_hooks/flutter_hooks.dart';
+
+  class TodoScreen extends HookConsumerWidget {
+    const TodoScreen({super.key});
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+      final newTodoController = useTextEditingController();
+
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('アボカドTODO'),
+          backgroundColor: Colors.green,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller: newTodoController,
+                decoration: const InputDecoration(
+                  labelText: '新しいTODOを入力',
+                  hintText: '例：牛乳を買う',
+                ),
+                onSubmitted: (String value) {
+                  // TODO: Add todo logic here
+                  // print('入力されたTODO: $value');
+                  // newTodoController.clear();
+                },
+              ),
+              const SizedBox(height: 20.0),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 3, // Placeholder
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      leading: const Icon(Icons.check_box_outline_blank),
+                      title: Text('TODOアイテム \${index + 1}'),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          // TODO: Delete todo logic here
+                          // print('アイテム \${index + 1} を削除');
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // TODO: Add todo logic here
+            // final String todoText = newTodoController.text;
+            // if (todoText.isNotEmpty) {
+            //   print('追加するTODO: $todoText');
+            //   newTodoController.clear();
+            // }
+          },
+          tooltip: 'TODOを追加',
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }`}
+</SyntaxHighlighter>
+
+これでアプリを実行すると、TODO入力欄、仮のTODOリスト、そして追加ボタンが表示される画面になっているはずです！
+
+---
+
+この章では、TODOアプリの画面の「見た目」だけを構築しました。使ったWidgetは以下の通りです。
+
+- `Scaffold`: 画面の基本骨格
+- `AppBar`: 上部のタイトルバー
+- `Padding`: 余白
+- `Column`: Widgetを縦に並べる
+- `TextField`: 文字入力欄 (`useTextEditingController` フックと共に)
+- `SizedBox`: 固定サイズの空間
+- `Expanded`: 利用可能なスペースを埋める
+- `ListView.builder`: スクロール可能なリスト (`ListTile` を使ってアイテム表示)
+- `FloatingActionButton`: 右下の追加ボタン
+
+まだ、入力したTODOがリストに表示されたり、チェックをつけたり、削除したりといった実際の「機能」は動きません。
+
+次の章では、いよいよRiverpodとHooksを使って、この静的な画面に命を吹き込み、実際にTODOを管理できるようにしていきます！

@@ -1,222 +1,270 @@
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
+第4章では、皆さんのパソコンにFlutterの開発環境を整え、初めてのFlutterアプリ（カウンターアプリ）を動かすことに成功しましたね！
+大きな一歩です、おめでとうございます！
 
-さて、Dart 言語の基本を少し学んだところで、いよいよ Flutter の中心的な概念である **Widget（ウィジェット）** について学んでいきましょう！ Flutter アプリ開発では、この Widget を理解することが非常に重要です。
+さて、あのカウンターアプリは確かに動きましたが、実はFlutterプロジェクトを新規作成した際に提供される雛形（ひながた）のコードは、`StatefulWidget` と `setState` という仕組みを使ってカウンターの数字（状態）を管理していました。
+これは小規模な場合には機能しますが、アプリが複雑になってくると、状態の管理が難しくなってくることがあります。
 
-## Flutter では「すべてが Widget」！？
+そこでこの章では、より現代的で、大規模なアプリにも対応しやすい状態管理の方法である **Riverpod（リバーポッド）** と、Widgetの記述をシンプルにするのに役立つ **flutter_hooks（フラッターフックス）** という2つの強力な道具を使って、カウンターアプリを「モダン化」してみましょう。
+これが、私たちがTODOアプリを作る上での状態管理の基本となります。
 
-Flutter の最も特徴的な考え方の一つが、 **「UI（ユーザーインターフェース：画面の見た目や操作部分）を構成するほとんどすべての要素が Widget である」** という点です。
+## パッケージとは？ Flutterの機能を拡張しよう
 
-- 画面に表示する文字 (テキスト)
-- ボタン
-- 画像
-- アイコン
-- 画面全体のレイアウト（配置）
-- 画面の見えない部分（余白など）
+Riverpodやflutter_hooksについて話す前に、まず **「パッケージ」** というものについて理解しておきましょう。
 
-これらすべてが Widget として扱われます。まるでレゴブロックのように、様々な種類の Widget を組み合わせてアプリの画面を作り上げていくイメージです。
+Flutter（や他の多くのプログラミング環境）では、「パッケージ」（ライブラリや依存関係とも呼ばれます）という形で、世界中の開発者が作った便利な機能や部品を利用することができます。
 
-この Widget を組み合わせた構造のことを Widget ツリーと呼びます。大きな Widget の中に小さな Widget が入子（ネスト）になって、画面全体が構成されます。
+例えるなら、料理をするときに、全ての調味料を一から手作りするのではなく、市販の便利な「合わせ調味料」や「〇〇の素」を使うようなものです。これらを使えば、手間をかけずに美味しい料理が作れますよね？
 
-<SyntaxHighlighter language="dart">
-  {`// Widget ツリーのイメージ（あくまで概念図）
-  MaterialApp(
-    // アプリ全体
-    home: Scaffold(
-      // 画面の基本骨格
-      appBar: AppBar(
-        // 上部のバー
-        title: Text('タイトル'), // バーの中のテキスト
-      ),
-      body: Center(
-        // 画面中央に配置
-        child: Text('こんにちは、Flutter！'), // 中央に表示するテキスト
-      ),
-    ),
-  )`}
-</SyntaxHighlighter>
+Flutterのパッケージも同様で、
 
-## Widget には２つの基本タイプがある：StatelessWidget と StatefulWidget
+- インターネットからデータを取ってくる機能
+- 地図を表示する機能
+- そして、今回使う「状態管理」を助けてくれる機能
 
-Widget にはたくさんの種類がありますが、大きく分けて 2 つの基本的なタイプをまず覚えましょう。
+など、様々なものが「パッケージ」として提供されています。これらを利用することで、私たちはアプリの独自機能の開発に集中できるのです。
 
-### 1. StatelessWidget (ステートレスウィジェット)
+### `pub.dev` と `pubspec.yaml`
 
-- **意味**: 「State（状態）を持たない」Widget。
-- **特徴**: 一度表示されたら、それ自体が内部の情報で見た目が変化することはありません。設定された情報に基づいて常に同じように表示されます。
-- **例**: アイコン、ただ表示するだけのテキスト、一度表示したら変わらない画像など。
-- **イメージ**: 一度印刷したら内容が変わらない「ポスター」や「看板」のようなもの。
-- **コードの基本形**:
+Flutterのパッケージは、`pub.dev` ([https://pub.dev/](https://pub.dev/)) という公式サイトで探すことができます。ここには膨大な数のパッケージが登録されており、それぞれの使い方や人気度なども確認できます。
 
-<SyntaxHighlighter language="dart">
-  {`import 'package:flutter/material.dart';
+そして、自分のプロジェクトで特定のパッケージを使いたい場合は、プロジェクトフォルダ内にある `pubspec.yaml`（パブスペック・ヤムル）というファイルに、使いたいパッケージの名前とバージョンを記述します。
+`pubspec.yaml` は、いわばプロジェクトの「材料リスト」のようなものです。このリストに書かれたパッケージを、Flutterが自動的にダウンロードして使えるようにしてくれます。
 
-  // StatelessWidget を継承してクラスを作る
-  class MyStaticWidget extends StatelessWidget {
-    // この build メソッドが Widget の見た目を作る
-    @override
-    Widget build(BuildContext context) {
-      // ここに表示したい Widget を記述して返す
-      return Container( // 例えば色付きの四角い箱を返す
-        color: Colors.blue,
-        width: 100,
-        height: 50,
-      );
-    }
-  }`}
+## アプリが大きくなると考えないといけないこと
 
-</SyntaxHighlighter>
+カウンターアプリのように、一つの画面内で完結する単純な状態変化なら、Flutterの基本的な仕組み（`StatefulWidget`と`setState`）でも十分対応できます。
 
-`extends StatelessWidget` で StatelessWidget であることを示します。
-build メソッドが、この Widget が画面にどう表示されるかを定義する場所です。
+しかし、私たちがこれから作ろうとしているTODOアプリのように、
 
-### 2. **StatefulWidget** (ステートフルウィジェット)
+- 複数の画面で同じデータ（TODOリスト）を共有したい
+- データの追加、変更、削除といった操作が色々な場所から行われる可能性がある
+- アプリが成長して新しい機能が増えても、コードを整理整頓された状態に保ちたい
 
-- 意味: 「State（状態）を持つ」Widget。
-- 特徴: ユーザーの操作やデータの更新などによって、見た目が動的に変化する可能性のある Widget です。
-- 例: チェックボックス（チェックの ON/OFF で見た目が変わる）、カウンター（ボタンを押すと数字が増える）、アニメーションなど。
-- イメージ: 試合中に得点が変わる「スコアボード」や、押すたびに ON/OFF が切り替わる「電灯のスイッチ」のようなもの。
-- コードの基本形: (StatelessWidget より少し複雑です)
+といったことを考えると、もう少し工夫が必要になります。
+データ（状態）がどこにあって、どのWidgetがそれを読み書きできて、変更があったときにどのWidgetを再描画すればよいのか…といった管理が、アプリの規模が大きくなるにつれて複雑になりがちだからです。
+
+そこで登場するのが、Riverpodのような状態管理ライブラリです。
+これらは、アプリの状態を安全かつ効率的に管理するための枠組みを提供してくれます。
+
+## Riverpod登場！ - シンプルで強力な状態管理
+
+**Riverpod（リバーポッド）** は、Flutterアプリのための状態管理ライブラリの一つで、特にそのシンプルさと安全性、テストのしやすさから人気が高まっています。
+
+Riverpodを使うと、アプリの状態（データ）をWidgetツリーのどこからでも簡単に、かつ安全に読み書きできるようになります。
+また、UI（見た目）のコードと、ビジネスロジック（アプリの実際の処理）をきれいに分離するのにも役立ちます。
+
+### Riverpodの主な部品
+
+- `ProviderScope` **（プロバイダースコープ）**: Riverpodを使うためには、まずアプリ全体（または状態を共有したい範囲）を `ProviderScope` というWidgetで囲む必要があります。
+  これは、Riverpodの「Provider（プロバイダー）」たちが活動できる範囲を提供するものです。通常、`main.dart` の `runApp()` で呼び出す一番上のWidgetをこれで囲みます。
+
+- `Provider` **（プロバイダー）**: 状態（データ）を「提供する」役割を持つオブジェクトです。
+  様々な種類のProviderがありますが、今回は最も基本的なものの一つである `StateProvider` **（ステートプロバイダー）** を使ってみましょう。
+  `StateProvider` は、シンプルな状態（例えば、カウンターの数字、ON/OFFの状態など）を保持し、その状態が変更されたことを検知して、関連するWidgetを再描画させることができます。
+
+### `StateProvider` の定義例
+
+カウンターの数値を管理する `StateProvider` は以下のように定義できます。
 
 <SyntaxHighlighter language="dart">
-  {`import 'package:flutter/material.dart';
+{`import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-  // ① StatefulWidget 自体 (状態を持つことを宣言)
-  class MyDynamicWidget extends StatefulWidget {
-    @override
-    \_MyDynamicWidgetState createState() => \_MyDynamicWidgetState();
-  }
-
-  // ② State オブジェクト (実際の状態と見た目を作る)
-  class \_MyDynamicWidgetState extends State<MyDynamicWidget> {
-    // ここに変化するデータ（状態）を持つことができる (例: int count = 0;)
-    @override
-    Widget build(BuildContext context) {
-      // 現在の状態に基づいて Widget の見た目を作る
-      return Container( // 例: 状態によって色が変わる箱など
-        // color: (状態によって変化する色),
-        width: 100,
-        height: 50,
-        child: Text('変化する Widget'),
-      );
-    }
-  }`}
+// counterProviderという名前で、整数(int)の状態を管理するStateProviderを定義
+// 初期値は0とする
+final counterProvider = StateProvider<int>((ref) => 0);`}
 </SyntaxHighlighter>
 
-StatefulWidget は、StatefulWidget を継承したクラスと、State を継承したクラスの 2 つで 1 セットになります。
-変化する可能性のあるデータ（状態）は State クラス側で持ちます。
-見た目を作る build メソッドは State クラス側にあります。
-重要: 「どうやって見た目を変化させるか（setState の使い方など）」の詳細は、後の「状態管理」の章で詳しく学びますので、今は「見た目が変わる可能性がある Widget なんだな」という理解で OK です！
-今はまず、見た目が変わらないものは StatelessWidget、変わる可能性があるものは StatefulWidget を使う、と覚えておきましょう。
+- `final counterProvider` : これがProviderの名前になります。`final` は一度定義したら変更しないよ、という意味です。
+- `StateProvider<int>` : `<int>` で、このProviderが整数(`int`)型の状態を扱うことを示します。
+- `((ref) => 0)` : Providerが初めて使われるときに、状態の初期値を設定します。ここでは `0` を初期値としています。`ref` はProviderがお互いに連携する際に使うおまじないのようなものです。
 
-まずは StatelessWidget で簡単な UI を作ってみよう
-最初は StatelessWidget を使って、画面に部品を表示する練習をしてみましょう。
+## flutter_hooks登場！ - Widgetをよりシンプルに
 
-例えば、青い背景色を持ち、中央に「Hello Widget!」と表示する簡単な Widget を作ってみます。
+次に紹介する **flutter_hooks（フラッターフックス）** は、Widgetのコードをより簡潔に、そして再利用しやすくするための仕組み（「フック」と呼びます）を提供してくれるパッケージです。
+Riverpodと非常に相性が良く、一緒に使うことで開発体験が向上します。
 
-<SyntaxHighlighter language="dart">
-  {`import 'package:flutter/material.dart';
+### `HookConsumerWidget`
 
-  class HelloWidgetBox extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
-      // Container: 色やサイズ、余白などを指定できる便利な箱 Widget
-      return Container(
-        color: Colors.blue[100], // 背景色 (薄い青)
-        width: 200, // 幅を 200 に指定
-        height: 100, // 高さを 100 に指定
-        // Center: 中に入れた Widget(child)を中央に配置する Widget
-        child: Center(
-          // Text: 文字を表示する Widget
-          child: Text(
-            'Hello Widget!',
-            // TextStyle: 文字の見た目(サイズ、色など)を指定
-            style: TextStyle(
-              fontSize: 20.0, // 文字サイズ
-              color: Colors.black, // 文字色
-              fontWeight: FontWeight.bold, // 太字
-            ),
-          ),
-        ),
-      );
-    }
-  }`}
-</SyntaxHighlighter>
+flutter_hooksとRiverpodを一緒に使う場合、`StatelessWidget` や `StatefulWidget` の代わりに `HookConsumerWidget` **（フックコンシューマーウィジェット）** という種類のWidgetを使うのが基本になります。
+この `HookConsumerWidget` は、フックの機能とRiverpodのProviderを「消費（Consumer）」する（つまり、Providerの状態を読み取ったり、変更したりする）機能の両方を備えています。
 
-<SyntaxHighlighter language="dart">
-  {`// --- 実際に画面に表示するためのコード (main.dart などに書く) ---
-  void main() {
-    runApp(
-      MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(title: Text('Widget 入門')),
-          body: Center( // 作った Widget を画面中央に表示
-            child: HelloWidgetBox(), // 上で作った Widget クラスを使う
-          ),
-        ),
-      )
-    );
-  }`}
-</SyntaxHighlighter>
+### Providerの状態を読み書きする
 
-この例では、`Container`、`Center`、`Text`という 3 つの Widget を組み合わせています。`Container`の中に`Center`が入り、`Center`の中に`Text`が入るという「入れ子構造（Widget ツリー）」になっているのが分かりますね。
+`HookConsumerWidget` の `build` メソッド内では、`WidgetRef`（通常 `ref` という名前で引数として渡されます）というオブジェクトを使ってProviderにアクセスします。
 
-## よく使う基本的な Widget たち
+- **状態の監視（読み取り）** : `ref.watch()` `final count = ref.watch(counterProvider);` のように書くと、`counterProvider` が提供する現在の状態（この場合はカウンターの数値）を取得できます。
+  そして重要なのは、`ref.watch()` を使って監視しているProviderの状態が変化すると、自動的にこのWidgetの `build` メソッドが再実行され、画面が更新される点です。
 
-Flutter には、あらかじめ用意された便利な Widget がたくさんあります（これらを **Material Components Widgets** などと呼びます）。ここでは、特によく使う基本的なものをいくつか紹介します。
+- **状態の変更** : `ref.read()` や `ref.notifier` Providerの状態を変更したい場合（例：ボタンが押されたときなど）は、`ref.read(counterProvider.notifier).state++` や `ref.read(counterProvider.notifier).update((state) => state + 1)` のように書きます。
+  `notifier` を介して状態オブジェクトにアクセスし、値を更新します。
 
-### Container:
+## 実践：カウンターアプリをRiverpodとHooksで書き換えてみよう
 
-- 最も基本的な「箱」のような Widget。
-- 色 (`color`)、幅 (`width`)、高さ (`height`)、内側の余白 (`padding`)、外側の余白 (`margin`) などを指定できます。
-- 中に別の Widget (`child`) を入れることができます。
-- `Container(color: Colors.red, width: 50, height: 50)` -> 赤い 50x50 の四角形
+それでは、実際にFlutterプロジェクトの雛形として作られるカウンターアプリを、Riverpodとflutter_hooksを使って書き換えてみましょう。
 
-### Text:
+### ステップ1：パッケージの追加
 
-- 文字列を表示するための Widget。
-- `style` プロパティで `TextStyle` を指定し、フォントサイズ (`fontSize`)、色 (`color`)、太さ (`fontWeight`) などを変更できます。
-- `Text('こんにちは', style: TextStyle(fontSize: 24, color: Colors.blue))`
-
-### Icon:
-
-- アイコンを表示するための Widget。
-- `Icons`. に続けて使いたいアイコン名を指定します（例: `Icons.favorite` -> ハートマーク）。
-- `color` や `size` も指定できます。
-- `Icon(Icons.star, color: Colors.yellow, size: 30)` -> 黄色い星アイコン
-
-### Image:
-
-- 画像を表示するための Widget。
-- アプリ内に画像ファイルを含めて表示 (`Image.asset('画像ファイルのパス')`), インターネット上の画像を表示 (`Image.network('画像の URL')`) などの方法があります。
-- `Image.asset` を使う場合:
-
-  1. プロジェクトのルート（`pubspec.yaml` と同じ階層）に `assets` フォルダなど（名前は任意）を作成し、そこに画像ファイルを置きます。
-  2. `pubspec.yaml` ファイルに使用するアセットフォルダを宣言します。
+まず、`pubspec.yaml `ファイルに使用するパッケージを追加します。ファイルを開き、dependencies: セクションに以下のように hooks_riverpod を追加してください（flutter_lints など、他の既存の記述はそのままでOKです）。
 
 <SyntaxHighlighter language="yaml">
-  {`flutter:
-    uses-material-design: true
-    assets:
-      - assets/ # assets フォルダ全体を対象にする場合
-      # - assets/images/ # images フォルダだけを対象にする場合
-      # - assets/my_icon.png # 特定のファイルだけを対象にする場合`}
+{`dependencies:
+    flutter:
+      sdk: flutter
+    
+    # ここに追加！
+    hooks_riverpod: ^2.5.1 # バージョンは最新のものをpub.devで確認して記載するのが良いです
+
+    cupertino_icons: ^1.0.6 # これは元からあるかもしれません`}
 </SyntaxHighlighter>
 
-コード内で `Image.asset('assets/画像ファイル名')` のように指定します。
+（バージョン (`^2.5.1`) は、`pub.dev` で `hooks_riverpod` を検索して、最新の安定版のバージョンを確認して記述してください。）
 
-### Center:
+`pubspec.yaml` を保存すると、VS Codeが自動的にパッケージを取得してくれるか、画面上部に「Pub get」のようなボタンが表示されるので、それをクリックします。または、VS Codeのターミナルで `flutter pub get` と入力して実行してもOKです。
 
-- 中に配置された `child` Widget を、利用可能なスペースの中央に配置します。
-- `Center(child: Text('中央寄せ'))`
+### ステップ2：main.dart の修正 - ProviderScope の追加
 
-これらの Widget を組み合わせることで、様々なレイアウトや表現が可能になります。次の章では、これらの Widget をうまく配置するための「レイアウト用 Widget」について学んでいきましょう。
+次に、`lib/main.dart` ファイルを開き、アプリのルートを `ProviderScope` で囲みます。
 
-## まとめ
+<SyntaxHighlighter language="dart">
+{`import 'package:flutter/material.dart';
+  import 'package:hooks_riverpod/hooks_riverpod.dart'; // hooks_riverpodをインポート
 
-- Flutter では UI のほとんどが Widget で構成される。
-- Widget を組み合わせて Widget ツリー を作る。
-- Widget には基本タイプとして、見た目が変わらない StatelessWidget と、変わる可能性のある StatefulWidget がある。
-- `Container`, `Text`, `Icon`, `Image`, `Center` など、便利な基本 Widget がたくさん用意されている。
+  // （ここに counterProvider を定義します - 後述）
 
-まずはこれらの基本をしっかり押さえて、Widget を組み合わせていく感覚に慣れていきましょう！
+  void main() {
+    runApp(
+      // MyAppをProviderScopeで囲む
+      ProviderScope(
+        child: MyApp(),
+      ),
+    );
+  }
+
+  class MyApp extends StatelessWidget {
+    // ... (MyAppクラスの中身は変更なしでも良いですが、
+    //       最終的にはHookConsumerWidgetに置き換えることもあります)
+    @override
+    Widget build(BuildContext context) {
+      return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: MyHomePage(title: 'Riverpod Counter'), // タイトルを少し変えてみましょう
+      );
+    }
+  }`}
+</SyntaxHighlighter>
+
+### ステップ3：`StateProvider` の定義
+
+カウンターの状態を管理する `StateProvider` を定義します。`main.dart` の `main()` 関数の前あたり（または別のファイルに分けても良い）に記述しましょう。
+
+<SyntaxHighlighter language="dart">
+{`// main.dart の MyApp クラスの前あたり
+
+// counterProviderという名前で、整数(int)の状態を管理するStateProviderを定義
+// 初期値は0とする
+final counterProvider = StateProvider<int>((ref) => 0);`}
+</SyntaxHighlighter>
+
+### ステップ4：`MyHomePage` Widget の書き換え
+
+ここが一番の変更点です。元の `StatefulWidget` である `MyHomePage` を `HookConsumerWidget` に書き換えます。
+
+元の `MyHomePage` (StatefulWidget) のコードは `_counter` 変数や `_incrementCounter` メソッド、`setState` などがありましたが、これらがごっそりシンプルになります。
+
+<SyntaxHighlighter language="dart">
+{`// MyAppクラスの下に記述されている MyHomePage クラスを以下のように書き換えます
+
+  class MyHomePage extends HookConsumerWidget { // StatelessWidget から HookConsumerWidget に変更
+    const MyHomePage({super.key, required this.title});
+
+    final String title;
+
+    @override
+    Widget build(BuildContext context, WidgetRef ref) { // WidgetRef ref を引数に追加
+      // counterProviderを監視し、現在のカウント数を取得
+      final int count = ref.watch(counterProvider);
+
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(title),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$count', // counterProviderから取得したカウント数を表示
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // ボタンが押されたら、counterProviderの状態を1増やす
+            ref.read(counterProvider.notifier).state++;
+            // または updateメソッドを使うこともできます
+            // ref.read(counterProvider.notifier).update((state) => state + 1);
+          },
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ),
+      );
+    }
+  }`}
+</SyntaxHighlighter>
+
+### 主な変更点:
+
+- `StatefulWidget` と `_MyHomePageState` が `HookConsumerWidget` 一つになりました。
+- `build` メソッドに `WidgetRef ref` が追加されました。
+- カウンターの値 `_counter` は `ref.watch(counterProvider)` で取得するようになりました。
+- 数字を増やす処理 `_incrementCounter` メソッドと `setState` はなくなり、`onPressed`の中で直接 `ref.read(counterProvider.notifier).state++` で状態を更新するようになりました。
+
+これで、アプリを再度実行してみてください。見た目は同じカウンターアプリですが、内部の状態管理の仕組みがRiverpodとHooksを使ったモダンなものに置き換わりました！
+
+### `ref.watch` と `ref.read` の使い分け
+
+RiverpodでProviderの状態にアクセスする際、`ref.watch` と `ref.read`（や `ref.listen`）というメソッドが出てきました。
+これらは似ていますが、重要な違いがあります。
+
+- `ref.watch(provider)`:
+
+    - 主にWidgetの `build` **メソッド内** で使います。
+    - 指定した `provider` の状態を監視し、その状態が変化すると、この `ref.watch` を呼んでいるWidgetを **再描画（リビルド）させます。**
+    - 常に最新の状態でUIを保ちたい場合に用います。
+
+- `ref.read(provider)`:
+
+    - 主にボタンが押されたときのコールバック関数内など、`build` **メソッド以外** の場所で使います。
+    - 指定した `provider` の現在の状態を **一度だけ読み取り** ます。
+    - 状態が変化しても、この `ref.read` を呼んだだけではWidgetの再描画はトリガーされません。
+    - `StateProvider` の状態を更新する場合は、`ref.read(provider.notifier)` のように `.notifier` を介して状態オブジェクトを取得し、その `.state` を変更します。
+
+### 簡単な覚え方:
+
+- 画面表示のために、常に最新の値が欲しい　⇒ `build` メソッドで `ref.watch()`
+- ボタンが押された時など、ある瞬間の処理のために値が欲しい、または値を変更したい ⇒ コールバック関数内で `ref.read()`
+
+この使い分けは、Riverpodを効果的に使う上で非常に重要なので、少しずつ慣れていきましょう。
+
+---
+
+お疲れ様でした！今回は、Flutter開発で非常に強力なツールであるRiverpodとflutter_hooksの基本を学び、実際にカウンターアプリをリファクタリングしました。
+
+- パッケージの概念と `pubspec.yaml`
+- Riverpod (`ProviderScope`, `StateProvider`) と flutter_hooks (`HookConsumerWidget`) の基本的な使い方
+- `ref.watch` と `ref.read` の違い
+
+これらの知識は、次の章から本格的にTODOアプリを構築していく上で不可欠な土台となります。
+新しい概念が多くて大変だったかもしれませんが、実際にコードを書き換えて動かすことで、その便利さを少しでも感じていただけたなら嬉しいです。
+
+次の章では、いよいよTODOアプリの画面デザインとレイアウト作成に取り掛かります！

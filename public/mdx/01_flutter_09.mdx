@@ -1,35 +1,252 @@
-<style>
-  .yellow {
-    color: #DCDCAA;
+第8章で、TODOアイテムの完了状態の切り替えと削除機能を実装し、TODOアプリの基本的な機能が一通り完成しましたね！ 
+これで、日々のタスク管理に少し役立つアプリになったのではないでしょうか。
+
+しかし、今のアプリには一つ大きな問題があります。それは、**アプリを一度閉じてしまうと、登録したTODOリストが全て消えてしまう** ことです。
+これは、TODOリストのデータがアプリのメモリ上に一時的に保存されているだけで、永続的（えいぞくてき）には保存されていないためです。
+
+この章では、この問題を解決し、アプリのデータを永続化する方法を学びます。
+具体的には、`shared_preferences`**（シェアードプレファレンシズ）** というパッケージを使って、TODOリストのデータをデバイス内に保存し、アプリを再起動したときにもそのデータを読み込んで復元できるようにします。
+
+## `shared_preferences` パッケージとは？
+
+`shared_preferences` は、Flutterで簡単に少量のデータを永続化するためのプラグイン（機能拡張の部品）です。
+主に、ユーザーの設定情報（例：ダークモードのON/OFF、通知設定など）や、今回のような比較的小さなデータをキーと値のペアで保存するのに適しています。
+
+- **仕組み（簡易説明）** ： スマートフォンのOSが提供するデータ保存領域（iOSでは`NSUserDefaults`、Androidでは`SharedPreferences`）を利用してデータを保存します。
+- **保存できるデータの種類** ： 文字列、数値、真偽値、文字列のリストなどを保存できます。
+- **注意点** ： 大量のデータや複雑な構造のデータ、厳密なデータ整合性が求められるような場合には、SQLiteのようなデータベースなど、他の永続化手段を検討する必要があります。私たちのTODOリスト程度であれば、工夫次第で`shared_preferences`で対応可能です。
+
+## `shared_preferences` の導入と基本的な使い方
+
+まず、`shared_preferences` パッケージをプロジェクトに追加しましょう。
+
+### 1. `pubspec.yaml` ファイルの修正
+
+`dependencies:` セクションに `shared_preferences:` を追加します。バージョンは `pub.dev` で最新のものを確認して記述するのが良いでしょう。
+
+<SyntaxHighlighter language="yaml">
+{`dependencies:
+    flutter:
+      sdk: flutter
+
+    hooks_riverpod: ^2.5.1 # 既存
+    flutter_hooks: ^0.20.5 # hooks_riverpod が依存している場合がある (明示的に書いても良い)
+
+    # ここに追加！
+    shared_preferences: ^2.2.3 # 例：バージョンは適宜最新に
+
+    cupertino_icons: ^1.0.6 # 既存`}
+</SyntaxHighlighter>
+
+### 2. パッケージの取得
+
+`pubspec.yaml` を保存後、VS Codeのターミナルで `flutter pub get `コマンドを実行してパッケージをプロジェクトにダウンロードします。
+
+### 基本的な操作（概念的な例）
+
+`shared_preferences` を使う際の基本的な操作は以下のようになります。（これらはまだTODOアプリのコードではありません）
+
+<SyntaxHighlighter language="dart">
+{`import 'package:shared_preferences/shared_preferences.dart';
+
+  // データを保存する例
+  Future<void> saveData() async {
+    // SharedPreferences のインスタンスを取得 (非同期処理)
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', 'アボカドユーザー');
+    await prefs.setInt('score', 100);
+    await prefs.setBool('isLoggedIn', true);
+    await prefs.setStringList('items', <String>['りんご', 'バナナ']);
   }
-  .yellowgreen {
-    color: #B5CEA8;
-  }
-  .green {
-    color: #4EC9B0;
-  }
-  .blue {
-    color: #569CD6; 
-  }
-  .skyblue {
-    color: #9CDCFE;
-  }
-  .purple {
-    color: #C586C0;
-  }
-  .pink {
-    color: pink;
-  }
-  .orange {
-    color: #CE9178;
-    * {
-      color: #CE9178;
+
+  // データを読み込む例
+  Future<void> loadData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? username = prefs.getString('username'); // 値が存在しない場合は null が返る
+    int score = prefs.getInt('score') ?? 0; // nullならデフォルト値0を使う (??演算子)
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    List<String>? items = prefs.getStringList('items');
+    
+    print('Username: $username, Score: $score, LoggedIn: $isLoggedIn, Items: $items');
+  }`}
+</SyntaxHighlighter>
+
+- `async` / `await`: `SharedPreferences.getInstance()` やデータの保存・読み込み処理は非同期（処理に時間がかかる可能性があり、完了を待つ必要がある）なので、`async` キーワードを関数につけ、実際の非同期処理の呼び出しの前に `await` をつけます。
+- `getString`, `getInt` などでデータを読み込む際、キーに対応するデータが存在しない場合は `null` が返ることがあるため、変数の型を `String?` のようにNull許容型にしたり、`??` (Null合体演算子) を使ってデフォルト値を設定したりします。
+
+## TODOリストのデータをJSON形式に変換（へんかん）する
+
+`shared_preferences` は、直接 `List<Todo>` のようなカスタムオブジェクトのリストを保存することはできません。保存できるのは文字列のリスト (`List<String>`) などです。
+そこで、私たちの `List<Todo> `を `List<String>` に変換し、読み込むときにはその逆の変換を行う必要があります。
+
+この変換の際によく使われるのが **JSON (ジェイソン / JavaScript Object Notation)** というデータ形式です。
+JSONは、人間にも読みやすく、プログラムでも扱いやすいテキストベースのデータ交換フォーマットです。
+Dartの `Map` オブジェクト（キーと値のペア）と非常に相性が良いです。
+
+手順：
+
+1. `Todo` モデルに `toJson()` と `fromJson()` メソッドを追加
+    - `toJson()`: Todo オブジェクトを `Map<String, dynamic>` に変換します。
+    - `fromJson()`: `Map<String, dynamic>` から `Todo` オブジェクトを復元します。
+
+    `lib/todo_model.dart` を以下のように修正します。
+
+<SyntaxHighlighter language="dart">
+{`class Todo {
+    final String id;
+    final String description;
+    final bool isCompleted;
+
+    Todo({
+        required this.id,
+        required this.description,
+        this.isCompleted = false,
+      });
+
+      Todo copyWith({ /* ... (変更なし) ... */ }) {
+        return Todo(
+          id: id ?? this.id,
+          description: description ?? this.description,
+          isCompleted: isCompleted ?? this.isCompleted,
+        );
+      }
+
+      // TodoオブジェクトをMapに変換するメソッド
+      Map<String, dynamic> toJson() {
+        return {
+          'id': id,
+          'description': description,
+          'isCompleted': isCompleted,
+        };
+      }
+
+      // MapからTodoオブジェクトを復元するファクトリコンストラクタ
+      factory Todo.fromJson(Map<String, dynamic> json) {
+        return Todo(
+          id: json['id'] as String,
+          description: json['description'] as String,
+          isCompleted: json['isCompleted'] as bool,
+        );
+      }
+    }`}
+</SyntaxHighlighter>
+
+2. `dart:convert` ライブラリの使用 Dart標準の `dart:convert` ライブラリを使うと、`Map` オブジェクトとJSON文字列を相互に変換できます。
+    - `jsonEncode(mapObject)`: `Map` をJSON文字列にエンコード（変換）します。
+    - `jsonDecode(jsonString)`: JSON文字列を `Map` (または `List`) にデコード（復元）します。
+
+これで、`Todo` オブジェクトをJSON文字列として保存し、JSON文字列から `Todo` オブジェクトを復元する準備ができました。
+
+## RiverpodのProviderに保存・読み込み処理を組み込む
+
+次に、`lib/todo_provider.dart` の `TodoListNotifier` に、TODOリストの保存と読み込みのロジックを組み込みます。
+
+<SyntaxHighlighter language="dart">
+{`import 'dart:convert'; // jsonEncode, jsonDecode のためにインポート
+  import 'package:shared_preferences/shared_preferences.dart'; // SharedPreferences のためにインポート
+  import 'package:hooks_riverpod/hooks_riverpod.dart';
+  import 'todo_model.dart';
+
+  const String _todoListKey = 'todoList'; // SharedPreferences で使うキー
+
+  class TodoListNotifier extends StateNotifier<List<Todo>> {
+    TodoListNotifier() : super([]) {
+      // Notifierが作成されたときに、保存されたTODOを読み込む
+      _loadTodos();
+    }
+
+    // TODOリストを SharedPreferences に保存するプライベートメソッド
+    Future<void> _saveTodos() async {
+      final prefs = await SharedPreferences.getInstance();
+      // List<Todo> を List<String> (JSON文字列のリスト) に変換
+      final List<String> todoListAsJsonStrings =
+          state.map((todo) => jsonEncode(todo.toJson())).toList();
+      await prefs.setStringList(_todoListKey, todoListAsJsonStrings);
+    }
+
+    // SharedPreferences からTODOリストを読み込むプライベートメソッド
+    Future<void> _loadTodos() async {
+      final prefs = await SharedPreferences.getInstance();
+      final List<String>? loadedTodoJsonStrings = prefs.getStringList(_todoListKey);
+
+      if (loadedTodoJsonStrings != null) {
+        // List<String> (JSON文字列のリスト) を List<Todo> に変換
+        final List<Todo> loadedTodos = loadedTodoJsonStrings
+            .map((jsonString) => Todo.fromJson(jsonDecode(jsonString) as Map<String, dynamic>))
+            .toList();
+        state = loadedTodos; // 読み込んだデータでstateを更新
+      }
+      // 保存されているデータがない場合は、初期状態の空リストのまま
+    }
+
+    // 状態を変更するメソッド群で、処理後に _saveTodos() を呼び出す
+    void addTodo(String description) {
+      final newTodo = Todo(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        description: description,
+      );
+      state = [...state, newTodo];
+      _saveTodos(); // 保存
+    }
+
+    void toggle(String todoId) {
+      state = [
+        for (final todo in state)
+          if (todo.id == todoId)
+            todo.copyWith(isCompleted: !todo.isCompleted)
+          else
+            todo,
+      ];
+      _saveTodos(); // 保存
+    }
+
+    void removeTodo(String todoId) {
+      state = state.where((todo) => todo.id != todoId).toList();
+      _saveTodos(); // 保存
     }
   }
-  .gray {
-    color: #757575;
-    * {
-      color: #757575;
-    }
-  }
-</style>
+
+  final todoListProvider = /* ... (変更なし) ... */;`}
+</SyntaxHighlighter>
+
+### 変更のポイント:
+
+- `dart:convert` と `shared_preferences` をインポートします。
+- `_todoListKey` という定数を定義し、SharedPreferencesでデータを保存・読み込みする際のキーとして使用します。
+- コンストラクタ (`TodoListNotifier()`) の中で `_loadTodos()` メソッドを呼び出し、Notifierが初期化される際に保存されたデータを読み込むようにします。
+- `_saveTodos()` メソッド:
+    - 現在の `state` ( `List<Todo>` ) を `map` と `jsonEncode(todo.toJson())` を使ってJSON文字列のリスト (`List<String>`) に変換します。
+    - 変換したリストを `prefs.setStringList()` で保存します。
+- `_loadTodos()` メソッド:
+    - `prefs.getStringList()` で保存されたJSON文字列のリストを読み込みます。
+    - データが存在すれば (`loadedTodoJsonStrings != null`)、それを `map` と `Todo.fromJson(jsonDecode(jsonString))` を使って `List<Todo>` に復元し、`state` を更新します。
+- `addTodo`, `toggle`, `removeTodo` の各メソッドの最後に `_saveTodos()` を呼び出し、状態が変更されるたびにデータが保存されるようにします。
+
+## アプリ起動時・変更時に読み書き実行
+
+上記の `TodoListNotifier` の修正により、以下のタイミングでデータの読み書きが自動的に行われるようになります。
+
+- **アプリ起動時（Notifier初期化時）** : `TodoListNotifier` のコンストラクタで `_loadTodos()` が呼ばれ、保存されていたTODOリストが読み込まれて `state` にセットされます。
+- **TODOリスト変更時** : `addTodo`, `toggle`, `removeTodo` メソッドが呼ばれて `state` が更新された後、`_saveTodos()` が呼ばれて最新のTODOリストが保存されます。
+
+これで、アプリを起動し、いくつかのTODOアイテムを追加・変更・削除してみてください。
+その後、**アプリを完全に終了させて（タスクキルして）、再度起動** してみてください。
+前回終了時のTODOリストがちゃんと復元されて表示されていれば成功です！
+
+UI側（`todo_screen.dart`）のコードは、この永続化機能の追加に関しては特に変更する必要はありません。
+RiverpodのProviderが状態を適切に管理し、UIはそれを `ref.watch` で監視しているため、データが読み込まれれば自動的に画面に反映されます。
+
+---
+
+素晴らしいです！ これで皆さんのTODOアプリは、データを永続化する機能を持ち、より実用的なものになりました。
+
+この章では、
+
+- `shared_preferences` パッケージを使った簡単なデータの永続化。
+- カスタムオブジェクトを保存するためのJSON形式への変換（`toJson`, `fromJson`, `jsonEncode`, `jsonDecode`）。
+- Riverpodの `StateNotifier` に保存・読み込みロジックを組み込む方法。
+
+を学びました。`shared_preferences` は手軽ですが、より複雑なデータや大量のデータを扱う場合は、SQLiteデータベースやクラウドストレージなど、他の永続化方法も検討することになります。
+
+さあ、TODOアプリの主要機能はこれで完成です！
+次の最終章では、これまでの学習を振り返り、完成したTODOアプリの全体像を確認し、そしてこれからの皆さんのFlutter学習のネクストステップについてお話しします。

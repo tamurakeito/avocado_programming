@@ -48,17 +48,67 @@
       "goal": "自分のPCでFlutterアプリ開発の準備ができるようになる",
       "content": "01_flutter_04.mdx",
       "previous": "アプリの部品 - Widgetを知ろう",
-      "next": ""
+      "next": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす"
     },
     {
       "id": 5,
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 5,
-      "heading": "Flutterの基本「Widget」を理解しよう",
-      "goal": "FlutterのUI構築の核となるWidgetの概念を理解する",
+      "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
+      "goal": "RiverpodとHooksを使った状態管理の基本を実践する",
       "content": "01_flutter_05.mdx",
-      "previous": "Dart言語の基本（Flutterで使う部分だけ！）",
-      "next": "レイアウトを組んでみよう"
+      "previous": "開発環境を整えよう - Flutterを動かす準備",
+      "next": "TODOアプリの画面を作ろう - レイアウト編"
+    },
+    {
+      "id": 6,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 6,
+      "heading": "TODOアプリの画面を作ろう - レイアウト編",
+      "goal": "FlutterのWidgetを組み合わせてTODOアプリの静的な画面を作る",
+      "content": "01_flutter_06.mdx",
+      "previous": "カウンターをモダン化！ Riverpod と Hooks で動かす",
+      "next": ""
+    },
+    {
+      "id": 7,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 7,
+      "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
+      "goal": "Riverpod/Hooksを使ってTODOの追加と表示を実装する",
+      "content": "01_flutter_07.mdx",
+      "previous": "TODOアプリの画面を作ろう - レイアウト編",
+      "next": ""
+    },
+    {
+      "id": 8,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 8,
+      "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
+      "goal": "Riverpod/HooksでTODOのチェック・削除機能を実装する",
+      "content": "01_flutter_08.mdx",
+      "previous": "TODOを追加・表示しよう - Riverpod/Hooks実践",
+      "next": "データを保存しよう - shared_preferences と Riverpod"
+    },
+    {
+      "id": 9,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 9,
+      "heading": "データを保存しよう - shared_preferences と Riverpod",
+      "goal": "アプリのデータを保存し、閉じても消えないようにする",
+      "content": "01_flutter_09.mdx",
+      "previous": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
+      "next": "完成！そして次のステップへ"
+    },
+    {
+      "id": 10,
+      "course": "初心者のためのアプリ開発教室 - Flutter入門",
+      "chapter": 10,
+      "heading": "完成！そして次のステップへ",
+      "goal": "TODOアプリの完成を確認し、次の学習ステップを知る",
+      "content": "01_flutter_10.mdx",
+      "previous": "データを保存しよう - shared_preferences と Riverpod",
+      "next": ""
     }
   ]
 }
