@@ -1,0 +1,430 @@
+第1章では、Go言語のプログラムを構成する最も基本的な要素である、変数、基本的なデータ型、計算や比較のための演算子、そしてプログラムの流れを制御する `if` 文や `for` ループなどを学びました。
+これらは、どんなプログラムを書くにも欠かせない基礎知識です。
+
+この第2章では、さらにステップアップして、
+
+- 複数のデータをまとめて扱う方法（配列、スライス、マップ）
+- 自分だけのオリジナルのデータ型を作る方法（構造体）
+- 処理を部品としてまとめ、再利用しやすくする方法（関数、メソッド）
+- プログラムで起こりうる問題に備える方法（エラー処理）
+
+といった、より実践的なプログラムを書くために必要な知識を学んでいきます。
+これらの道具を使いこなせるようになると、表現できることの幅がぐっと広がりますよ。
+
+## 複数のデータをまとめる(1)：配列とスライス
+
+一つのデータだけでなく、たくさんの同じ種類のデータをまとめて扱いたい場面はよくあります。
+例えば、ユーザーのリスト、商品の価格リストなどです。
+Go言語では、そのために「配列」と「スライス」という仕組みが用意されています。
+
+### 配列 (Array)
+
+配列は、同じ型の要素を、決まった数だけ順番に並べて格納できるデータ構造です。
+一度作成すると、その大きさを変えることはできません。
+
+<SyntaxHighlighter language="go">
+{`// [要素数]型 で宣言
+  var numbers [5]int // int型の要素を5つ格納できる配列 numbers を宣言
+  
+  numbers[0] = 10 // 最初の要素 (インデックス0) に 10 を代入
+  numbers[1] = 20 // 2番目の要素 (インデックス1) に 20 を代入
+  // numbers[5] = 60 // エラー！ 配列の範囲外 (0から4まで)
+  
+  fmt.Println(numbers[1]) // 20 が出力される
+  
+  // 宣言と同時に初期化
+  primes := [3]int{2, 3, 5} // 要素数が3で、値が2, 3, 5のint型配列
+  fmt.Println(primes[2]) // 5 が出力される
+  
+  // 要素数を ... でコンパイラに推測させることも可能
+  langs := [...]string{"Go", "Flutter", "Dart"}
+  fmt.Println(len(langs)) // 3 が出力される (len()で要素数を取得)`}
+</SyntaxHighlighter>
+
+配列の要素には、`配列名[インデックス]` の形でアクセスします。インデックスは **0から始まる** ことに注意してください。
+配列はサイズが固定されているため、少し扱いにくい面があり、Go言語では次に説明する「スライス」の方がより一般的に使われます。
+
+### スライス (Slice)
+
+スライスは、配列と似ていますが、可変長（かへんちょう）、つまり長さを後から変えることができる、より柔軟なデータ構造です。
+スライスは内部的には配列の一部を参照しており、その配列に対する「窓」のようなものだとイメージできます。
+
+<SyntaxHighlighter language="go">
+{`// []型 で宣言 (要素数は指定しない)
+  var scores []int // int型のスライス scores を宣言 (初期状態は nil)
+  
+  // make関数を使って初期化 (型, 長さ, 容量(省略可))
+  names := make([]string, 3) // 長さ3のstring型スライスを作成 (各要素はゼロ値 "")
+  names[0] = "Alice"
+  names[1] = "Bob"
+  names[2] = "Charlie"
+  // names[3] = "David" // エラー！ 長さが3なのでインデックスは0, 1, 2まで
+  
+  // スライスリテラルで初期化
+  points := []int{10, 20, 30, 40, 50}
+  
+  // append関数で要素を追加 (スライスの長さが変わる)
+  points = append(points, 60) // points の末尾に 60 を追加
+  fmt.Println(points)        // [10 20 30 40 50 60] が出力される
+  fmt.Println(len(points))   // 6 が出力される (現在の長さ)
+  fmt.Println(cap(points))   // 10 (またはそれ以上、内部配列の容量) が出力される
+  
+  // スライスから一部を切り出す (スライシング)
+  subPoints := points[1:3] // インデックス1から3の手前まで (つまりインデックス1と2)
+  fmt.Println(subPoints)  // [20 30] が出力される`}
+</SyntaxHighlighter>
+
+- `make([]string, 3)` は、長さ3のstring型スライスを作成します。`cap`（キャパシティ、内部配列の容量）を指定することもできます。
+- `append` 関数は、スライスに要素を追加します。内部の配列の容量が足りなくなると、より大きな新しい配列が確保され、そこへデータがコピーされることがあります。
+  そのため、`append` の結果を元のスライス変数に再代入する必要があります (`points = append(points, 60)`)。
+- `len(スライス名)` で現在の要素数、`cap(スライス名)` で現在の内部配列の容量を取得できます。 
+  スライスはGo言語で非常に頻繁に使われる重要なデータ構造です。
+
+### `for...range` ループ (配列やスライスの反復処理)
+
+配列やスライスの各要素を順番に処理したい場合、第1章で学んだ基本的な for ループも使えますが、Go言語にはより便利な for...range ループがあります。
+
+<SyntaxHighlighter language="go">
+{`names := []string{"Alice", "Bob", "Charlie"}
+  
+  // インデックスと値の両方を取得
+  for index, name := range names {
+    fmt.Printf("インデックス %d: 名前 %s", index, name)
+  }
+  // 出力例:
+  // インデックス 0: 名前 Alice
+  // インデックス 1: 名前 Bob
+  // インデックス 2: 名前 Charlie
+  
+  // 値だけが必要な場合 (インデックスを _ で無視)
+  for _, name := range names {
+    fmt.Println("名前:", name)
+  }
+  
+  // インデックスだけが必要な場合 (値を _ で無視)
+  for index := range names {
+    fmt.Println("インデックス:", index)
+  }`}
+</SyntaxHighlighter>
+
+`for...range` は、コレクション（配列、スライス、後述するマップなど）の各要素に対して繰り返し処理を行います。
+ループごとに、要素のインデックスと値（またはキーと値）が返されます。不要な方はアンダースコア `_`（ブランク識別子）を使って無視できます。
+
+## 複数のデータをまとめる(2)：マップ
+
+マップ (`Map`) は、キー (`key`) と 値 (`value`) のペアを集めたデータ構造です。
+キーを使って対応する値に素早くアクセスできます。順番は保証されません。辞書や電話帳のようなものをイメージすると分かりやすいでしょう。
+
+<SyntaxHighlighter language="go">
+{`// map[キーの型]値の型 で宣言
+  var userAges map[string]int // string型のキーとint型の値を持つマップ (初期状態はnil)
+  
+  // make関数で初期化
+  userAges = make(map[string]int)
+  userAges["Alice"] = 30
+  userAges["Bob"] = 25
+  
+  // マップリテラルで初期化
+  populations := map[string]int{
+    "Tokyo":   13960000,
+    "NewYork": 8399000,
+    "London":  8982000,
+  }
+  fmt.Println(populations["Tokyo"]) // 13960000 が出力される
+  
+  // 要素の追加・更新
+  populations["Paris"] = 2141000 // Paris を追加
+  populations["Tokyo"] = 14000000 // Tokyo の値を更新
+  
+  // 要素の存在確認 ( "comma ok" idiom )
+  parisPop, ok := populations["Paris"]
+  if ok {
+    fmt.Println("Parisの人口:", parisPop)
+  } else {
+    fmt.Println("Parisのデータはありません")
+  }
+  
+  beijingPop, ok := populations["Beijing"] // Beijingは存在しない
+  if !ok {
+    fmt.Println("Beijingのデータはありません") // こちらが実行される
+  }
+  
+  // 要素の削除
+  delete(populations, "London")
+  fmt.Println(populations["London"]) // 0 (存在しないキーへのアクセスはゼロ値)
+  
+  // for...range でマップの要素を反復処理 (順序は不定)
+  for city, pop := range populations {
+    fmt.Printf("%s の人口は %d 人です", city, pop)
+  }`}
+</SyntaxHighlighter>
+
+- マップも `make` 関数で初期化するか、マップリテラルを使います。
+- キーを使って値にアクセスします `(populations["Tokyo"])`。
+- マップから値を取得する際に、`値, ok := マップ[キー]` のように書くと、キーが存在すれば `ok` が `true` に、存在しなければ `false` になります。
+  これはGoでよく使われる「comma ok」イディオムです。
+- `delete(マップ名, キー)` で要素を削除できます。
+
+### 独自のデータ型を作る：構造体 (Struct)
+
+プログラムで扱うデータを、より意味のあるまとまりとして扱いたい場合があります。
+例えば、「ユーザー」という概念は、名前（文字列）、年齢（整数）、メールアドレス（文字列）といった複数の情報を持ちます。
+このように、**関連する複数のデータを一つの新しい型としてまとめる** のが **構造体 (Struct)** です。
+
+<SyntaxHighlighter language="go">
+{`// Userという名前の構造体を定義
+  type User struct {
+    ID        int
+    FirstName string
+    LastName  string
+    Email     string
+    IsActive  bool
+  }
+  
+  func main() { // (main関数内で実行する想定のコード)
+    // User型の変数を宣言し、フィールドに値を設定
+    var user1 User
+    user1.ID = 1
+    user1.FirstName = "Taro"
+    user1.LastName = "Yamada"
+    user1.Email = "taro@example.com"
+    user1.IsActive = true
+  
+    fmt.Println(user1)                     // {1 Taro Yamada taro@example.com true}
+    fmt.Println("名前:", user1.FirstName) // 名前: Taro
+  
+    // 構造体リテラルで初期化
+    user2 := User{
+      ID:        2,
+      FirstName: "Hanako",
+      LastName:  "Suzuki",
+      Email:     "hanako@example.com",
+      IsActive:  true,
+    }
+    fmt.Println(user2.Email) // hanako@example.com
+  
+    // フィールド名を省略して初期化も可能 (順序が重要、あまり推奨されない)
+    // user3 := User{3, "Jiro", "Sato", "jiro@example.com", false}
+  }`}
+</SyntaxHighlighter>
+
+- `type 構造体名 struct { ... }` の形で新しい型を定義します。
+- `{}` の中に、構造体が持つフィールド（メンバ変数）を `フィールド名 型` の形で列挙します。
+構造体のインスタンス（実際のデータ）を作成し、`.`（ドット）を使って各フィールドにアクセスします `(user1.FirstName)`。
+
+### ポインタと構造体 (少しだけ)
+
+構造体を関数に渡したりする際、通常は構造体の**コピー**が渡されます。
+大きな構造体の場合、コピーのコストが無視できないことがあります。
+また、関数内で元の構造体の値を変更したい場合もあります。
+そのような場合に**ポインタ**が役立ちます。
+
+ポインタは「値が格納されているメモリ上の住所」を指すものです。今は詳細に立ち入りませんが、「大きなデータを効率よく扱ったり、元のデータを変更したりする際に使うもの」くらいの理解でOKです。
+
+<SyntaxHighlighter language="go">
+{`// (上記のUser構造体があるとして、main関数内)
+  userToModify := User{ID: 10, FirstName: "Temp", IsActive: true}
+  
+  // & をつけると、その変数のメモリアドレス（ポインタ）を取得できる
+  userPointer := &userToModify // userPointer の型は *User (Userへのポインタ)
+  
+  // ポインタを通じてフィールドにアクセス (Goが自動で解決してくれる)
+  userPointer.IsActive = false
+  fmt.Println(userToModify.IsActive) // false (元のuserToModifyの値が変わっている！)
+  
+  // new関数は指定した型のゼロ値が格納されたメモリを確保し、そのアドレス（ポインタ）を返す
+  anotherUserPointer := new(User) // anotherUserPointer も *User 型
+  anotherUserPointer.ID = 11
+  fmt.Println(anotherUserPointer.ID) // 11`}
+</SyntaxHighlighter>
+
+構造体のメソッド（後述）では、このポインタの考え方が重要になってきます。
+
+## 処理をまとめる：関数とメソッド
+
+プログラムを書いていると、同じような処理の塊が何度も出てくることがあります。
+それを毎回書くのは非効率ですし、間違いのもとです。
+そこで、一連の処理をひとまとめにして名前をつけ、必要な時に呼び出せるようにしたものが **関数** (Function) です。
+
+### 関数 (Function)
+
+<SyntaxHighlighter language="go">
+{`// 引数なし、戻り値なしの関数
+  func sayHello() {
+    fmt.Println("こんにちは！")
+  }
+  
+  // 引数あり、戻り値なしの関数
+  func greet(name string) {
+    fmt.Printf("ようこそ、%s さん！\n", name)
+  }
+  
+  // 引数あり、戻り値ありの関数
+  func add(a int, b int) int { // 最後の int が戻り値の型
+    return a + b
+  }
+  
+  // 複数の値を返す関数
+  func divide(numerator int, denominator int) (int, error) { // (商, エラー) の2つを返す
+    if denominator == 0 {
+      return 0, fmt.Errorf("0で割ることはできません") // エラーを返す
+    }
+    return numerator / denominator, nil // 成功時はエラーなし (nil)
+  }
+  
+  func main() { // (main関数内で実行する想定のコード)
+    sayHello()       // こんにちは！
+    greet("アボカド") // ようこそ、アボカド さん！
+  
+    sum := add(5, 3)
+    fmt.Println("5 + 3 =", sum) // 5 + 3 = 8
+  
+    result, err := divide(10, 2)
+    if err != nil {
+      fmt.Println("エラー:", err)
+    } else {
+      fmt.Println("10 / 2 =", result) // 10 / 2 = 5
+    }
+  
+    result, err = divide(10, 0)
+    if err != nil {
+      fmt.Println("エラー:", err) // エラー: 0で割ることはできません
+    } else {
+      fmt.Println("10 / 0 =", result)
+    }
+  }`}
+</SyntaxHighlighter>
+
+- `func 関数名(引数リスト) 戻り値の型リスト { ... }` の形で定義します。
+- 引数や戻り値は複数持つことができます。戻り値が複数の場合は `(型1, 型2)` のように書きます。
+- Goでは、エラーが発生する可能性のある関数は、結果と一緒に `error` 型の値を返すのが一般的です（エラー処理については後述）。
+
+### メソッド (Method)
+
+メソッドは、**特定の型（通常は構造体）に関連付けられた関数** のことです。
+その型のデータに対して操作を行う場合によく使われます。
+メソッドを定義するには、`func` キーワードと関数名の間に「レシーバ」と呼ばれる引数を記述します。
+
+<SyntaxHighlighter language="go">
+  {`type Rectangle struct {
+    Width  float64
+    Height float64
+  }
+  
+  // Rectangle型のメソッド Area (値レシーバ)
+  // (r Rectangle) がレシーバ。r を通じてRectangleのフィールドにアクセスできる
+  func (r Rectangle) Area() float64 {
+    return r.Width * r.Height
+  }
+  
+  // Rectangle型のメソッド Scale (ポインタレシーバ)
+  // レシーバがポインタ型 (*Rectangle) なので、元の構造体の値を変更できる
+  func (r *Rectangle) Scale(factor float64) {
+    r.Width *= factor
+    r.Height *= factor
+  }
+  
+  func main() { // (main関数内で実行する想定のコード)
+    rect := Rectangle{Width: 10, Height: 5}
+    fmt.Println("面積:", rect.Area()) // 面積: 50
+  
+    rect.Scale(2) // rect の Width と Height が2倍になる
+    // ポインタレシーバのメソッドを呼び出す際、Goが自動で
+    // rect を &rect のようにポインタに変換してくれる場合がある
+    // (&rect).Scale(2) と書くこともできる
+    fmt.Println("拡大後の幅:", rect.Width, "高さ:", rect.Height) // 拡大後の幅: 20 高さ: 10
+    fmt.Println("拡大後の面積:", rect.Area())                 // 拡大後の面積: 200
+  }`}
+</SyntaxHighlighter>
+
+- **レシーバ (Receiver):** `func (r Rectangle)` の `(r Rectangle)` の部分です。
+  `r` がレシーバ変数、`Rectangle` がレシーバの型です。
+  メソッド内で `r` を通じて、その型のフィールドにアクセスしたり、他のメソッドを呼び出したりできます。
+
+- **値レシーバ (`r Rectangle`) vs ポインタレシーバ (`r *Rectangle`):**
+    
+    - 値レシーバのメソッド内では、レシーバはコピーなので、元の構造体の値を変更しても影響はありません。
+    - ポインタレシーバのメソッド内では、レシーバは元の構造体のアドレス（ポインタ）なので、フィールドの値を変更すると元の構造体も変更されます。構造体を変更したい場合や、大きな構造体のコピーを避けたい場合にポインタレシーバを使います。
+
+## プログラムの「もしも」に備える：エラー処理
+
+プログラムは常に期待通りに動くとは限りません。
+ファイルが見つからなかったり、ネットワーク接続が切れたり、ユーザーが無効な値を入力したりと、様々な「もしも」（エラー）が発生する可能性があります。
+Go言語には、これらのエラーを扱うためのシンプルで強力な仕組みがあります。
+
+Go言語では、例外（Exception）を投げるという仕組みは一般的ではなく、エラーが発生する可能性のある関数は、**戻り値の一つとして `error` 型の値を返す** のが慣習です。
+
+<SyntaxHighlighter language="go">
+{`import (
+    "fmt"
+    "errors" // errors.New を使うため
+    "strconv" // 文字列を数値に変換するAtoiを使うため
+  )
+  
+  // 文字列を整数に変換し、挨拶を返す関数。エラーも返す可能性がある。
+  func greetAge(ageString string) (string, error) {
+    if ageString == "" {
+      return "", errors.New("年齢が入力されていません") // errors.Newで新しいエラーを作成
+    }
+  
+    age, err := strconv.Atoi(ageString) // Atoiは (int, error) を返す
+    if err != nil {
+      // 元のエラー情報を含めて新しいエラーを作成 (エラーラッピング)
+      return "", fmt.Errorf("年齢の形式が正しくありません: %w", err)
+    }
+  
+    if age < 0 {
+      return "", fmt.Errorf("年齢が負の数です: %d", age)
+    }
+  
+    return fmt.Sprintf("%d歳、こんにちは！", age), nil // 成功時はエラーとしてnilを返す
+  }
+  
+  func main() { // (main関数内で実行する想定のコード)
+    message, err := greetAge("30")
+    if err != nil { // まずエラーをチェック！
+      fmt.Println("エラー発生:", err)
+    } else {
+      fmt.Println(message) // 30歳、こんにちは！
+    }
+  
+    message, err = greetAge("秘密")
+    if err != nil {
+      fmt.Println("エラー発生:", err) // エラー発生: 年齢の形式が正しくありません: strconv.Atoi: parsing "秘密": invalid syntax
+    } else {
+      fmt.Println(message)
+    }
+  
+    message, err = greetAge("")
+    if err != nil {
+      fmt.Println("エラー発生:", err) // エラー発生: 年齢が入力されていません
+    } else {
+      fmt.Println(message)
+    }
+  }`}
+</SyntaxHighlighter>
+
+- **`error` 型:** Goの組み込みインターフェース型で、エラーを表す値はこの型を持ちます。
+  エラーがない場合は `nil`（ヌル、何もないことを示す特別な値）を返します。
+- **エラーの生成:** `errors.New("エラーメッセージ")` や `fmt.Errorf("フォーマット文字列", 引数...)` を使って新しい `error` 型の値を作成できます。
+  `fmt.Errorf` で `%w` を使うと、元のエラーを「ラップ」して、より詳細なエラー情報を提供できます。
+- **エラーチェックの基本パターン:**
+    1. エラーを返す可能性のある関数を呼び出し、結果と一緒に `err` 変数でエラーを受け取る。
+    2. **すぐに `if err != nil { ... }` でエラーが発生したかどうかをチェックする。**
+    3. エラーがあれば、適切な処理（エラーメッセージ表示、処理の中断、デフォルト値の使用など）を行う。
+    4. エラーがなければ (`err == nil`)、正常な処理を続ける。
+
+この「エラーを明示的に返し、呼び出し側でチェックする」というスタイルは、Go言語のコードの堅牢性（けんろうせい）を高める重要な特徴の一つです。
+
+---
+
+お疲れ様でした！この章では、Go言語でより複雑なデータを扱ったり、プログラムを整理したり、エラーに対処したりするための重要な道具立てを学びました。
+
+- **複合型:** 配列、スライス (`append`, `len`, `cap`, `for...range`)、マップ (`make`, `delete`, `comma ok`)
+- **構造体 (Struct):** 独自のデータ型を定義 (`type ... struct`)、ポインタの簡単な導入
+- **関数とメソッド:** 処理の部品化、レシーバ (値/ポインタ)
+- **エラー処理:** `error`型、`nil`チェック、`errors.New`, `fmt.Errorf`
+
+これらの概念は、私たちがこれから作るInstagramクローンのサーバーアプリケーションを構築する上で、何度も登場し、活用していくことになります。
+
+次の章では、いよいよこれらの知識を実際に試す時が来ます！ Go言語の開発環境を皆さんのパソコンにセットアップし、記念すべき最初のプログラム「Hello, World!」を実行してみましょう！

@@ -1,7 +1,7 @@
 {
   "articles": [
     {
-      "id": 0,
+      "id": "flutter_00",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 0,
       "heading": "はじめに - プログラミングの世界へようこそ！",
@@ -11,7 +11,7 @@
       "next": "Flutterって何だろう？ - アプリの見た目に触れてみる"
     },
     {
-      "id": 1,
+      "id": "flutter_01",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 1,
       "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
@@ -21,7 +21,7 @@
       "next": "Dart言語の基本"
     },
     {
-      "id": 2,
+      "id": "flutter_02",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 2,
       "heading": "Dart言語の基本",
@@ -31,7 +31,7 @@
       "next": "アプリの部品 - Widgetを知ろう"
     },
     {
-      "id": 3,
+      "id": "flutter_03",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 3,
       "heading": "アプリの部品 - Widgetを知ろう",
@@ -41,7 +41,7 @@
       "next": "開発環境を整えよう - Flutterを動かす準備"
     },
     {
-      "id": 4,
+      "id": "flutter_04",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 4,
       "heading": "開発環境を整えよう - Flutterを動かす準備",
@@ -51,7 +51,7 @@
       "next": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす"
     },
     {
-      "id": 5,
+      "id": "flutter_05",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 5,
       "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
@@ -61,7 +61,7 @@
       "next": "TODOアプリの画面を作ろう - レイアウト編"
     },
     {
-      "id": 6,
+      "id": "flutter_06",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 6,
       "heading": "TODOアプリの画面を作ろう - レイアウト編",
@@ -71,7 +71,7 @@
       "next": ""
     },
     {
-      "id": 7,
+      "id": "flutter_07",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 7,
       "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
@@ -81,7 +81,7 @@
       "next": ""
     },
     {
-      "id": 8,
+      "id": "flutter_08",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 8,
       "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
@@ -91,7 +91,7 @@
       "next": "データを保存しよう - shared_preferences と Riverpod"
     },
     {
-      "id": 9,
+      "id": "flutter_09",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 9,
       "heading": "データを保存しよう - shared_preferences と Riverpod",
@@ -101,13 +101,103 @@
       "next": "完成！そして次のステップへ"
     },
     {
-      "id": 10,
+      "id": "flutter_10",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 10,
       "heading": "完成！そして次のステップへ",
       "goal": "TODOアプリの完成を確認し、次の学習ステップを知る",
       "content": "01_flutter_10.mdx",
       "previous": "データを保存しよう - shared_preferences と Riverpod",
+      "next": ""
+    },
+    {
+      "id": "go_00",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 0,
+      "heading": "サーバー開発の世界へようこそ！Go言語で作るアプリの裏側",
+      "goal": "サーバーサイドの役割とGo講座の全体像を掴む",
+      "content": "02_go_00.mdx",
+      "previous": "",
+      "next": "Go言語基本マスター(1)：変数・型・演算子・制御構文"
+    },
+    {
+      "id": "go_01",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 1,
+      "heading": "Go言語基本マスター(1)：変数・型・演算子・制御構文",
+      "goal": "Go言語の基本的な変数宣言とデータ型と制御構文を習得する",
+      "content": "02_go_01.mdx",
+      "previous": "サーバー開発の世界へようこそ！Go言語で作るアプリの裏側",
+      "next": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理"
+    },
+    {
+      "id": "go_02",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 2,
+      "heading": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理",
+      "goal": "Go言語の複合型と関数とメソッドとエラー処理を習得する",
+      "content": "02_go_02.mdx",
+      "previous": "Go言語基本マスター(1)：変数・型・演算子・制御構文",
+      "next": "いざ実践！Go言語環境構築と'Hello, World!'"
+    },
+    {
+      "id": "go_03",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 3,
+      "heading": "いざ実践！Go言語環境構築と'Hello, World!'",
+      "goal": "Go言語開発環境を準備し簡単なプログラムを実行する",
+      "content": "02_go_03.mdx",
+      "previous": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理",
+      "next": ""
+    },
+    {
+      "id": "go_04",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 4,
+      "heading": "",
+      "goal": "",
+      "content": "02_go_04.mdx",
+      "previous": "いざ実践！Go言語環境構築と'Hello, World!'",
+      "next": ""
+    },
+    {
+      "id": "go_05",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 5,
+      "heading": "",
+      "goal": "",
+      "content": "02_go_05.mdx",
+      "previous": "",
+      "next": ""
+    },
+    {
+      "id": "go_06",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 6,
+      "heading": "",
+      "goal": "",
+      "content": "02_go_06.mdx",
+      "previous": "",
+      "next": ""
+    },
+    {
+      "id": "go_07",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 7,
+      "heading": "",
+      "goal": "",
+      "content": "02_go_07.mdx",
+      "previous": "",
+      "next": ""
+    },
+    {
+      "id": "go_08",
+      "course": "初心者のためのサーバー開発教室 - Go言語入門",
+      "chapter": 8,
+      "heading": "",
+      "goal": "",
+      "content": "02_go_08.mdx",
+      "previous": "",
       "next": ""
     }
   ]

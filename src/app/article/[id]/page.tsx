@@ -52,7 +52,7 @@ const components = {
 
 const Article = async ({ params }: PageProps) => {
   const { id } = await params;
-  const articleId = parseInt(id);
+  const articleId = id;
   let data: ArticleType | Error;
   let mdxContent: string;
 

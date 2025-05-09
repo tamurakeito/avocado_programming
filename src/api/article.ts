@@ -10,7 +10,7 @@ export type ArticleType = {
   next: string;
 };
 
-export async function getArticle(id: number): Promise<ArticleType | Error> {
+export async function getArticle(id: string): Promise<ArticleType | Error> {
   try {
     const url = `/articles/${id}`;
     const response = await client.get<ArticleType>(url);
