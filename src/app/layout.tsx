@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import "reset-css/reset.css";
-
+import { GeneralTemplate } from "@ui/templates/general";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "🥑",
+  title: "アボカドプログラミング｜初心者でもアプリ開発ができるようになる",
   description: "アボカドでプログラミング",
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <GeneralTemplate>{children}</GeneralTemplate>
       </body>
     </html>
   );

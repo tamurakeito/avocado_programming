@@ -1,0 +1,165 @@
+@use "@assets/styles/variables" as var;
+
+.home {
+  align-self: stretch;
+
+  .heading {
+    font: var.$FONT_H1;
+    color: var.$AVOCADO_DARK;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 48px;
+    gap: 120px;
+    background: var.$PRIMARY100;
+    align-self: stretch;
+
+    .phrases_discription {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 36px;
+
+      .phrases {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 12px;
+
+        .phrase {
+          font: normal 700 36px/43px var.$NOTO_SANS_JP;
+          color: var.$AVOCADO_DARK;
+        }
+      }
+
+      .discription {
+        font: normal 700 16px/24px var.$NOTO_SANS_JP;
+        color: var.$AVOCADO_DARK;
+      }
+    }
+
+    img {
+      width: 256px;
+      height: 256px;
+    }
+  }
+  .about {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 60px 84px;
+    gap: 48px;
+    background: var.$WHITE025;
+    align-self: stretch;
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      gap: 24px;
+
+      width: 700px;
+
+      .p {
+        font: var.$FONT_LG;
+        color: var.$GRAY900;
+        align-self: stretch;
+      }
+    }
+  }
+  .courses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 48px 60px;
+    gap: 36px;
+    background: var.$GRAY050;
+    align-self: stretch;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 36px;
+
+      .note {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 6px;
+        background: var.$PRIMARY200;
+
+        font: var.$FONT_H3;
+        color: var.$AVOCADO_DARK;
+      }
+    }
+  }
+  .error_handling {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+    gap: 48px;
+
+    background: var.$WHITE000;
+    align-self: stretch;
+
+    .button {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      width: 72px;
+      height: 72px;
+
+      background: var.$AVOCADO_DARK;
+      border-radius: 100px;
+    }
+  }
+  .contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 60px 96px;
+    gap: 48px;
+    background: var.$PRIMARY050;
+    align-self: stretch;
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      gap: 24px;
+
+      .p {
+        font: var.$FONT_LG;
+        color: var.$GRAY900;
+      }
+      .email {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 24px;
+        background: var.$PRIMARY100;
+        align-self: stretch;
+
+        font: var.$FONT_LG;
+        color: var.$AVOCADO_DARK;
+      }
+    }
+  }
+}

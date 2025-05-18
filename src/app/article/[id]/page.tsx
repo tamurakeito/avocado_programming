@@ -13,9 +13,18 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+interface PreProps {
+  children: {
+    props: {
+      children: string;
+      className?: string;
+    };
+  };
+}
+
 const components = {
-  pre: ({ children }: { children: any }) => {
-    const child = children as React.ReactElement;
+  pre: ({ children }: PreProps) => {
+    const child = children;
     const code = child.props.children;
     const language = child.props.className?.replace("language-", "");
 

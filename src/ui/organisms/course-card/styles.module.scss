@@ -1,0 +1,76 @@
+@use "@assets/styles/variables" as var;
+
+.course_card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  align-self: stretch;
+
+  .icon {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 72px;
+    background: var.$PRIMARY300;
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+
+    .icon_circle {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 8px;
+
+      width: 40px;
+      height: 40px;
+      background: var.$WHITE025;
+      border-radius: 100px;
+    }
+  }
+
+  .heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+    gap: 10px;
+    background: var.$WHITE000;
+
+    .title {
+      font: var.$FONT_H1;
+      color: var.$GRAY900;
+      align-self: stretch;
+    }
+
+    .description {
+      font: var.$FONT_MD;
+      color: var.$GRAY900;
+      align-self: stretch;
+    }
+
+    .lesson {
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      align-items: center;
+      padding: 0px 4px;
+      gap: 10px;
+
+      flex: none;
+      order: 2;
+      align-self: stretch;
+      flex-grow: 0;
+
+      .lesson_text {
+        font: var.$FONT_SM;
+        color: var.$GRAY900;
+      }
+    }
+  }
+}
