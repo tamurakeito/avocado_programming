@@ -7,7 +7,7 @@ import { Footer } from "@ui/organisms/footer";
 import fs from "fs/promises";
 import path from "path";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -31,7 +31,7 @@ const components = {
     return (
       <SyntaxHighlighter
         language={language || "text"}
-        style={vscDarkPlus}
+        style={oneDark}
         PreTag="div"
         className={styles.codeBlock}
       >
@@ -50,7 +50,7 @@ const components = {
   }) => (
     <SyntaxHighlighter
       language={language || "text"}
-      style={vscDarkPlus}
+      style={oneDark}
       PreTag="div"
       className={`${styles.codeBlock} ${className || ""}`}
     >
@@ -87,35 +87,31 @@ const Article = async ({ params }: PageProps) => {
 
   return (
     <div className={styles.article}>
-      <Header />
-      <div className={styles.content_area}>
-        <Paginations
-          chapter={data.chapter}
-          previous={data.previous}
-          next={data.next}
-        />
-        <div className={styles.course_chapter_heading_goal}>
-          <div className={styles.course_chapter}>
-            <div className={styles.course}>{data.course}</div>
-            <div className={styles.chapter}>第 {data.chapter} 章</div>
-          </div>
-          <div className={styles.heading}>{data.heading}</div>
-          <div className={styles.goal}>
-            <div className={styles.mokuhyou}>目標</div>
-            <div className={styles.goal_content}>{data.goal}</div>
-          </div>
+      <Paginations
+        chapter={data.chapter}
+        previous={data.previous}
+        next={data.next}
+      />
+      <div className={styles.course_chapter_heading_goal}>
+        <div className={styles.course_chapter}>
+          <div className={styles.course}>{data.course}</div>
+          <div className={styles.chapter}>第 {data.chapter} 章</div>
         </div>
-        <div className={styles.divider}></div>
-        <div className={styles.content}>
-          <MDXRemote source={mdxContent} components={components} />
+        <div className={styles.heading}>{data.heading}</div>
+        <div className={styles.goal}>
+          <div className={styles.mokuhyou}>目標</div>
+          <div className={styles.goal_content}>{data.goal}</div>
         </div>
-        <Paginations
-          chapter={data.chapter}
-          previous={data.previous}
-          next={data.next}
-        />
       </div>
-      <Footer />
+      <div className={styles.divider}></div>
+      <div className={styles.content}>
+        <MDXRemote source={mdxContent} components={components} />
+      </div>
+      <Paginations
+        chapter={data.chapter}
+        previous={data.previous}
+        next={data.next}
+      />
     </div>
   );
 };
