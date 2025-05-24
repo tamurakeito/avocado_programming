@@ -2,13 +2,14 @@ import styles from "./styles.module.scss";
 import AvocadoLogo from "@assets/images/avocado_programming.svg";
 import { Tab } from "@ui/atoms/tab";
 import { Divider } from "@ui/atoms/divider";
+import Image from "next/image";
 
 export const Header = () => {
   return (
     <div className={styles.header}>
       <Divider />
       <div className={styles.header_content}>
-        <img src={AvocadoLogo.src} width={180} />
+        <Image src={AvocadoLogo} alt="アボカドプログラミング" width={180} />
         <div className={styles.navigation}>
           <Tab label="ホーム" />
           <Tab label="コース" />

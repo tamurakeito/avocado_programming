@@ -3,6 +3,7 @@ import HeroImage from "@assets/images/hero.png";
 import { ArrowRight } from "react-feather";
 import { CourseCard } from "@/ui/organisms/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
+import Image from "next/image";
 
 export default function Home() {
   const Heading = ({ title }: { title: string }) => {
@@ -24,7 +25,7 @@ export default function Home() {
             気軽にアプリ開発の楽しさに触れてみてください。
           </div>
         </div>
-        <img src={HeroImage.src} />
+        <Image src={HeroImage} alt="アボカドプログラミング" />
       </div>
       <div className={styles.about}>
         <Heading title={"「アボカドプログラミング」へようこそ！"} />

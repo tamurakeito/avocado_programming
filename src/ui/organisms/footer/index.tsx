@@ -2,14 +2,15 @@ import styles from "./styles.module.scss";
 import AvocadoLogo from "@assets/images/avocado_programming.svg";
 import PoweredBy from "@assets/images/powered_by.svg";
 import { Tab } from "@ui/atoms/tab";
+import Image from "next/image";
 
 export const Footer = () => {
   return (
     <div className={styles.footer}>
       <div className={styles.logo_navigation}>
         <div className={styles.logo}>
-          <img src={AvocadoLogo.src} width={240} />
-          <img src={PoweredBy.src} width={180} />
+          <Image src={AvocadoLogo} alt="アボカドプログラミング" width={240} />
+          <Image src={PoweredBy} alt="Powered by 慧陽社" width={180} />
         </div>
         <div className={styles.navigation}>
           <Tab label="ホーム" />

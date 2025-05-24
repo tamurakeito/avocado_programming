@@ -1,0 +1,105 @@
+# Next.js with TypeScript and SASS (SCSS Modules) Project Rules for AI Assistant
+
+## 1. General Instructions & AI Role
+- You are an expert AI assistant specializing in Next.js, TypeScript, and SASS/SCSS.
+- Your primary goal is to help generate clean, efficient, maintainable, and idiomatic code.
+- Provide concise and clear explanations for complex code or when suggesting alternatives.
+- Prioritize solutions that align with modern best practices for Next.js and the React ecosystem.
+- If an instruction seems to conflict with a widely accepted best practice, please point it out and ask for clarification, but adhere to the specific instruction if confirmed.
+
+## 2. Project Overview
+- **Framework:** Next.js (latest stable version, assume **App Router** unless explicitly told otherwise).
+- **Language:** TypeScript (latest stable version).
+- **Styling:** SASS/SCSS, with a strong preference for **CSS Modules** (`.module.scss`).
+- **Key Libraries/Patterns (Assumed unless specified):**
+    - React Hooks for state and lifecycle management.
+    - Functional Components over Class Components.
+    - ESLint and Prettier for linting and formatting (generate code that would pass common configurations).
+
+## 3. Next.js & React Specifics
+- **Component Structure:**
+    - Use Functional Components.
+    - Define props using TypeScript interfaces (e.g., `interface MyComponentProps { ... }`). Name interfaces clearly.
+    - Component file names should be PascalCase (e.g., `UserProfile.tsx`).
+    - For client-side interactivity, use `"use client";` directive at the top of the file.
+    - Leverage Server Components for UI that can be rendered on the server without client-side JavaScript, especially for data fetching.
+- **Routing (App Router):**
+    - Understand and utilize file-system based routing within the `app` directory (e.g., `app/dashboard/page.tsx`, `app/users/[id]/page.tsx`).
+    - Use `layout.tsx` for shared UI across routes.
+    - Use `loading.tsx` for loading UI and `error.tsx` for error boundaries.
+    - For navigation, use the `<Link>` component from `next/link` for client-side transitions.
+    - For programmatic navigation, use `useRouter` from `next/navigation`.
+- **Data Fetching:**
+    - Prefer fetching data in Server Components using `async/await`.
+    - For Client Components, if data fetching is needed, consider using `useEffect` with `Workspace`, or libraries like SWR/TanStack Query for more complex scenarios.
+    - Always handle loading and error states gracefully.
+- **API Routes:**
+    - Create API route handlers within the `app/api/.../route.ts` convention.
+    - Ensure proper request/response typing and error handling.
+- **Images:**
+    - Use the `next/image` component for optimized image handling.
+- **Metadata:**
+    - Use the Metadata API (`export const metadata: Metadata = { ... };`) for SEO and page metadata in `layout.tsx` or `page.tsx`.
+
+## 4. TypeScript Specifics
+- **Type Safety:**
+    - Adhere to strict type checking (as if `strict: true` is enabled in `tsconfig.json`).
+    - **Avoid `any` type.** Use `unknown` for values with truly unknown types and perform type checking, or define specific types/interfaces.
+    - Use explicit types for function parameters and return values.
+    - Utilize utility types (e.g., `Partial`, `Required`, `Readonly`, `Pick`, `Omit`) where appropriate.
+    - Define clear and reusable interfaces and types. Name them in PascalCase (e.g., `interface User`, `type ProductId`).
+- **Modularity:**
+    - Organize code into logical modules using ES module syntax (`import`/`export`).
+    - Keep functions and components focused on a single responsibility.
+- **Naming Conventions:**
+    - Variables and functions: `camelCase`.
+    - Constants: `UPPER_SNAKE_CASE`.
+    - Interfaces, Types, Enums, Components: `PascalCase`.
+
+## 5. SASS/SCSS Specifics (with CSS Modules)
+- **CSS Modules:**
+    - **Strongly prefer CSS Modules for component-level styling.** File names should be `[ComponentName].module.scss` (e.g., `UserProfile.module.scss`).
+    - Import styles as an object: `import styles from './UserProfile.module.scss';`
+    - Apply styles using the imported object: `className={styles.someClass}`.
+    - Class names within SCSS files should generally be `camelCase` to align with JavaScript object property access (e.g., `.userName`, `.profileCard`).
+- **Global Styles:**
+    - Global styles should be placed in a dedicated file (e.g., `app/globals.scss`) and imported into the root `layout.tsx`.
+    - Minimize global styles; prefer component-scoped styles.
+- **SASS Features:**
+    - Utilize SASS variables for colors, fonts, spacing, breakpoints, etc. (e.g., `$primary-color: #3498db;`).
+    - Use mixins for reusable style patterns.
+    - Keep nesting to a maximum of 2-3 levels to maintain readability and avoid overly specific selectors.
+    - Use `@use` for importing SASS partials instead of `@import` for better modularity and to avoid potential issues with global namespace collisions and build performance (though Next.js handles `@import` well, `@use` is the modern SASS standard).
+    - Organize SASS files logically (e.g., a `styles` directory with subdirectories for `abstracts`, `base`, `components`, `layouts`, etc., if not using CSS Modules exclusively).
+- **Readability & Maintainability:**
+    - Write clear and understandable selectors.
+    - Add comments for complex SASS logic or important declarations.
+    - Follow the DRY (Don't Repeat Yourself) principle.
+
+## 6. Coding Style & Best Practices
+- **Readability:**
+    - Prioritize clear, readable code over overly clever or compact code.
+    - Use meaningful variable and function names.
+    - Add comments to explain non-obvious logic or important decisions.
+- **Error Handling:**
+    - Implement robust error handling, especially for API interactions, data processing, and user input.
+    - Provide user-friendly error messages.
+- **Performance:**
+    - Be mindful of performance implications.
+    - Leverage Next.js features like dynamic imports (`next/dynamic`) for code splitting.
+    - Use `React.memo`, `useCallback`, and `useMemo` judiciously for optimizing component rendering when necessary.
+- **Accessibility (a11y):**
+    - Write semantic HTML.
+    - Ensure UIs are keyboard navigable.
+    - Consider ARIA attributes when semantic HTML alone is insufficient, but prioritize native HTML elements.
+
+## 7. Linting and Formatting
+- Generate code that would adhere to common ESLint (e.g., `eslint-plugin-react`, `eslint-plugin-jsx-a11y`, `@typescript-eslint/eslint-plugin`) and Prettier configurations.
+- Strive for zero linting errors or warnings in generated code.
+
+## 8. What to Avoid (Unless Specifically Instructed)
+- Avoid deprecated APIs or patterns.
+- Avoid large, monolithic components. Break them down into smaller, reusable pieces.
+- Avoid direct DOM manipulation; use React's declarative approach.
+
+By following these rules, you will help ensure consistency and quality in our Next.js, TypeScript, and SASS project. If any part of these rules is unclear or seems inappropriate for a given context, please ask for clarification.

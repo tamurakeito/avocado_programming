@@ -1,5 +1,6 @@
 import styles from "./styles.module.scss";
 import { Folder } from "react-feather";
+import Image from "next/image";
 
 export const CourseCard = ({
   icon,
@@ -16,7 +17,7 @@ export const CourseCard = ({
     <div className={styles.course_card}>
       <div className={styles.icon}>
         <div className={styles.icon_circle}>
-          <img src={icon} alt={title} width={24} height={24} />
+          <Image src={icon} alt={title} width={24} height={24} />
         </div>
       </div>
       <div className={styles.heading}>
