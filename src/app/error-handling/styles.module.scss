@@ -1,0 +1,46 @@
+@use "@assets/styles/variables" as var;
+
+.error_handling {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  align-self: stretch;
+  background: var.$GRAY050;
+
+  &_heading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+    gap: 48px;
+
+    background: var.$PRIMARY100;
+    align-self: stretch;
+
+    font: var.$FONT_H2;
+    color: var.$AVOCADO_DARK;
+  }
+
+  &_content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 36px 36px 84px;
+    gap: 36px;
+
+    width: 700px;
+
+    font: var.$FONT_LG;
+
+    color: var.$GRAY900;
+
+    &_text {
+      &_bold {
+        font: var.$FONT_H3;
+      }
+    }
+  }
+}
