@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+import styles from "./pages.module.scss";
 import HeroImage from "@assets/images/hero.png";
 import { ArrowRight } from "react-feather";
 import { CourseCardList, ConstCardProps } from "@/ui/organisms/course-card";

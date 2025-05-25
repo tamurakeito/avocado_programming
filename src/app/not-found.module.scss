@@ -1,0 +1,16 @@
+@use "@assets/styles/variables.scss" as var;
+
+.not_found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 600px;
+
+  background: var.$WHITE025;
+  align-self: stretch;
+
+  font: var.$FONT_H2;
+  color: var.$AVOCADO_DARK;
+}
