@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import { CourseCardList, ConstCardProps } from "@/ui/organisms/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
-
+import { Category } from "@/ui/atoms/category";
 const Courses = () => {
   const list: Array<ConstCardProps> = [
     {
@@ -23,7 +23,7 @@ const Courses = () => {
     <div className={styles.courses}>
       <div className={styles.courses_heading}>コースを選択する</div>
       <div className={styles.courses_list}>
-        <div className={styles.note}>プログラミング初心者向け</div>
+        <Category label="プログラミング初心者向け" />
         <CourseCardList list={list} />
       </div>
     </div>

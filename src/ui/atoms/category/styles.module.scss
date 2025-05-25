@@ -1,0 +1,13 @@
+@use "@assets/styles/variables" as var;
+
+.category {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  background: var.$PRIMARY300;
+
+  font: var.$FONT_H3;
+  color: var.$AVOCADO_DARK;
+}

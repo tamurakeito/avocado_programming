@@ -4,6 +4,7 @@ import { ArrowRight } from "react-feather";
 import { CourseCardList, ConstCardProps } from "@/ui/organisms/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
 import Image from "next/image";
+import { Category } from "@/ui/atoms/category";
 
 export default function Home() {
   const Heading = ({ title }: { title: string }) => {
@@ -63,7 +64,7 @@ export default function Home() {
       <div className={styles.courses}>
         <Heading title={"コース一覧"} />
         <div className={styles.content}>
-          <div className={styles.note}>プログラミング初心者向け</div>
+          <Category label="プログラミング初心者向け" />
           <CourseCardList list={list} />
         </div>
       </div>
