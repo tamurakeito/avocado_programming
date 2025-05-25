@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import HeroImage from "@assets/images/hero.png";
 import { ArrowRight } from "react-feather";
-import { CourseCard } from "@/ui/organisms/course-card";
+import { CourseCardList, ConstCardProps } from "@/ui/organisms/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
 import Image from "next/image";
 
@@ -9,6 +9,22 @@ export default function Home() {
   const Heading = ({ title }: { title: string }) => {
     return <div className={styles.heading}>{title}</div>;
   };
+  const list: Array<ConstCardProps> = [
+    {
+      icon: FlutterIcon,
+      title: "初心者のためのアプリ開発教室- Flutter入門",
+      discription:
+        "プログラミング経験がない方でも、話題のフレームワークFlutterを使いこなし、iOSとAndroidの両方で動くオリジナルアプリを実際に開発できるようになることを目指します。",
+      lesson: 12,
+    },
+    {
+      icon: FlutterIcon,
+      title: "初心者のためのアプリ開発教室- Flutter入門",
+      discription:
+        "プログラミング経験がない方でも、話題のフレームワークFlutterを使いこなし、iOSとAndroidの両方で動くオリジナルアプリを実際に開発できるようになることを目指します。",
+      lesson: 12,
+    },
+  ];
   return (
     <div className={styles.home}>
       <div className={styles.hero}>
@@ -48,14 +64,7 @@ export default function Home() {
         <Heading title={"コース一覧"} />
         <div className={styles.content}>
           <div className={styles.note}>プログラミング初心者向け</div>
-          <CourseCard
-            icon={FlutterIcon.src}
-            title={"初心者のためのアプリ開発教室- Flutter入門"}
-            discription={
-              "プログラミング経験がない方でも、話題のフレームワークFlutterを使いこなし、iOSとAndroidの両方で動くオリジナルアプリを実際に開発できるようになることを目指します。"
-            }
-            lesson={12}
-          />
+          <CourseCardList list={list} />
         </div>
       </div>
       <div className={styles.error_handling}>

@@ -18,12 +18,18 @@
   .about_content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 60px;
+    padding: {
+      top: 60px;
+      bottom: 84px;
+      left: 60px;
+      right: 60px;
+    }
     gap: 48px;
     background: var.$WHITE025;
     align-self: stretch;
+
+    // min-height: calc(100vh - 600px);
 
     .about_content_text_container {
       display: flex;
@@ -35,8 +41,10 @@
 
       max-width: 700px;
 
-      font: var.$FONT_LG;
-      color: var.$GRAY900;
+      .about_content_text {
+        font: var.$FONT_LG;
+        color: var.$GRAY900;
+      }
     }
   }
 }

@@ -5,7 +5,10 @@
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
+  background: var.$WHITE000;
   align-self: stretch;
+
+  filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.25));
 
   .icon {
     display: flex;
@@ -40,10 +43,9 @@
     align-items: flex-start;
     padding: 24px;
     gap: 10px;
-    background: var.$WHITE000;
 
     .title {
-      font: var.$FONT_H1;
+      font: var.$FONT_H2;
       color: var.$GRAY900;
       align-self: stretch;
     }
@@ -73,4 +75,12 @@
       }
     }
   }
+}
+
+.course_card_list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 36px;
+  align-self: stretch;
 }

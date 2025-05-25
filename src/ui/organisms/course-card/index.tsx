@@ -2,17 +2,19 @@ import styles from "./styles.module.scss";
 import { Folder } from "react-feather";
 import Image from "next/image";
 
+export type ConstCardProps = {
+  icon: string;
+  title: string;
+  discription: string;
+  lesson: number;
+};
+
 export const CourseCard = ({
   icon,
   title,
   discription,
   lesson,
-}: {
-  icon: string;
-  title: string;
-  discription: string;
-  lesson: number;
-}) => {
+}: ConstCardProps) => {
   return (
     <div className={styles.course_card}>
       <div className={styles.icon}>
@@ -28,6 +30,16 @@ export const CourseCard = ({
           <div className={styles.lesson_text}>全{lesson}レッスン</div>
         </div>
       </div>
+    </div>
+  );
+};
+
+export const CourseCardList = ({ list }: { list: Array<ConstCardProps> }) => {
+  return (
+    <div className={styles.course_card_list}>
+      {list.map((item, index) => (
+        <CourseCard key={index} {...item} />
+      ))}
     </div>
   );
 };
