@@ -23,7 +23,7 @@
 
 Dart (lib/todo_model.dart)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`class Todo {
     final String id;          // 各TODOを一位に識別するためのID
     final String description; // TODOの内容
@@ -36,7 +36,7 @@ Dart (lib/todo_model.dart)
       this.isCompleted = false, // デフォルトでは未完了として作成
     });
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `final` キーワードは、一度値が設定されたら変更されないことを意味します。
     これにより、`Todo` オブジェクト自体は不変（イミュータブル）となり、状態管理がしやすくなります。
@@ -57,7 +57,7 @@ Dart (lib/todo_model.dart)
 
 Dart (lib/todo_provider.dart)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:hooks_riverpod/hooks_riverpod.dart';
   import 'todo_model.dart'; // 作成したTodoモデルをインポート
 
@@ -93,7 +93,7 @@ Dart (lib/todo_provider.dart)
       StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
     return TodoListNotifier();
 });`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `TodoListNotifier` クラスが `StateNotifier<List<Todo>>` を継承しています。これにより、このクラスは `List<Todo>` 型の状態を管理できます。
 
@@ -111,7 +111,7 @@ Dart (lib/todo_provider.dart)
 
 Dart (lib/todo_screen.dart の TodoScreen Widget内)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// ... (既存のimport文)
   import 'todo_provider.dart'; // 作成した todo_provider.dart をインポート
 
@@ -160,7 +160,7 @@ Dart (lib/todo_screen.dart の TodoScreen Widget内)
       // ...
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `import 'todo_provider.dart';` を追加して、先ほど作成した `todoListProvider` を使えるようにします。
 - `onPressed` (FAB) および `onSubmitted` (`TextField`) の中で、
@@ -177,7 +177,7 @@ TODOをリストに追加できるようになったので、次はそれを画�
 
 Dart (lib/todo_screen.dart の TodoScreen Widget内)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// ... (既存のimport文)
   import 'todo_model.dart';    // Todoモデルをインポート
   import 'todo_provider.dart'; // todo_provider.dart をインポート
@@ -230,7 +230,7 @@ Dart (lib/todo_screen.dart の TodoScreen Widget内)
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `import 'todo_model.dart';` を追加します。
 - `final List<Todo> todos = ref.watch(todoListProvider); `: `ref.watch()` を使って `todoListProvider` の状態（つまり `List<Todo>`）を監視します。
@@ -248,7 +248,7 @@ Dart (lib/todo_screen.dart の TodoScreen Widget内)
 lib/todo_model.dart
 Dart
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`class Todo {
     final String id;
     final String description;
@@ -260,10 +260,10 @@ Dart
       this.isCompleted = false,
     });
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 lib/todo_provider.dart
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:hooks_riverpod/hooks_riverpod.dart';
   import 'todo_model.dart';
 
@@ -283,11 +283,11 @@ lib/todo_provider.dart
       StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
     return TodoListNotifier();
   });`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 lib/todo_screen.dart (主な変更箇所のみ。main.dart は第6章から変更なし)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:flutter/material.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart';
   import 'package:flutter_hooks/flutter_hooks.dart';
@@ -362,7 +362,7 @@ lib/todo_screen.dart (主な変更箇所のみ。main.dart は第6章から変�
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ---
 

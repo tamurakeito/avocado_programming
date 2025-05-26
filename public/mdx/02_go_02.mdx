@@ -22,7 +22,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 配列は、同じ型の要素を、決まった数だけ順番に並べて格納できるデータ構造です。
 一度作成すると、その大きさを変えることはできません。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// [要素数]型 で宣言
   var numbers [5]int // int型の要素を5つ格納できる配列 numbers を宣言
   
@@ -39,7 +39,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
   // 要素数を ... でコンパイラに推測させることも可能
   langs := [...]string{"Go", "Flutter", "Dart"}
   fmt.Println(len(langs)) // 3 が出力される (len()で要素数を取得)`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 配列の要素には、`配列名[インデックス]` の形でアクセスします。インデックスは **0から始まる** ことに注意してください。
 配列はサイズが固定されているため、少し扱いにくい面があり、Go言語では次に説明する「スライス」の方がより一般的に使われます。
@@ -49,7 +49,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 スライスは、配列と似ていますが、可変長（かへんちょう）、つまり長さを後から変えることができる、より柔軟なデータ構造です。
 スライスは内部的には配列の一部を参照しており、その配列に対する「窓」のようなものだとイメージできます。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// []型 で宣言 (要素数は指定しない)
   var scores []int // int型のスライス scores を宣言 (初期状態は nil)
   
@@ -72,7 +72,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
   // スライスから一部を切り出す (スライシング)
   subPoints := points[1:3] // インデックス1から3の手前まで (つまりインデックス1と2)
   fmt.Println(subPoints)  // [20 30] が出力される`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `make([]string, 3)` は、長さ3のstring型スライスを作成します。`cap`（キャパシティ、内部配列の容量）を指定することもできます。
 - `append` 関数は、スライスに要素を追加します。内部の配列の容量が足りなくなると、より大きな新しい配列が確保され、そこへデータがコピーされることがあります。
@@ -84,7 +84,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 
 配列やスライスの各要素を順番に処理したい場合、第1章で学んだ基本的な for ループも使えますが、Go言語にはより便利な for...range ループがあります。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`names := []string{"Alice", "Bob", "Charlie"}
   
   // インデックスと値の両方を取得
@@ -105,7 +105,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
   for index := range names {
     fmt.Println("インデックス:", index)
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `for...range` は、コレクション（配列、スライス、後述するマップなど）の各要素に対して繰り返し処理を行います。
 ループごとに、要素のインデックスと値（またはキーと値）が返されます。不要な方はアンダースコア `_`（ブランク識別子）を使って無視できます。
@@ -115,7 +115,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 マップ (`Map`) は、キー (`key`) と 値 (`value`) のペアを集めたデータ構造です。
 キーを使って対応する値に素早くアクセスできます。順番は保証されません。辞書や電話帳のようなものをイメージすると分かりやすいでしょう。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// map[キーの型]値の型 で宣言
   var userAges map[string]int // string型のキーとint型の値を持つマップ (初期状態はnil)
   
@@ -157,7 +157,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
   for city, pop := range populations {
     fmt.Printf("%s の人口は %d 人です", city, pop)
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - マップも `make` 関数で初期化するか、マップリテラルを使います。
 - キーを使って値にアクセスします `(populations["Tokyo"])`。
@@ -171,7 +171,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 例えば、「ユーザー」という概念は、名前（文字列）、年齢（整数）、メールアドレス（文字列）といった複数の情報を持ちます。
 このように、**関連する複数のデータを一つの新しい型としてまとめる** のが **構造体 (Struct)** です。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// Userという名前の構造体を定義
   type User struct {
     ID        int
@@ -206,7 +206,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
     // フィールド名を省略して初期化も可能 (順序が重要、あまり推奨されない)
     // user3 := User{3, "Jiro", "Sato", "jiro@example.com", false}
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `type 構造体名 struct { ... }` の形で新しい型を定義します。
 - `{}` の中に、構造体が持つフィールド（メンバ変数）を `フィールド名 型` の形で列挙します。
@@ -221,7 +221,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 
 ポインタは「値が格納されているメモリ上の住所」を指すものです。今は詳細に立ち入りませんが、「大きなデータを効率よく扱ったり、元のデータを変更したりする際に使うもの」くらいの理解でOKです。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// (上記のUser構造体があるとして、main関数内)
   userToModify := User{ID: 10, FirstName: "Temp", IsActive: true}
   
@@ -236,7 +236,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
   anotherUserPointer := new(User) // anotherUserPointer も *User 型
   anotherUserPointer.ID = 11
   fmt.Println(anotherUserPointer.ID) // 11`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 構造体のメソッド（後述）では、このポインタの考え方が重要になってきます。
 
@@ -248,7 +248,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 
 ### 関数 (Function)
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// 引数なし、戻り値なしの関数
   func sayHello() {
     fmt.Println("こんにちは！")
@@ -293,7 +293,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
       fmt.Println("10 / 0 =", result)
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `func 関数名(引数リスト) 戻り値の型リスト { ... }` の形で定義します。
 - 引数や戻り値は複数持つことができます。戻り値が複数の場合は `(型1, 型2)` のように書きます。
@@ -305,7 +305,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
 その型のデータに対して操作を行う場合によく使われます。
 メソッドを定義するには、`func` キーワードと関数名の間に「レシーバ」と呼ばれる引数を記述します。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
   {`type Rectangle struct {
     Width  float64
     Height float64
@@ -335,7 +335,7 @@ Go言語では、そのために「配列」と「スライス」という仕組
     fmt.Println("拡大後の幅:", rect.Width, "高さ:", rect.Height) // 拡大後の幅: 20 高さ: 10
     fmt.Println("拡大後の面積:", rect.Area())                 // 拡大後の面積: 200
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - **レシーバ (Receiver):** `func (r Rectangle)` の `(r Rectangle)` の部分です。
   `r` がレシーバ変数、`Rectangle` がレシーバの型です。
@@ -354,7 +354,7 @@ Go言語には、これらのエラーを扱うためのシンプルで強力な
 
 Go言語では、例外（Exception）を投げるという仕組みは一般的ではなく、エラーが発生する可能性のある関数は、**戻り値の一つとして `error` 型の値を返す** のが慣習です。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`import (
     "fmt"
     "errors" // errors.New を使うため
@@ -402,7 +402,7 @@ Go言語では、例外（Exception）を投げるという仕組みは一般的
       fmt.Println(message)
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - **`error` 型:** Goの組み込みインターフェース型で、エラーを表す値はこの型を持ちます。
   エラーがない場合は `nil`（ヌル、何もないことを示す特別な値）を返します。

@@ -1,0 +1,48 @@
+@use "@assets/styles/variables" as var;
+
+.code_block {
+  // border: 1px solid #333;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: {
+    bottom: 24px;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+
+  height: 32px;
+  background: var.$GRAY900;
+  color: var.$GRAY400;
+  font: var.$FONT_SM;
+  border-bottom: 1px solid var.$GRAY800;
+}
+
+.filename {
+  display: flex;
+  align-items: center;
+}
+
+.copy_button {
+  background: none;
+  border: none;
+  color: var.$GRAY500;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var.$WHITE000;
+  }
+}
+
+.syntax_highlighter {
+  padding: 12px;
+}

@@ -1,69 +1,34 @@
 import styles from "./styles.module.scss";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ArticleType, getArticle } from "@api/article";
-import { Header } from "@ui/organisms/header";
 import { Paginations } from "@ui/molecules/pagination";
-import { Footer } from "@ui/organisms/footer";
 import fs from "fs/promises";
 import path from "path";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import CodeBlock from "@/ui/organisms/code-block";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
-
-interface PreProps {
-  children: {
-    props: {
-      children: string;
-      className?: string;
-    };
-  };
-}
-
-const components = {
-  pre: ({ children }: PreProps) => {
-    const child = children;
-    const code = child.props.children;
-    const language = child.props.className?.replace("language-", "");
-
-    return (
-      <SyntaxHighlighter
-        language={language || "text"}
-        style={oneDark}
-        PreTag="div"
-        className={styles.codeBlock}
-      >
-        {code}
-      </SyntaxHighlighter>
-    );
-  },
-  SyntaxHighlighter: ({
-    children,
-    language,
-    className,
-  }: {
-    children: string;
-    language?: string;
-    className?: string;
-  }) => (
-    <SyntaxHighlighter
-      language={language || "text"}
-      style={oneDark}
-      PreTag="div"
-      className={`${styles.codeBlock} ${className || ""}`}
-    >
-      {children}
-    </SyntaxHighlighter>
-  ),
-};
-
-const Article = async ({ params }: PageProps) => {
+const Article = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   const articleId = id;
   let data: ArticleType | Error;
-  let mdxContent: string;
+  let source: string;
+  const components = {
+    CodeBlock: ({
+      children,
+      language,
+      className,
+    }: {
+      children: string;
+      language?: string;
+      className?: string;
+    }) => (
+      <CodeBlock
+        language={language || "text"}
+        className={`${styles.codeBlock} ${className || ""}`}
+      >
+        {children}
+      </CodeBlock>
+    ),
+  };
 
   try {
     data = await getArticle(articleId);
@@ -79,7 +44,7 @@ const Article = async ({ params }: PageProps) => {
 
   try {
     const filePath = path.join(process.cwd(), "public", "mdx", data.content);
-    mdxContent = await fs.readFile(filePath, "utf-8");
+    source = await fs.readFile(filePath, "utf-8");
   } catch (error) {
     console.error("MDXファイルの読み込みに失敗しました:", error);
     return <div>コンテンツの読み込みに失敗しました</div>;
@@ -105,7 +70,7 @@ const Article = async ({ params }: PageProps) => {
       </div>
       <div className={styles.divider}></div>
       <div className={styles.content}>
-        <MDXRemote source={mdxContent} components={components} />
+        <MDXRemote source={source} components={components} />
       </div>
       <Paginations
         chapter={data.chapter}

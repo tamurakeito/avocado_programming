@@ -20,13 +20,13 @@ Go言語のプログラムは、**パッケージ (package)** という単位で
 
 Dart (Goのコードです)
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`package main // このファイルが main パッケージに属することを示す
 
   import "fmt" // 他のパッケージを使うための import 宣言
 
   // ... この下にプログラムの本体（関数など）を書いていく ...`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `package main`: ファイルが `main` パッケージに属することを示します。`main` パッケージは特別で、その中に `main` 関数（後述）があれば、それは直接実行可能なプログラムとなります。
     私たちが作るサーバーアプリケーションも、この `main` パッケージとして作ります。
@@ -47,7 +47,7 @@ Go言語で変数を使う（宣言する）主な方法は2つあります。
 
 ### 1. var キーワードを使う方法（型を明示）:
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// var 変数名 型
   var userAge int       // int型(整数)を入れる userAge という名前の箱を用意
   var userName string    // string型(文字列)を入れる userName という名前の箱を用意
@@ -58,7 +58,7 @@ Go言語で変数を使う（宣言する）主な方法は2つあります。
   // 型を明示して初期値を同時に代入することも可能
   var message string = "初期メッセージ"
   var score int = 100`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `var` の後に変数名、そしてその変数に入れるデータの型（かた）（`int` や `string` など）を指定します。
 値を後から入れる（代入する）ことも、宣言と同時に初期値を入れることもできます。
@@ -69,7 +69,7 @@ Go言語で変数を使う（宣言する）主な方法は2つあります。
 関数の中で変数を宣言する場合、より短い `:=` という書き方がよく使われます。
 これは、代入する値からGo言語が型を自動で推測（型推論）してくれる便利な方法です。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// 関数の中でのみ使用可能
   count := 10             // 10からint型だと推論される
   isEnabled := true       // trueからbool型だと推論される
@@ -79,7 +79,7 @@ Go言語で変数を使う（宣言する）主な方法は2つあります。
   // var count int = 10
   // var isEnabled bool = true
   // var serverName string = "MyServer"`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `:=` は `var` と型宣言を省略できるため、コードを簡潔に書けます。
 ただし、**関数の外（トップレベル）では使えず、関数内でのみ使用可能** というルールがあります。
@@ -91,13 +91,13 @@ Go言語で変数を使う（宣言する）主な方法は2つあります。
 
 `const` キーワードを使って宣言します。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`const pi = 3.14159
   const siteTitle string = "アボカドサーバー開発教室"
   const maxLoginAttempts = 5
   
   // pi = 3.14 // エラー！定数は再代入できない`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 定数を使うと、コードの中でマジックナンバー（意味不明な数字）が減り、後から読み返したときに意味が分かりやすくなります。
 また、誤って値を変更してしまうミスも防げます。
@@ -124,12 +124,12 @@ Go言語では、変数や定数にどんな種類のデータを入れるかを
 - **論理型 (Boolean Type):**
     - `bool`: `true` (真) または `false` (偽) のどちらかの値だけを持つ型です。条件分岐などで使われます。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`var year int = 2025
   var temperature float64 = 18.5
   var greeting string = "始めましょう！"
   var isActive bool = true`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ## 計算や比較をする：演算子
 
@@ -140,13 +140,13 @@ Go言語では、変数や定数にどんな種類のデータを入れるかを
 - `+` (足し算), `-` (引き算), `*` (掛け算), `/` (割り算)
 - `%` (剰余、割り算の余り): 例 `10 % 3` は `1` になります。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`sum := 10 + 5 // sum は 15
   difference := 10 - 3 // difference は 7
   product := 4 * 6 // product は 24
   quotient := 10 / 3 // quotient は 3 (整数同士の割り算は結果も整数)
   remainder := 10 % 3 // remainder は 1`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ### 比較演算子 (Comparison Operators): 
 
@@ -159,11 +159,11 @@ Go言語では、変数や定数にどんな種類のデータを入れるかを
 - `<=`（以下）
 - `>=`（以上）
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`isEqual := (5 == 5) // isEqual は true
   isNotEqual := (5 != 3) // isNotEqual は true
   isGreater := (10 > 5) // isGreater は true`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ### 論理演算子 (Logical Operators):
 
@@ -173,11 +173,11 @@ Go言語では、変数や定数にどんな種類のデータを入れるかを
 - `||` (OR、または): どちらか一方、または両方の条件が true の場合に true になります。
 - `!` (NOT、否定): true を false に、false を true に反転させます。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`result1 := (true && false) // result1 は false
   result2 := (true || false) // result2 は true
   result3 := !true           // result3 は false`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ## 流れをコントロールする：制御構文
 
@@ -188,7 +188,7 @@ Go言語では、変数や定数にどんな種類のデータを入れるかを
 
 「もし○○なら××する、そうでなければ△△する」というように、条件に応じて処理を分岐させます。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`score := 75
   
   if score >= 80 {
@@ -199,7 +199,7 @@ Go言語では、変数や定数にどんな種類のデータを入れるかを
     fmt.Println("もう少し頑張ろう")
   }
   // この場合、scoreは75なので "合格です" が出力される`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - Go言語の `if` 文では、条件式を囲む `()` は不要です。
 - 処理ブロックを囲む `{}` は必須です。`{` は `if` や `else` と同じ行に書く必要があります。
@@ -212,7 +212,7 @@ Go言語には `while` や `do-while` といったループ構文はなく、ル
 
 1. 基本的な for ループ（C言語やJavaに似た形式）:
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`// i を 0 から始めて、9 になるまで1ずつ増やしながら繰り返す
   for i := 0; i < 10; i++ {
     fmt.Println(i) // 0, 1, 2, ..., 9 が順に出力される
@@ -220,21 +220,21 @@ Go言語には `while` や `do-while` といったループ構文はなく、ル
   // ① 初期化: i := 0 (ループ開始時に一度だけ実行)
   // ② 条件式: i < 10 (ループを続ける条件)
   // ③ 後処理: i++ (各ループの最後に実行)`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 2. 条件だけを指定する for ループ（while ループのように使う）:
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`sum := 1
   for sum < 100 { // sum が 100 未満の間、繰り返す
     sum += sum // sum を2倍にしていく
   }
   fmt.Println(sum) // 100以上になった時点の sum が出力される (例: 128)`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 3. 無限ループ:
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`for {
     fmt.Println("無限ループ中...")
     // 何らかの条件でループを抜ける処理が必要 (例: break)
@@ -242,7 +242,7 @@ Go言語には `while` や `do-while` といったループ構文はなく、ル
     //     break // ループを抜ける
     // }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 条件式を省略すると無限ループになります。
 `break` 文を使ってループを明示的に抜ける処理を書かないと、プログラムが停止しなくなってしまうので注意が必要です。
@@ -254,7 +254,7 @@ Go言語には `while` や `do-while` といったループ構文はなく、ル
 特定の変数の値に応じて、複数の処理経路の中から一つを選んで実行したい場合に `switch` 文が便利です。
 `if/else if` をたくさん繋げるよりもコードがすっきりすることがあります。
 
-<SyntaxHighlighter language="go">
+<CodeBlock language="go">
 {`day := "Sunday"
   
   switch day {
@@ -266,7 +266,7 @@ Go言語には `while` や `do-while` といったループ構文はなく、ル
     fmt.Println("平日です")
   }
   // この場合 "週末です！" が出力される`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - Goの `switch` は、一致した `case` の処理が終わると自動的に `switch` 文全体を抜けます（他の言語のように `break` を書く必要はありません）。
 もし、次の `case` の処理も続けたい場合は、明示的に `fallthrough` を記述します（あまり使いません）。

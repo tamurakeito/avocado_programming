@@ -31,7 +31,7 @@
 
 lib/todo_model.dart
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`class Todo {
     final String id;
     final String description;
@@ -71,11 +71,11 @@ lib/todo_model.dart
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 lib/todo_provider.dart
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'dart:convert';
   import 'package:shared_preferences/shared_preferences.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -137,11 +137,11 @@ lib/todo_provider.dart
       StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
     return TodoListNotifier();
   });`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 lib/todo_screen.dart
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:flutter/material.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart';
   import 'package:flutter_hooks/flutter_hooks.dart';
@@ -229,7 +229,7 @@ lib/todo_screen.dart
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 （`main.dart` は第6章からほぼ変更ありません）
 

@@ -217,29 +217,5 @@
       padding: 1px 4px;
       border-radius: 5px;
     }
-
-    // コードブロック用のスタイル
-    .codeBlock {
-      margin-bottom: 32px !important;
-      border-radius: 8px !important;
-
-      pre {
-        padding: 24px;
-        margin: {
-          bottom: 32px;
-        }
-        gap: 10px;
-        background: #1f1f1f;
-        white-space: pre-wrap;
-        border-radius: 8px;
-
-        code {
-          font: var.$FONT_CODE;
-          letter-spacing: 0.02em;
-          color: var.$GRAY100;
-          background: none;
-        }
-      }
-    }
   }
 }

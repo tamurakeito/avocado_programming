@@ -36,48 +36,48 @@ Flutterフレームワークがその宣言を読み取り、実際に画面に�
 
 - `Text`: 文字列を表示します。一番シンプルでよく使うWidgetの一つです。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`Text('こんにちは、Flutter！')`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `Icon`: アイコンを表示します。Flutterにはたくさんのアイコンが事前に用意されています（Material Icons）。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`Icon(Icons.favorite, color: Colors.red) // 赤いハートのアイコン`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 （ `Icons.favorite` でアイコンの種類を指定し、 `Colors.red` で色を指定しています。 `Icons` や `Colors` もFlutterが用意してくれている便利な道具です）
 
 - `Image`: 画像を表示します。インターネット上の画像をURLで指定したり、アプリ内に含めた画像ファイルを表示したりできます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// 例：ネットワーク上の画像を表示する場合
 Image.network('https://example.com/image.png')
 
 // 例：アプリ内の画像を表示する場合 (設定が別途必要)
 Image.asset('assets/images/my_image.jpg')`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `Container`: 多目的な「箱」のようなWidgetです。
 色をつけたり、サイズを指定したり、枠線をつけたり、内側や外側に余白（`padding` や `margin`）を設定したりできます。
 レイアウトの調整に非常に便利です。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`Container(
     width: 100.0, // 幅を100に指定
     height: 50.0, // 高さを50に指定
     color: Colors.blue, // 背景色を青に指定
     child: Center(child: Text('箱')), // 中にさらにWidgetを入れることも可能
 )`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `Center`: 中に入れた子Widget（child）を、自身の領域の中央に配置します。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`Center(
     child: Text('中央寄せ'),
 )`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ## Widgetを組み合わせる：レイアウトWidget
 
@@ -88,7 +88,7 @@ Image.asset('assets/images/my_image.jpg')`}
 
 - `Row`: 子Widgetたちを **水平方向（横）** に並べます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`Row(
     mainAxisAlignment: MainAxisAlignment.center, // 横方向の中央揃え (オプション)
     children: <Widget>[ // 横に並べたいWidgetをリストで指定
@@ -97,12 +97,12 @@ Image.asset('assets/images/my_image.jpg')`}
       Text('お気に入り'),
     ],
 )`}
-</SyntaxHighlighter>
+</CodeBlock>
 （`children` には `List<Widget>`、つまりWidgetのリストを渡します）
 
 - `Column`: 子Widgetたちを **垂直方向（縦）** に並べます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`Column(
     crossAxisAlignment: CrossAxisAlignment.start, // 縦方向の左揃え (オプション)
     children: <Widget>[ // 縦に並べたいWidgetをリストで指定
@@ -112,18 +112,18 @@ Image.asset('assets/images/my_image.jpg')`}
       Row( /* RowをColumnの中に入れることも可能 */ ),
     ],
 )`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `Padding`: 子Widgetの周囲に **余白（パディング）** を追加します。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`Padding(
     padding: EdgeInsets.all(16.0), // 全方向に16.0の余白を追加
     // padding: EdgeInsets.symmetric(horizontal: 20.0), // 水平方向に20.0の余白
     // padding: EdgeInsets.only(left: 10.0, top: 5.0), // 左に10.0, 上に5.0の余白
     child: Text('この文字の周りに余白があります'),
 )`}
-</SyntaxHighlighter>
+</CodeBlock>
 （`EdgeInsets` を使って余白のサイズや方向を指定します）
 
 - `Scaffold`: アプリの基本的なページの骨組みを提供します。
@@ -150,7 +150,7 @@ StatelessWidgetの見た目は、それが作られるときに外部から与�
 第1章で見たコード例も、実は `StatelessWidget` を使って作られていました。
 
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// 'name' という文字列を受け取って挨拶を表示するStatelessWidgetの例
   class GreetingWidget extends StatelessWidget {
     // このWidgetの設定値（外部から受け取る情報）
@@ -170,7 +170,7 @@ StatelessWidgetの見た目は、それが作られるときに外部から与�
 
   // 使う側：
   GreetingWidget(name: 'アボカド') // これで「こんにちは、アボカド さん！」と表示される`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `class GreetingWidget extends StatelessWidget` で、StatelessWidgetを継承（性質を受け継ぐ）して新しいWidgetを定義します。
 - `final String name;` で、このWidgetが持つ設定値（変更されない値）を宣言します。

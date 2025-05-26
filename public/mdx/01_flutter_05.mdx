@@ -66,13 +66,13 @@ Riverpodを使うと、アプリの状態（データ）をWidgetツリーのど
 
 カウンターの数値を管理する `StateProvider` は以下のように定義できます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // counterProviderという名前で、整数(int)の状態を管理するStateProviderを定義
 // 初期値は0とする
 final counterProvider = StateProvider<int>((ref) => 0);`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `final counterProvider` : これがProviderの名前になります。`final` は一度定義したら変更しないよ、という意味です。
 - `StateProvider<int>` : `<int>` で、このProviderが整数(`int`)型の状態を扱うことを示します。
@@ -106,7 +106,7 @@ flutter_hooksとRiverpodを一緒に使う場合、`StatelessWidget` や `Statef
 
 まず、`pubspec.yaml `ファイルに使用するパッケージを追加します。ファイルを開き、dependencies: セクションに以下のように hooks_riverpod を追加してください（flutter_lints など、他の既存の記述はそのままでOKです）。
 
-<SyntaxHighlighter language="yaml">
+<CodeBlock language="yaml">
 {`dependencies:
     flutter:
       sdk: flutter
@@ -115,7 +115,7 @@ flutter_hooksとRiverpodを一緒に使う場合、`StatelessWidget` や `Statef
     hooks_riverpod: ^2.5.1 # バージョンは最新のものをpub.devで確認して記載するのが良いです
 
     cupertino_icons: ^1.0.6 # これは元からあるかもしれません`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 （バージョン (`^2.5.1`) は、`pub.dev` で `hooks_riverpod` を検索して、最新の安定版のバージョンを確認して記述してください。）
 
@@ -125,7 +125,7 @@ flutter_hooksとRiverpodを一緒に使う場合、`StatelessWidget` や `Statef
 
 次に、`lib/main.dart` ファイルを開き、アプリのルートを `ProviderScope` で囲みます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:flutter/material.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart'; // hooks_riverpodをインポート
 
@@ -155,19 +155,19 @@ flutter_hooksとRiverpodを一緒に使う場合、`StatelessWidget` や `Statef
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ### ステップ3：`StateProvider` の定義
 
 カウンターの状態を管理する `StateProvider` を定義します。`main.dart` の `main()` 関数の前あたり（または別のファイルに分けても良い）に記述しましょう。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// main.dart の MyApp クラスの前あたり
 
 // counterProviderという名前で、整数(int)の状態を管理するStateProviderを定義
 // 初期値は0とする
 final counterProvider = StateProvider<int>((ref) => 0);`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ### ステップ4：`MyHomePage` Widget の書き換え
 
@@ -175,7 +175,7 @@ final counterProvider = StateProvider<int>((ref) => 0);`}
 
 元の `MyHomePage` (StatefulWidget) のコードは `_counter` 変数や `_incrementCounter` メソッド、`setState` などがありましたが、これらがごっそりシンプルになります。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// MyAppクラスの下に記述されている MyHomePage クラスを以下のように書き換えます
 
   class MyHomePage extends HookConsumerWidget { // StatelessWidget から HookConsumerWidget に変更
@@ -220,7 +220,7 @@ final counterProvider = StateProvider<int>((ref) => 0);`}
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ### 主な変更点:
 

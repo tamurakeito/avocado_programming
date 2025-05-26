@@ -20,7 +20,7 @@
 
 Dart (lib/todo_model.dart)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`class Todo {
     final String id;
     final String description;
@@ -45,7 +45,7 @@ Dart (lib/todo_model.dart)
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `copyWith` メソッドは、引数で指定されたプロパティだけを新しい値で更新し、指定されなかったプロパティは元のオブジェクトの値を引き継いだ、新しい `Todo` インスタンスを返します。
 `??` は「Null合体演算子」といい、左辺が `null` なら右辺の値を採用します。
@@ -56,7 +56,7 @@ Dart (lib/todo_model.dart)
 
 Dart (lib/todo_provider.dart の TodoListNotifier クラス内)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// class TodoListNotifier extends StateNotifier<List<Todo>> {
   //   TodoListNotifier() : super([]);
   //   void addTodo(String description) { ... } // 既存のメソッド
@@ -76,7 +76,7 @@ Dart (lib/todo_provider.dart の TodoListNotifier クラス内)
 
     // void removeTodo(String todoId) { ... } // これは後で追加
   // }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 この `toggle` メソッドでは、現在の `state`（TODOリスト）の各アイテムをチェックし、IDが一致するアイテムが見つかれば、そのアイテムの `isCompleted` の値を `!todo.isCompleted`（現在の値の反対）にして `copyWith` で新しい `Todo` オブジェクトを作成します。
 IDが一致しないアイテムはそのままです。これにより、変更対象のアイテムだけが更新された新しいリストが生成され、`state` が置き換えられます。
@@ -88,7 +88,7 @@ IDが一致しないアイテムはそのままです。これにより、変更
 
 Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`              itemBuilder: (BuildContext context, int index) {
                   final Todo todo = todos[index];
                   return ListTile(
@@ -114,7 +114,7 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内)
                     trailing: IconButton( /* ... (削除ボタンは後ほど) ... */ ),
                   );
                 },`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `ListTile` の `leading` プロパティを、以前の `Icon` から `Checkbox` Widgetに変更しました。
 - `Checkbox` の `value` プロパティに `todo.isCompleted` を設定し、現在のTODOアイテムの完了状態を反映させます。
@@ -133,7 +133,7 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内)
 
 Dart (lib/todo_provider.dart の TodoListNotifier クラス内)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// class TodoListNotifier extends StateNotifier<List<Todo>> {
   //   // ... (既存のコンストラクタ, addTodo, toggle メソッド) ...
 
@@ -144,7 +144,7 @@ Dart (lib/todo_provider.dart の TodoListNotifier クラス内)
       state = state.where((todo) => todo.id != todoId).toList();
     }
   // }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `state.where((todo) => todo.id != todoId)` は、リストの各要素 (`todo`) について、`todo.id != todoId` という条件（IDが削除対象のIDと一致しない）を満たすものだけを抽出します。
 その結果に `.toList()` を付けることで、新しいリストが生成され、`state` が更新されます。
@@ -155,7 +155,7 @@ Dart (lib/todo_provider.dart の TodoListNotifier クラス内)
 
 Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile の trailing)
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`                  trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
@@ -163,7 +163,7 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile �
                         ref.read(todoListProvider.notifier).removeTodo(todo.id);
                       },
                     ),`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `IconButton` の `onPressed` コールバックで、`ref.read(todoListProvider.notifier).removeTodo(todo.id)` を呼び出し、対応するTODOアイテムを削除します。
 
@@ -173,13 +173,13 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile �
 
 今回 `TodoListNotifier` に追加した `toggle` や `removeTodo` メソッドを見てみると、どちらも元の `state` リストを直接変更するのではなく、条件に基づいて新しいリストを作成し、それで `state` を置き換えていることがわかります。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// toggleメソッド内
   state = [ /* 新しいリストをここで構築 */ ];
 
   // removeTodoメソッド内
   state = state.where(/* 条件 */).toList(); // where().toList() は新しいリストを返す`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 このように状態を **不変（イミュータブル）** なものとして扱い、更新時には常に新しい状態オブジェクトを生成する、というやり方は、Riverpodをはじめとする多くの現代的な状態管理ライブラリで推奨されるパターンです。
 
@@ -195,7 +195,7 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile �
 
 `lib/todo_model.dart`（変更点: `copyWith` メソッドの追加）
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`class Todo {
     final String id;
     final String description;
@@ -219,11 +219,11 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile �
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `lib/todo_provider.dart`（変更点: `toggle`, `removeTodo` メソッドの追加）
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:hooks_riverpod/hooks_riverpod.dart';
   import 'todo_model.dart';
 
@@ -257,11 +257,11 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile �
       StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
     return TodoListNotifier();
   });`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `lib/todo_screen.dart`（変更点: `ListTile` 内の `Checkbox` と `IconButton` の `onPressed`、`Text` の `style`）
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:flutter/material.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart';
   import 'package:flutter_hooks/flutter_hooks.dart';
@@ -349,7 +349,7 @@ Dart (lib/todo_screen.dart の ListView.builder の itemBuilder 内、ListTile �
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ---
 

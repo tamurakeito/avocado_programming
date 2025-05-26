@@ -24,7 +24,7 @@
 
 `dependencies:` セクションに `shared_preferences:` を追加します。バージョンは `pub.dev` で最新のものを確認して記述するのが良いでしょう。
 
-<SyntaxHighlighter language="yaml">
+<CodeBlock language="yaml">
 {`dependencies:
     flutter:
       sdk: flutter
@@ -36,7 +36,7 @@
     shared_preferences: ^2.2.3 # 例：バージョンは適宜最新に
 
     cupertino_icons: ^1.0.6 # 既存`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ### 2. パッケージの取得
 
@@ -46,7 +46,7 @@
 
 `shared_preferences` を使う際の基本的な操作は以下のようになります。（これらはまだTODOアプリのコードではありません）
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:shared_preferences/shared_preferences.dart';
 
   // データを保存する例
@@ -69,7 +69,7 @@
     
     print('Username: $username, Score: $score, LoggedIn: $isLoggedIn, Items: $items');
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `async` / `await`: `SharedPreferences.getInstance()` やデータの保存・読み込み処理は非同期（処理に時間がかかる可能性があり、完了を待つ必要がある）なので、`async` キーワードを関数につけ、実際の非同期処理の呼び出しの前に `await` をつけます。
 - `getString`, `getInt` などでデータを読み込む際、キーに対応するデータが存在しない場合は `null` が返ることがあるため、変数の型を `String?` のようにNull許容型にしたり、`??` (Null合体演算子) を使ってデフォルト値を設定したりします。
@@ -91,7 +91,7 @@ Dartの `Map` オブジェクト（キーと値のペア）と非常に相性が
 
     `lib/todo_model.dart` を以下のように修正します。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`class Todo {
     final String id;
     final String description;
@@ -129,7 +129,7 @@ Dartの `Map` オブジェクト（キーと値のペア）と非常に相性が
         );
       }
     }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 2. `dart:convert` ライブラリの使用 Dart標準の `dart:convert` ライブラリを使うと、`Map` オブジェクトとJSON文字列を相互に変換できます。
     - `jsonEncode(mapObject)`: `Map` をJSON文字列にエンコード（変換）します。
@@ -141,7 +141,7 @@ Dartの `Map` オブジェクト（キーと値のペア）と非常に相性が
 
 次に、`lib/todo_provider.dart` の `TodoListNotifier` に、TODOリストの保存と読み込みのロジックを組み込みます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'dart:convert'; // jsonEncode, jsonDecode のためにインポート
   import 'package:shared_preferences/shared_preferences.dart'; // SharedPreferences のためにインポート
   import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -207,7 +207,7 @@ Dartの `Map` オブジェクト（キーと値のペア）と非常に相性が
   }
 
   final todoListProvider = /* ... (変更なし) ... */;`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 ### 変更のポイント:
 

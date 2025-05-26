@@ -24,7 +24,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
 では、まずTODOアプリのメイン画面となる新しいWidgetを作成しましょう。
 `lib` フォルダ内に新しいファイル `todo_screen.dart` を作成し、以下のように記述します。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:flutter/material.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart'; // HookConsumerWidget を使うため
 
@@ -44,7 +44,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `TodoScreen` という名前の `HookConsumerWidget` を作成しました。
 - `Scaffold` Widgetを返し、その `appBar` プロパティに `AppBar` を設定しています。
@@ -53,7 +53,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
 次に、この `TodoScreen` がアプリ起動時に表示されるように、`lib/main.dart` ファイルを修正します。
 `MyApp` Widget内の `home` プロパティを、新しく作った `TodoScreen` に変更しましょう。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// lib/main.dart の中の MyApp クラス
   // ... (省略) ...
   import 'todo_screen.dart'; // 作成した todo_screen.dart をインポート
@@ -73,7 +73,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 `main.dart` に `import 'todo_screen.dart';` を追加するのを忘れないでください。
 これでアプリを実行すると、緑色のタイトルバーに「アボカドTODO」と表示され、画面中央に仮のテキストが表示されるはずです。
@@ -87,7 +87,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
 
 `flutter_hooks` パッケージの `useTextEditingController` フックを使うと、`TextField` の入力を簡単に管理できます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`// lib/todo_screen.dart の TodoScreen クラス内
   import 'package:flutter/material.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -131,7 +131,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `flutter_hooks.dart` をインポートします。
 - `useTextEditingController()` で `TextEditingController` のインスタンス（`newTodoController`）を作成し、これを `TextField` の `controller` プロパティに設定します。
@@ -144,7 +144,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
 たくさんのTODOアイテムが表示される可能性があるので、スクロール可能なリストを作るために `ListView.builder` を使います。
 また、`ListView` が `Column` の中で適切に高さを確保できるように、`Expanded` Widgetで囲みます。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`          // lib/todo_screen.dart の TodoScreen クラスの build メソッド内
             // Column の children の TextField の下に追加
 
@@ -170,7 +170,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
                 },
               ),
             ),`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `SizedBox(height: 20.0)` で、入力欄とリストの間に少し縦の空白を入れています。
 - `Expanded` Widgetを使うことで、`ListView` は `Column` の中で `TextField` が使っている以外の残りの垂直方向のスペースを全て使うようになります。
@@ -184,7 +184,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
 
 最後に、新しいTODOを追加するためのボタンを画面右下に配置しましょう。`Scaffold` の `floatingActionButton` プロパティを使います。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`    // lib/todo_screen.dart の TodoScreen クラスの Scaffold 内
       // body: Padding(...), の後に追加
 
@@ -201,7 +201,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
         child: const Icon(Icons.add), // ボタンに表示されるアイコン
         backgroundColor: Colors.green, // ボタンの色（お好みで）
       ),`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 - `FloatingActionButton` の `onPressed` には、ボタンが押されたときの処理を書きますが、実際の追加ロジックは次の章で実装します。
 - `tooltip` や `child`（アイコン）も設定しています。
@@ -210,7 +210,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
 
 ここまでの変更を反映した `lib/todo_screen.dart` の全コードは以下のようになります。
 
-<SyntaxHighlighter language="dart">
+<CodeBlock language="dart">
 {`import 'package:flutter/material.dart';
   import 'package:hooks_riverpod/hooks_riverpod.dart';
   import 'package:flutter_hooks/flutter_hooks.dart';
@@ -281,7 +281,7 @@ Widgetは `HookConsumerWidget` を基本として使っていきますが、こ�
       );
     }
   }`}
-</SyntaxHighlighter>
+</CodeBlock>
 
 これでアプリを実行すると、TODO入力欄、仮のTODOリスト、そして追加ボタンが表示される画面になっているはずです！
 
