@@ -6,8 +6,8 @@ export type ArticleType = {
   heading: string;
   goal: string;
   content: string;
-  previous: string;
-  next: string;
+  previous: { heading: string; href: string };
+  next: { heading: string; href: string };
 };
 
 export async function getArticle(id: string): Promise<ArticleType | Error> {

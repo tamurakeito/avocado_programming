@@ -6,9 +6,9 @@
   align-items: center;
   gap: 12px;
 
-  flex: none;
-  order: 0;
-  flex-grow: 0;
+  cursor: pointer;
+
+  max-width: calc(50vw - 26px);
 
   .chevron {
     display: flex;

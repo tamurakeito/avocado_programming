@@ -24,7 +24,7 @@
       "@api/*": ["./src/api/*"],
       "@app/*": ["./src/app/*"],
       "@assets/*": ["./src/assets/*"],
-      "@md/*": ["./src/md/*"],
+      "@providers/*": ["./src/providers/*"],
       "@ui/*": ["./src/ui/*"],
       "@utils/*": ["./src/utils/*"]
     },

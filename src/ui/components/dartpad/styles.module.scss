@@ -1,0 +1,82 @@
+@use "@assets/styles/variables" as var;
+
+$DARTPAD_COLOR: #0e161f;
+
+.dartpad {
+  position: fixed;
+
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  bottom: 6px;
+  right: 16px;
+  // cursor: pointer;
+  // background-color: #0e161f;
+  // border-radius: 6px;
+  // border: 1px solid var.$GRAY900;
+  // color: var.$WHITE025;
+
+  // transition: 0.1s ease-in-out;
+
+  // &.open {
+  //   transform: scale(1);
+  // }
+  // &.close {
+  //   transform: scale(0.1);
+  // }
+
+  .embed_wrapper {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    right: 0;
+    color: var.$WHITE025;
+    background-color: $DARTPAD_COLOR;
+    border-radius: 4px;
+    border: 1px solid var.$GRAY900;
+
+    .dartpad_header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      padding: 6px 8px;
+
+      * {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .closed_wrapper {
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    // gap: px;
+    padding: 6px 8px;
+
+    width: 160px;
+    color: var.$WHITE025;
+    font: var.$FONT_SM;
+    background-color: $DARTPAD_COLOR;
+    border-radius: 4px;
+    border: 1px solid var.$GRAY900;
+
+    .wrapper_chunk {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+
+      * {
+        cursor: pointer;
+      }
+    }
+  }
+}

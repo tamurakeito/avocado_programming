@@ -5,52 +5,63 @@ import styles from "./styles.module.scss";
 type PaginationProps = {
   index: number;
   heading: string;
+  href: string;
 };
 
-export const PaginationPrevious = ({ index, heading }: PaginationProps) => {
+export const PaginationPrevious = ({
+  index,
+  heading,
+  href,
+}: PaginationProps) => {
   return (
-    <div className={styles.pagination}>
+    <a href={`/article/${href}`} className={styles.pagination}>
       <div className={styles.chevron}>
         <ChevronLeft size={20} />
       </div>
       <div className={styles.chapter}>
         <Chapter index={index} />　{heading}
       </div>
-    </div>
+    </a>
   );
 };
 
-export const PaginationNext = ({ index, heading }: PaginationProps) => {
+export const PaginationNext = ({ index, heading, href }: PaginationProps) => {
   return (
-    <div className={styles.pagination}>
+    <a href={`/article/${href}`} className={styles.pagination}>
       <div className={styles.chapter}>
         <Chapter index={index} />　{heading}
       </div>
       <div className={styles.chevron}>
         <ChevronRight size={20} />
       </div>
-    </div>
+    </a>
   );
 };
 
 export const Paginations = ({
-  chapter,
   previous,
   next,
 }: {
-  chapter: number;
-  previous: string;
-  next: string;
+  previous?: PaginationProps;
+  next?: PaginationProps;
 }) => {
   return (
     <div className={styles.paginations}>
-      {previous != "" ? (
-        <PaginationPrevious index={chapter - 1} heading={previous} />
+      {previous?.heading ? (
+        <PaginationPrevious
+          index={previous.index}
+          heading={previous.heading}
+          href={previous.href}
+        />
       ) : (
         <div className={styles.pagination}></div>
       )}
-      {next != "" ? (
-        <PaginationNext index={chapter + 1} heading={next} />
+      {next?.heading ? (
+        <PaginationNext
+          index={next.index}
+          heading={next.heading}
+          href={next.href}
+        />
       ) : (
         <div className={styles.pagination}></div>
       )}

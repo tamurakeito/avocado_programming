@@ -4,7 +4,7 @@ import { ArticleType, getArticle } from "@api/article";
 import { Paginations } from "@ui/molecules/pagination";
 import fs from "fs/promises";
 import path from "path";
-import CodeBlock from "@/ui/organisms/code-block";
+import CodeBlock from "@/ui/components/code-block";
 
 const Article = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -16,14 +16,17 @@ const Article = async ({ params }: { params: Promise<{ id: string }> }) => {
       children,
       language,
       className,
+      gist,
     }: {
       children: string;
       language?: string;
       className?: string;
+      gist?: string;
     }) => (
       <CodeBlock
         language={language || "text"}
         className={`${styles.codeBlock} ${className || ""}`}
+        gist={gist}
       >
         {children}
       </CodeBlock>
@@ -32,6 +35,7 @@ const Article = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   try {
     data = await getArticle(articleId);
+    console.log(data);
   } catch (error) {
     console.error("記事の取得に失敗しました:", error);
     return <div>記事の取得に失敗しました</div>;
@@ -50,13 +54,24 @@ const Article = async ({ params }: { params: Promise<{ id: string }> }) => {
     return <div>コンテンツの読み込みに失敗しました</div>;
   }
 
+  const AriticlePagenations = () => (
+    <Paginations
+      previous={{
+        index: data.chapter - 1,
+        heading: data.previous.heading,
+        href: data.previous.href,
+      }}
+      next={{
+        index: data.chapter + 1,
+        heading: data.next.heading,
+        href: data.next.href,
+      }}
+    />
+  );
+
   return (
     <div className={styles.article}>
-      <Paginations
-        chapter={data.chapter}
-        previous={data.previous}
-        next={data.next}
-      />
+      <AriticlePagenations />
       <div className={styles.course_chapter_heading_goal}>
         <div className={styles.course_chapter}>
           <div className={styles.course}>{data.course}</div>
@@ -72,11 +87,7 @@ const Article = async ({ params }: { params: Promise<{ id: string }> }) => {
       <div className={styles.content}>
         <MDXRemote source={source} components={components} />
       </div>
-      <Paginations
-        chapter={data.chapter}
-        previous={data.previous}
-        next={data.next}
-      />
+      <AriticlePagenations />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import styles from "./pages.module.scss";
 import HeroImage from "@assets/images/hero.png";
 import { ArrowRight } from "react-feather";
-import { CourseCardList, ConstCardProps } from "@/ui/organisms/course-card";
+import { CourseCardList, ConstCardProps } from "@/ui/components/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
 import Image from "next/image";
 import { Category } from "@/ui/atoms/category";

@@ -27,19 +27,25 @@
   align-items: center;
 }
 
-.copy_button {
-  background: none;
-  border: none;
-  color: var.$GRAY500;
-  cursor: pointer;
-  font-size: 12px;
+.buttons {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
-  transition: color 0.2s ease;
+  .button {
+    background: none;
+    border: none;
+    color: var.$GRAY500;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s ease;
 
-  &:hover {
-    color: var.$WHITE000;
+    &:hover {
+      color: var.$WHITE000;
+    }
   }
 }
 

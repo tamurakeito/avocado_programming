@@ -7,8 +7,11 @@
       "heading": "はじめに - プログラミングの世界へようこそ！",
       "goal": "講座の全体像とFlutterでアプリを作る魅力を知る",
       "content": "01_flutter_00.mdx",
-      "previous": "",
-      "next": "Flutterって何だろう？ - アプリの見た目に触れてみる"
+      "previous": {},
+      "next": {
+        "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
+        "href": "flutter_01"
+      }
     },
     {
       "id": "flutter_01",
@@ -17,8 +20,14 @@
       "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
       "goal": "Flutterのコードが画面の見た目になる雰囲気を掴む",
       "content": "01_flutter_01.mdx",
-      "previous": "はじめに - プログラミングの世界へようこそ！",
-      "next": "Dart言語の基本"
+      "previous": {
+        "heading": "はじめに - プログラミングの世界へようこそ！",
+        "href": "flutter_00"
+      },
+      "next": {
+        "heading": "Dart言語の基本",
+        "href": "flutter_02"
+      }
     },
     {
       "id": "flutter_02",
@@ -27,8 +36,14 @@
       "heading": "Dart言語の基本",
       "goal": "アプリ作成に必要なDart言語の基本文法を理解する",
       "content": "01_flutter_02.mdx",
-      "previous": "Flutterって何だろう？ - アプリの見た目に触れてみる",
-      "next": "アプリの部品 - Widgetを知ろう"
+      "previous": {
+        "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
+        "href": "flutter_01"
+      },
+      "next": {
+        "heading": "アプリの部品 - Widgetを知ろう",
+        "href": "flutter_03"
+      }
     },
     {
       "id": "flutter_03",
@@ -37,8 +52,14 @@
       "heading": "アプリの部品 - Widgetを知ろう",
       "goal": "Flutterアプリの画面を構成する基本Widgetを知る",
       "content": "01_flutter_03.mdx",
-      "previous": "Dart言語の基本",
-      "next": "開発環境を整えよう - Flutterを動かす準備"
+      "previous": {
+        "heading": "Dart言語の基本",
+        "href": "flutter_02"
+      },
+      "next": {
+        "heading": "開発環境を整えよう - Flutterを動かす準備",
+        "href": "flutter_04"
+      }
     },
     {
       "id": "flutter_04",
@@ -47,8 +68,14 @@
       "heading": "開発環境を整えよう - Flutterを動かす準備",
       "goal": "自分のPCでFlutterアプリ開発の準備ができるようになる",
       "content": "01_flutter_04.mdx",
-      "previous": "アプリの部品 - Widgetを知ろう",
-      "next": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす"
+      "previous": {
+        "heading": "アプリの部品 - Widgetを知ろう",
+        "href": "flutter_03"
+      },
+      "next": {
+        "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
+        "href": "flutter_05"
+      }
     },
     {
       "id": "flutter_05",
@@ -57,8 +84,14 @@
       "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
       "goal": "RiverpodとHooksを使った状態管理の基本を実践する",
       "content": "01_flutter_05.mdx",
-      "previous": "開発環境を整えよう - Flutterを動かす準備",
-      "next": "TODOアプリの画面を作ろう - レイアウト編"
+      "previous": {
+        "heading": "開発環境を整えよう - Flutterを動かす準備",
+        "href": "flutter_04"
+      },
+      "next": {
+        "heading": "TODOアプリの画面を作ろう - レイアウト編",
+        "href": "flutter_06"
+      }
     },
     {
       "id": "flutter_06",
@@ -67,8 +100,14 @@
       "heading": "TODOアプリの画面を作ろう - レイアウト編",
       "goal": "FlutterのWidgetを組み合わせてTODOアプリの静的な画面を作る",
       "content": "01_flutter_06.mdx",
-      "previous": "カウンターをモダン化！ Riverpod と Hooks で動かす",
-      "next": ""
+      "previous": {
+        "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
+        "href": "flutter_05"
+      },
+      "next": {
+        "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
+        "href": "flutter_07"
+      }
     },
     {
       "id": "flutter_07",
@@ -77,8 +116,14 @@
       "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
       "goal": "Riverpod/Hooksを使ってTODOの追加と表示を実装する",
       "content": "01_flutter_07.mdx",
-      "previous": "TODOアプリの画面を作ろう - レイアウト編",
-      "next": ""
+      "previous": {
+        "heading": "TODOアプリの画面を作ろう - レイアウト編",
+        "href": "flutter_06"
+      },
+      "next": {
+        "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
+        "href": "flutter_08"
+      }
     },
     {
       "id": "flutter_08",
@@ -87,8 +132,14 @@
       "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
       "goal": "Riverpod/HooksでTODOのチェック・削除機能を実装する",
       "content": "01_flutter_08.mdx",
-      "previous": "TODOを追加・表示しよう - Riverpod/Hooks実践",
-      "next": "データを保存しよう - shared_preferences と Riverpod"
+      "previous": {
+        "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
+        "href": "flutter_07"
+      },
+      "next": {
+        "heading": "データを保存しよう - shared_preferences と Riverpod",
+        "href": "flutter_09"
+      }
     },
     {
       "id": "flutter_09",
@@ -97,8 +148,14 @@
       "heading": "データを保存しよう - shared_preferences と Riverpod",
       "goal": "アプリのデータを保存し、閉じても消えないようにする",
       "content": "01_flutter_09.mdx",
-      "previous": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
-      "next": "完成！そして次のステップへ"
+      "previous": {
+        "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
+        "href": "flutter_08"
+      },
+      "next": {
+        "heading": "完成！そして次のステップへ",
+        "href": "flutter_10"
+      }
     },
     {
       "id": "flutter_10",
@@ -107,8 +164,11 @@
       "heading": "完成！そして次のステップへ",
       "goal": "TODOアプリの完成を確認し、次の学習ステップを知る",
       "content": "01_flutter_10.mdx",
-      "previous": "データを保存しよう - shared_preferences と Riverpod",
-      "next": ""
+      "previous": {
+        "heading": "データを保存しよう - shared_preferences と Riverpod",
+        "href": "flutter_09"
+      },
+      "next": {}
     },
     {
       "id": "go_00",
@@ -117,8 +177,11 @@
       "heading": "サーバー開発の世界へようこそ！Go言語で作るアプリの裏側",
       "goal": "サーバーサイドの役割とGo講座の全体像を掴む",
       "content": "02_go_00.mdx",
-      "previous": "",
-      "next": "Go言語基本マスター(1)：変数・型・演算子・制御構文"
+      "previous": {},
+      "next": {
+        "heading": "Go言語基本マスター(1)：変数・型・演算子・制御構文",
+        "href": "go_01"
+      }
     },
     {
       "id": "go_01",
@@ -127,8 +190,14 @@
       "heading": "Go言語基本マスター(1)：変数・型・演算子・制御構文",
       "goal": "Go言語の基本的な変数宣言とデータ型と制御構文を習得する",
       "content": "02_go_01.mdx",
-      "previous": "サーバー開発の世界へようこそ！Go言語で作るアプリの裏側",
-      "next": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理"
+      "previous": {
+        "heading": "サーバー開発の世界へようこそ！Go言語で作るアプリの裏側",
+        "href": "go_00"
+      },
+      "next": {
+        "heading": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理",
+        "href": "go_02"
+      }
     },
     {
       "id": "go_02",
@@ -137,8 +206,14 @@
       "heading": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理",
       "goal": "Go言語の複合型と関数とメソッドとエラー処理を習得する",
       "content": "02_go_02.mdx",
-      "previous": "Go言語基本マスター(1)：変数・型・演算子・制御構文",
-      "next": "いざ実践！Go言語環境構築と'Hello, World!'"
+      "previous": {
+        "heading": "Go言語基本マスター(1)：変数・型・演算子・制御構文",
+        "href": "go_01"
+      },
+      "next": {
+        "heading": "いざ実践！Go言語環境構築と'Hello, World!'",
+        "href": "go_03"
+      }
     },
     {
       "id": "go_03",
@@ -147,8 +222,14 @@
       "heading": "いざ実践！Go言語環境構築と'Hello, World!'",
       "goal": "Go言語開発環境を準備し簡単なプログラムを実行する",
       "content": "02_go_03.mdx",
-      "previous": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理",
-      "next": ""
+      "previous": {
+        "heading": "Go言語基本マスター(2)：複合型・関数・メソッド・エラー処理",
+        "href": "go_02"
+      },
+      "next": {
+        "heading": "Go言語基本マスター(3)：ポインタとメモリ管理",
+        "href": "go_04"
+      }
     },
     {
       "id": "go_04",

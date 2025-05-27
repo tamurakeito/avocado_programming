@@ -4,20 +4,24 @@ import styles from "./styles.module.scss";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { useState } from "react";
-import { Copy } from "react-feather";
+import { Copy, Smartphone } from "react-feather";
+import { useDartPad } from "@providers/dartpad-provider";
 
 const CodeBlock = ({
   children,
   language,
   className,
   filename,
+  gist,
 }: {
   children: string;
   language?: string;
   className?: string;
   filename?: string;
+  gist?: string;
 }) => {
   const [copied, setCopied] = useState(false);
+  const { isDartPad, toggleDartPad, setGist } = useDartPad();
 
   const handleCopy = async () => {
     try {
@@ -35,9 +39,22 @@ const CodeBlock = ({
           <div className={styles.filename}>
             {filename || language || "code"}
           </div>
-          <button className={styles.copy_button} onClick={handleCopy}>
-            {copied ? "Copied!" : <Copy size={16} />}
-          </button>
+          <div className={styles.buttons}>
+            <button className={styles.button} onClick={handleCopy}>
+              {copied ? "Copied!" : <Copy size={16} />}
+            </button>
+            {!isDartPad && gist && (
+              <button
+                className={styles.button}
+                onClick={() => {
+                  toggleDartPad();
+                  setGist(gist);
+                }}
+              >
+                <Smartphone size={16} />
+              </button>
+            )}
+          </div>
         </div>
       )}
       <SyntaxHighlighter

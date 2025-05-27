@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-import { CourseCardList, ConstCardProps } from "@/ui/organisms/course-card";
+import { CourseCardList, ConstCardProps } from "@/ui/components/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
 import { Category } from "@/ui/atoms/category";
 const Courses = () => {

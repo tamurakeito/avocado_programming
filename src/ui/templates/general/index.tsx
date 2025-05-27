@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
-import { Header } from "@ui/organisms/header";
-import { Footer } from "@ui/organisms/footer";
+import { Header } from "@/ui/components/header";
+import { Footer } from "@/ui/components/footer";
 
 export const GeneralTemplate = ({
   children,
