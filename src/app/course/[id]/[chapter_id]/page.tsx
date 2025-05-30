@@ -6,9 +6,13 @@ import fs from "fs/promises";
 import path from "path";
 import CodeBlock from "@/ui/components/code-block";
 
-const Article = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
-  const articleId = id;
+const Article = async ({
+  params,
+}: {
+  params: Promise<{ id: string; chapter_id: string }>;
+}) => {
+  const { id, chapter_id } = await params;
+  const articleId = `${id}_${chapter_id}`;
   let data: ArticleType | Error;
   let source: string;
   const components = {

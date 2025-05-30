@@ -14,7 +14,7 @@ export const PaginationPrevious = ({
   href,
 }: PaginationProps) => {
   return (
-    <a href={`/article/${href}`} className={styles.pagination}>
+    <a href={`${href}`} className={styles.pagination}>
       <div className={styles.chevron}>
         <ChevronLeft size={20} />
       </div>
@@ -27,7 +27,7 @@ export const PaginationPrevious = ({
 
 export const PaginationNext = ({ index, heading, href }: PaginationProps) => {
   return (
-    <a href={`/article/${href}`} className={styles.pagination}>
+    <a href={`${href}`} className={styles.pagination}>
       <div className={styles.chapter}>
         <Chapter index={index} />　{heading}
       </div>
@@ -51,7 +51,7 @@ export const Paginations = ({
         <PaginationPrevious
           index={previous.index}
           heading={previous.heading}
-          href={previous.href}
+          href={`/course/${previous.href}`}
         />
       ) : (
         <div className={styles.pagination}></div>
@@ -60,7 +60,7 @@ export const Paginations = ({
         <PaginationNext
           index={next.index}
           heading={next.heading}
-          href={next.href}
+          href={`/course/${next.href}`}
         />
       ) : (
         <div className={styles.pagination}></div>

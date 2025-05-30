@@ -1,0 +1,33 @@
+@use "@assets/styles/variables" as var;
+
+.pankuzu_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  a {
+    font: var.$FONT_SM;
+    color: var.$AVOCADO_DARK;
+    text-decoration: none;
+    transition: 0.1s;
+
+    &:hover {
+      color: var.$PRIMARY;
+      text-decoration: underline;
+    }
+  }
+
+  svg {
+    stroke: var.$AVOCADO_DARK;
+  }
+}
+
+.pankuzu_list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+}

@@ -7,6 +7,7 @@
   gap: 12px;
 
   cursor: pointer;
+  text-decoration: none;
 
   max-width: calc(50vw - 26px);
 
@@ -21,8 +22,13 @@
 
   .chapter {
     font: var.$FONT_SM;
-    text-decoration-line: underline;
     color: var.$GRAY800;
+    transition: 0.1s;
+
+    &:hover {
+      color: var.$PRIMARY;
+      text-decoration: underline;
+    }
   }
 }
 

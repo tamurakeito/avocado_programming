@@ -1,7 +1,7 @@
 {
   "articles": [
     {
-      "id": "flutter_00",
+      "id": "flutter_01_0",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 0,
       "heading": "はじめに - プログラミングの世界へようこそ！",
@@ -10,11 +10,11 @@
       "previous": {},
       "next": {
         "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
-        "href": "flutter_01"
+        "href": "/flutter_01/1"
       }
     },
     {
-      "id": "flutter_01",
+      "id": "flutter_01_1",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 1,
       "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
@@ -22,15 +22,15 @@
       "content": "01_flutter_01.mdx",
       "previous": {
         "heading": "はじめに - プログラミングの世界へようこそ！",
-        "href": "flutter_00"
+        "href": "/flutter_01/0"
       },
       "next": {
         "heading": "Dart言語の基本",
-        "href": "flutter_02"
+        "href": "/flutter_01/2"
       }
     },
     {
-      "id": "flutter_02",
+      "id": "flutter_01_2",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 2,
       "heading": "Dart言語の基本",
@@ -38,15 +38,15 @@
       "content": "01_flutter_02.mdx",
       "previous": {
         "heading": "Flutterって何だろう？ - アプリの見た目に触れてみる",
-        "href": "flutter_01"
+        "href": "/flutter_01/1"
       },
       "next": {
         "heading": "アプリの部品 - Widgetを知ろう",
-        "href": "flutter_03"
+        "href": "/flutter_01/3"
       }
     },
     {
-      "id": "flutter_03",
+      "id": "flutter_01_3",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 3,
       "heading": "アプリの部品 - Widgetを知ろう",
@@ -54,15 +54,15 @@
       "content": "01_flutter_03.mdx",
       "previous": {
         "heading": "Dart言語の基本",
-        "href": "flutter_02"
+        "href": "/flutter_01/2"
       },
       "next": {
         "heading": "開発環境を整えよう - Flutterを動かす準備",
-        "href": "flutter_04"
+        "href": "/flutter_01/4"
       }
     },
     {
-      "id": "flutter_04",
+      "id": "flutter_01_4",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 4,
       "heading": "開発環境を整えよう - Flutterを動かす準備",
@@ -70,15 +70,15 @@
       "content": "01_flutter_04.mdx",
       "previous": {
         "heading": "アプリの部品 - Widgetを知ろう",
-        "href": "flutter_03"
+        "href": "/flutter_01/3"
       },
       "next": {
         "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
-        "href": "flutter_05"
+        "href": "/flutter_01/5"
       }
     },
     {
-      "id": "flutter_05",
+      "id": "flutter_01_5",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 5,
       "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
@@ -86,15 +86,15 @@
       "content": "01_flutter_05.mdx",
       "previous": {
         "heading": "開発環境を整えよう - Flutterを動かす準備",
-        "href": "flutter_04"
+        "href": "/flutter_01/4"
       },
       "next": {
         "heading": "TODOアプリの画面を作ろう - レイアウト編",
-        "href": "flutter_06"
+        "href": "/flutter_01/6"
       }
     },
     {
-      "id": "flutter_06",
+      "id": "flutter_01_6",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 6,
       "heading": "TODOアプリの画面を作ろう - レイアウト編",
@@ -102,15 +102,15 @@
       "content": "01_flutter_06.mdx",
       "previous": {
         "heading": "カウンターアプリをモダン化！ Riverpod と Hooks で動かす",
-        "href": "flutter_05"
+        "href": "/flutter_01/5"
       },
       "next": {
         "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
-        "href": "flutter_07"
+        "href": "/flutter_01/7"
       }
     },
     {
-      "id": "flutter_07",
+      "id": "flutter_01_7",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 7,
       "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
@@ -118,15 +118,15 @@
       "content": "01_flutter_07.mdx",
       "previous": {
         "heading": "TODOアプリの画面を作ろう - レイアウト編",
-        "href": "flutter_06"
+        "href": "/flutter_01/6"
       },
       "next": {
         "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
-        "href": "flutter_08"
+        "href": "/flutter_01/8"
       }
     },
     {
-      "id": "flutter_08",
+      "id": "flutter_01_8",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 8,
       "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
@@ -134,15 +134,15 @@
       "content": "01_flutter_08.mdx",
       "previous": {
         "heading": "TODOを追加・表示しよう - Riverpod/Hooks実践",
-        "href": "flutter_07"
+        "href": "/flutter_01/7"
       },
       "next": {
         "heading": "データを保存しよう - shared_preferences と Riverpod",
-        "href": "flutter_09"
+        "href": "/flutter_01/9"
       }
     },
     {
-      "id": "flutter_09",
+      "id": "flutter_01_9",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 9,
       "heading": "データを保存しよう - shared_preferences と Riverpod",
@@ -150,15 +150,15 @@
       "content": "01_flutter_09.mdx",
       "previous": {
         "heading": "TODOを管理しやすくしよう - チェックと削除 (Riverpod/Hooks)",
-        "href": "flutter_08"
+        "href": "/flutter_01/8"
       },
       "next": {
         "heading": "完成！そして次のステップへ",
-        "href": "flutter_10"
+        "href": "/flutter_01/10"
       }
     },
     {
-      "id": "flutter_10",
+      "id": "flutter_01_10",
       "course": "初心者のためのアプリ開発教室 - Flutter入門",
       "chapter": 10,
       "heading": "完成！そして次のステップへ",
@@ -166,7 +166,7 @@
       "content": "01_flutter_10.mdx",
       "previous": {
         "heading": "データを保存しよう - shared_preferences と Riverpod",
-        "href": "flutter_09"
+        "href": "/flutter_01/9"
       },
       "next": {}
     },
