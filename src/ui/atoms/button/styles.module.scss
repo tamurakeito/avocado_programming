@@ -1,0 +1,25 @@
+@use "@assets/styles/variables" as var;
+
+.button {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+
+  width: 240px;
+
+  background: var.$PRIMARY100;
+  color: var.$AVOCADO_DARK;
+  font: var.$FONT_H3;
+  border: 2px solid var.$AVOCADO_DARK;
+  border-radius: 100px;
+
+  transition: 0.2s;
+
+  &:hover {
+    background: var.$AVOCADO_DARK;
+    color: var.$PRIMARY100;
+  }
+}

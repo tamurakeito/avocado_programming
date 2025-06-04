@@ -8,15 +8,15 @@ export const Footer = () => {
   return (
     <div className={styles.footer}>
       <div className={styles.logo_navigation}>
-        <div className={styles.logo}>
+        <a className={styles.logo} href="/">
           <Image src={AvocadoLogo} alt="アボカドプログラミング" width={240} />
           <Image src={PoweredBy} alt="Powered by 慧陽社" width={180} />
-        </div>
+        </a>
         <div className={styles.navigation}>
-          <Tab label="ホーム" />
-          <Tab label="コース" />
-          <Tab label="記事" />
-          <Tab label="お問い合わせ" />
+          <Tab label="アボカドプログラミングについて" href="/about" />
+          <Tab label="コース" href="/course" />
+          <Tab label="エラーでつまづいたら..." href="/error-handling" />
+          <Tab label="お問い合わせ" href="/contact" />
         </div>
       </div>
       <div className={styles.copyright}>©2025 アボカドプログラミング</div>

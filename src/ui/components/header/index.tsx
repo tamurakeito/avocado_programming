@@ -9,12 +9,14 @@ export const Header = () => {
     <div className={styles.header}>
       <Divider />
       <div className={styles.header_content}>
-        <Image src={AvocadoLogo} alt="アボカドプログラミング" width={180} />
+        <a href="/" className={styles.logo}>
+          <Image src={AvocadoLogo} alt="アボカドプログラミング" width={180} />
+        </a>
         <div className={styles.navigation}>
-          <Tab label="ホーム" />
-          <Tab label="コース" />
-          <Tab label="記事" />
-          <Tab label="お問い合わせ" />
+          <Tab label="アボカドプログラミングについて" href="/about" />
+          <Tab label="コース" href="/course" />
+          <Tab label="エラーでつまづいたら..." href="/error-handling" />
+          <Tab label="お問い合わせ" href="/contact" />
         </div>
       </div>
     </div>

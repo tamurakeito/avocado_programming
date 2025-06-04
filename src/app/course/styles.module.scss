@@ -21,11 +21,19 @@
   .courses_list {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 36px 36px 84px;
-    gap: 36px;
-
+    align-items: center;
+    padding: 36px 36px 60px;
+    gap: 60px;
     background: var.$GRAY050;
     align-self: stretch;
+
+    .courses_list_item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 36px;
+      align-self: stretch;
+    }
   }
 }

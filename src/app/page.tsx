@@ -5,7 +5,7 @@ import { CourseCardList, ConstCardProps } from "@/ui/components/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
 import Image from "next/image";
 import { Category } from "@/ui/atoms/category";
-
+import { Button } from "@/ui/atoms/button";
 export default function Home() {
   const Heading = ({ title }: { title: string }) => {
     return <div className={styles.heading}>{title}</div>;
@@ -70,9 +70,7 @@ export default function Home() {
       </div>
       <div className={styles.error_handling}>
         <Heading title={"エラーでつまづいたら..."} />
-        <div className={styles.button}>
-          <ArrowRight size={48} color="white" />
-        </div>
+        <Button label="エラーを解決する" href={"/error-handling"} />
       </div>
       <div className={styles.contact}>
         <Heading title={"お問い合わせ"} />

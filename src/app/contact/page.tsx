@@ -1,4 +1,5 @@
 import styles from "./styles.module.scss";
+import { Button } from "@ui/atoms/button"; 
 
 const Contact = () => {
   return (
@@ -11,6 +12,7 @@ const Contact = () => {
         <div className={styles.contact_content_email}>
           info@avocadoprogramming.com
         </div>
+        <Button label="トップへ戻る" href={"/"} />
       </div>
     </div>
   );

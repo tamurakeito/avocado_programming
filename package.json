@@ -20,8 +20,7 @@
     "react-feather": "^2.0.10",
     "react-syntax-highlighter": "^15.6.1",
     "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.1",
-    "reset-css": "^5.0.2"
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

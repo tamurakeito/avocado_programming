@@ -1,5 +1,5 @@
 import styles from "./styles.module.scss";
-
+import { Button } from "@/ui/atoms/button";
 const About = () => {
   return (
     <div className={styles.about}>
@@ -18,6 +18,7 @@ const About = () => {
             いずれは、皆さんのアイデアを本格的に形にするための学習プログラムやサポートも提供していきたいと考えています。まずは気軽に、ここからアプリ開発の世界を覗いてみてください。あなたの「作ってみたい！」が、きっとここから始まります。
           </div>
         </div>
+        <Button label="トップへ戻る" href={"/"} />
       </div>
     </div>
   );

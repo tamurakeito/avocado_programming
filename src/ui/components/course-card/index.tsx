@@ -7,6 +7,7 @@ export type ConstCardProps = {
   title: string;
   discription: string;
   lesson: number;
+  href?: string;
 };
 
 export const CourseCard = ({
@@ -14,9 +15,10 @@ export const CourseCard = ({
   title,
   discription,
   lesson,
+  href,
 }: ConstCardProps) => {
   return (
-    <div className={styles.course_card}>
+    <a href={href} className={styles.course_card}>
       <div className={styles.icon}>
         <div className={styles.icon_circle}>
           <Image src={icon} alt={title} width={24} height={24} />
@@ -30,7 +32,7 @@ export const CourseCard = ({
           <div className={styles.lesson_text}>全{lesson}レッスン</div>
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 

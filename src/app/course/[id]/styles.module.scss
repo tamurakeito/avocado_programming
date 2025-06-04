@@ -1,6 +1,11 @@
 @use "@assets/styles/variables.scss" as var;
 
 .course {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+
   .course_header {
     display: flex;
     flex-direction: column;
@@ -35,9 +40,6 @@
   &:hover {
     background: var.$GRAY100;
   }
-
-  text-decoration: none;
-  // cursor: pointer;
 
   .chapter_index {
     display: flex;

@@ -102,18 +102,6 @@
     background: var.$WHITE000;
     align-self: stretch;
 
-    .button {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-
-      width: 72px;
-      height: 72px;
-
-      background: var.$AVOCADO_DARK;
-      border-radius: 100px;
-    }
   }
   .contact {
     display: flex;
