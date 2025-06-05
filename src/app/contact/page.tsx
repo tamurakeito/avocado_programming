@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
-import { Button } from "@ui/atoms/button"; 
+import { Button } from "@ui/atoms/button";
 
-const Contact = () => {
+const ContactPage = () => {
   return (
     <div className={styles.contact}>
       <div className={styles.contact_heading}>お問い合わせ</div>
@@ -18,4 +18,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactPage;

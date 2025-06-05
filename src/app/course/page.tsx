@@ -1,28 +1,13 @@
 import styles from "./styles.module.scss";
-import { CourseCardList, ConstCardProps } from "@ui/components/course-card";
-import FlutterIcon from "@assets/images/icon_flutter.svg";
+import { CourseCardList } from "@ui/components/course-card";
 import { Category } from "@ui/atoms/category";
 import { Button } from "@ui/atoms/button";
+import { MockProgramApi } from "@/api/mock/program";
 
-const Courses = () => {
-  const list: Array<ConstCardProps> = [
-    {
-      icon: FlutterIcon,
-      title: "初心者のためのアプリ開発教室- Flutter入門",
-      discription:
-        "プログラミング経験がない方でも、話題のフレームワークFlutterを使いこなし、iOSとAndroidの両方で動くオリジナルアプリを実際に開発できるようになることを目指します。",
-      lesson: 12,
-      href: "/course/flutter_01",
-    },
-    {
-      icon: FlutterIcon,
-      title: "初心者のためのアプリ開発教室- Flutter入門",
-      discription:
-        "プログラミング経験がない方でも、話題のフレームワークFlutterを使いこなし、iOSとAndroidの両方で動くオリジナルアプリを実際に開発できるようになることを目指します。",
-      lesson: 12,
-      href: "/course/flutter_01",
-    },
-  ];
+const CoursesPage = async () => {
+  const api = new MockProgramApi();
+  const list = await api.fetchLectureList();
+
   return (
     <div className={styles.courses}>
       <div className={styles.courses_heading}>コースを選択する</div>
@@ -37,4 +22,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default CoursesPage;

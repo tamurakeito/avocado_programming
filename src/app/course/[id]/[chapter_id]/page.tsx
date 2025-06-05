@@ -1,19 +1,21 @@
 import styles from "./styles.module.scss";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { ArticleType, getArticle } from "@api/article";
 import { Paginations } from "@ui/molecules/pagination";
 import fs from "fs/promises";
 import path from "path";
 import CodeBlock from "@/ui/components/code-block";
+import { MockProgramApi } from "@/api/mock/program";
+import { ChapterDetail } from "@/types/program";
 
-const Article = async ({
+const ChapterPage = async ({
   params,
 }: {
   params: Promise<{ id: string; chapter_id: string }>;
 }) => {
   const { id, chapter_id } = await params;
-  const articleId = `${id}_${chapter_id}`;
-  let data: ArticleType | Error;
+  console.log(id, chapter_id);
+  const chapterId = `${id}_${chapter_id}`;
+  console.log(chapterId);
   let source: string;
   const components = {
     CodeBlock: ({
@@ -36,9 +38,11 @@ const Article = async ({
       </CodeBlock>
     ),
   };
+  const api = new MockProgramApi();
+  let data: ChapterDetail | Error;
 
   try {
-    data = await getArticle(articleId);
+    data = await api.fetchChapter(chapterId);
     console.log(data);
   } catch (error) {
     console.error("記事の取得に失敗しました:", error);
@@ -58,28 +62,34 @@ const Article = async ({
     return <div>コンテンツの読み込みに失敗しました</div>;
   }
 
-  const AriticlePagenations = () => (
+  const ChapterPagenations = () => (
     <Paginations
-      previous={{
-        index: data.chapter - 1,
-        heading: data.previous.heading,
-        href: data.previous.href,
-      }}
-      next={{
-        index: data.chapter + 1,
-        heading: data.next.heading,
-        href: data.next.href,
-      }}
+      previous={data.previous
+        ? {
+            index: data.number - 1,
+            heading: data.previous?.heading,
+            href: data.previous?.href,
+          }
+        : undefined}
+      next={
+        data.next
+          ? {
+              index: data.number + 1,
+              heading: data.next?.heading,
+              href: data.next?.href,
+            }
+          : undefined
+      }
     />
   );
 
   return (
     <div className={styles.article}>
-      <AriticlePagenations />
+      <ChapterPagenations />
       <div className={styles.course_chapter_heading_goal}>
         <div className={styles.course_chapter}>
           <div className={styles.course}>{data.course}</div>
-          <div className={styles.chapter}>第 {data.chapter} 章</div>
+          <div className={styles.chapter}>第 {data.number} 章</div>
         </div>
         <div className={styles.heading}>{data.heading}</div>
         <div className={styles.goal}>
@@ -91,9 +101,9 @@ const Article = async ({
       <div className={styles.content}>
         <MDXRemote source={source} components={components} />
       </div>
-      <AriticlePagenations />
+      <ChapterPagenations />
     </div>
   );
 };
 
-export default Article;
+export default ChapterPage;

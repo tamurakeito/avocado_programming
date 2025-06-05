@@ -1,31 +1,19 @@
 import styles from "./pages.module.scss";
 import HeroImage from "@assets/images/hero.png";
 import { ArrowRight } from "react-feather";
-import { CourseCardList, ConstCardProps } from "@/ui/components/course-card";
+import { CourseCardList } from "@/ui/components/course-card";
 import FlutterIcon from "@assets/images/icon_flutter.svg";
 import Image from "next/image";
 import { Category } from "@/ui/atoms/category";
 import { Button } from "@/ui/atoms/button";
-export default function Home() {
+import { MockProgramApi } from "@/api/mock/program";
+
+const HomePage = async () => {
   const Heading = ({ title }: { title: string }) => {
     return <div className={styles.heading}>{title}</div>;
   };
-  const list: Array<ConstCardProps> = [
-    {
-      icon: FlutterIcon,
-      title: "初心者のためのアプリ開発教室- Flutter入門",
-      discription:
-        "プログラミング経験がない方でも、話題のフレームワークFlutterを使いこなし、iOSとAndroidの両方で動くオリジナルアプリを実際に開発できるようになることを目指します。",
-      lesson: 12,
-    },
-    {
-      icon: FlutterIcon,
-      title: "初心者のためのアプリ開発教室- Flutter入門",
-      discription:
-        "プログラミング経験がない方でも、話題のフレームワークFlutterを使いこなし、iOSとAndroidの両方で動くオリジナルアプリを実際に開発できるようになることを目指します。",
-      lesson: 12,
-    },
-  ];
+  const api = new MockProgramApi();
+  const list = await api.fetchLectureList();
   return (
     <div className={styles.home}>
       <div className={styles.hero}>
@@ -83,4 +71,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default HomePage;

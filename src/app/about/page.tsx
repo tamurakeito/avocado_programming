@@ -1,6 +1,7 @@
 import styles from "./styles.module.scss";
 import { Button } from "@/ui/atoms/button";
-const About = () => {
+
+const AboutPage = () => {
   return (
     <div className={styles.about}>
       <div className={styles.about_heading}>
@@ -24,4 +25,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default AboutPage;
