@@ -19,12 +19,12 @@ export class MockProgramApi implements IProgramApi {
     {
       number: 0,
       heading: "はじめに - プログラミングの世界へようこそ！",
-      goal: "講座の全体像とFlutterでアプリを作る魅力を知る",
+      goal: "講座の全体像と Flutter でアプリを作る魅力を知る",
     },
     {
       number: 1,
       heading: "Flutterって何だろう？ - アプリの見た目に触れてみる",
-      goal: "Flutterのコードが画面の見た目になる雰囲気を掴む",
+      goal: "Flutter のコードが画面の見た目になる雰囲気を掴む",
     },
     {
       number: 2,
