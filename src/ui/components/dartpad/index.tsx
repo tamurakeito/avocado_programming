@@ -100,7 +100,7 @@ export const DartPad = ({
       <div className={styles.closed_wrapper}>
         <div className={styles.wrapper_chunk}>
           <Smartphone size={16} />
-          <div>DartPad</div>
+          <div>Playground</div>
         </div>
         <div className={styles.wrapper_chunk}>
           <Maximize2 size={14} onClick={() => setIsOpen(true)} />

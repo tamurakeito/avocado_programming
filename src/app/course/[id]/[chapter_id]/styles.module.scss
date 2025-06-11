@@ -216,5 +216,23 @@
       padding: 1px 4px;
       border-radius: 5px;
     }
+
+    .image {
+      display: flex;
+      flex-direction: column;
+      align-self: stretch;
+      gap: 24px;
+      padding: 24px 0px 48px;
+
+      img {
+        margin: 0 auto;
+      }
+
+      .image_comment {
+        font: var.$FONT_CODE;
+        color: var.$GRAY700;
+        text-align: center;
+      }
+    }
   }
 }

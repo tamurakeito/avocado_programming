@@ -6,6 +6,7 @@ import path from "path";
 import CodeBlock from "@/ui/components/code-block";
 import { MockProgramApi } from "@/api/mock/program";
 import { ChapterDetail } from "@/types/program";
+import Image from "next/image";
 
 const ChapterPage = async ({
   params,
@@ -37,6 +38,22 @@ const ChapterPage = async ({
         {children}
       </CodeBlock>
     ),
+    Image: ({
+      src,
+      comment,
+      width,
+      height,
+    }: {
+      src: string;
+      comment: string;
+      width: number;
+      height: number;
+    }) => (
+      <div className={styles.image}>
+        <Image src={src} alt={comment} width={width} height={height} />
+        <span className={styles.image_comment}>{comment}</span>
+      </div>
+    ),
   };
   const api = new MockProgramApi();
   let data: ChapterDetail | Error;
@@ -55,7 +72,12 @@ const ChapterPage = async ({
   }
 
   try {
-    const filePath = path.join(process.cwd(), "public", "mdx", data.content);
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "courses",
+      data.content
+    );
     source = await fs.readFile(filePath, "utf-8");
   } catch (error) {
     console.error("MDXファイルの読み込みに失敗しました:", error);
@@ -64,13 +86,15 @@ const ChapterPage = async ({
 
   const ChapterPagenations = () => (
     <Paginations
-      previous={data.previous
-        ? {
-            index: data.number - 1,
-            heading: data.previous?.heading,
-            href: data.previous?.href,
-          }
-        : undefined}
+      previous={
+        data.previous
+          ? {
+              index: data.number - 1,
+              heading: data.previous?.heading,
+              href: data.previous?.href,
+            }
+          : undefined
+      }
       next={
         data.next
           ? {

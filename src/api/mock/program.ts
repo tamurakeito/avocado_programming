@@ -73,17 +73,17 @@ export class MockProgramApi implements IProgramApi {
     },
   ];
   mockChapterContents: Array<string> = [
-    "01_flutter_00.mdx",
-    "01_flutter_01.mdx",
-    "01_flutter_02.mdx",
-    "01_flutter_03.mdx",
-    "01_flutter_04.mdx",
-    "01_flutter_05.mdx",
-    "01_flutter_06.mdx",
-    "01_flutter_07.mdx",
-    "01_flutter_08.mdx",
-    "01_flutter_09.mdx",
-    "01_flutter_10.mdx",
+    "01_flutter/00/content.mdx",
+    "01_flutter/01/content.mdx",
+    "01_flutter/02/content.mdx",
+    "01_flutter/03/content.mdx",
+    "01_flutter/04/content.mdx",
+    "01_flutter/05/content.mdx",
+    "01_flutter/06/content.mdx",
+    "01_flutter/07/content.mdx",
+    "01_flutter/08/content.mdx",
+    "01_flutter/09/content.mdx",
+    "01_flutter/10/content.mdx",
   ];
   shouldFail: boolean = false;
 
